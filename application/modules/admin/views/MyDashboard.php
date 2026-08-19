@@ -91,70 +91,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var total = donutValues.reduce((a, b) => a + b, 0);
 
-  var canvasEl = document.getElementById('vacancyDonutChart');
-  var parentBox = canvasEl ? canvasEl.parentElement : null;
-  var detailsContainer = document.getElementById('vacancyDetails');
+  var ctx = document.getElementById('vacancyDonutChart').getContext('2d');
 
-  if (total === 0) {
-    if (canvasEl) canvasEl.style.display = 'none';
-    if (parentBox) {
-      var emptyDiv = document.createElement('div');
-      emptyDiv.className = 'text-center py-4 w-100';
-      emptyDiv.innerHTML = `
-        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 50%; background-color: #f8fafc; border: 2px dashed #cbd5e1; color: #94a3b8; font-size: 20px;">
-          <i class="fas fa-chart-pie"></i>
-        </div>
-        <h6 class="font-weight-bold text-dark mb-1">No Data on Chart</h6>
-        <p class="text-muted small mb-0">No department vacancy data available.</p>
-      `;
-      parentBox.appendChild(emptyDiv);
-    }
-    if (detailsContainer) detailsContainer.innerHTML = '';
-  } else {
-    var ctx = canvasEl.getContext('2d');
-
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: donutLabels,
-        datasets: [{
-          data: donutValues,
-          backgroundColor: colors
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '70%',
-        plugins: {
-          legend: { display: false }
-        }
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: donutLabels,
+      datasets: [{
+        data: donutValues,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: {
+        legend: { display: false }
       }
-    });
-
-    if (detailsContainer) {
-      detailsContainer.innerHTML = '';
-
-      donutLabels.forEach(function(label, index) {
-        var value = donutValues[index];
-        var percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-        var color = colors[index];
-
-        detailsContainer.innerHTML += `
-          <div class="progress-group mb-3">
-            ${label}
-            <span class="float-right">
-              <b>${value}</b> / ${total}
-            </span>
-            <div class="progress progress-sm">
-              <div class="progress-bar" style="width:${percentage}%; background-color:${color}">
-              </div>
-            </div>
-          </div>
-        `;
-      });
     }
-  }
+  });
+
+ 
+  var detailsContainer = document.getElementById('vacancyDetails');
+  detailsContainer.innerHTML = '';
+
+  donutLabels.forEach(function(label, index) {
+
+    var value = donutValues[index];
+    var percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+    var color = colors[index];
+
+    detailsContainer.innerHTML += `
+      <div class="progress-group mb-3">
+        ${label}
+        <span class="float-right">
+          <b>${value}</b> / ${total}
+        </span>
+        <div class="progress progress-sm">
+          <div class="progress-bar" style="width:${percentage}%; background-color:${color}">
+          </div>
+        </div>
+      </div>
+    `;
+  });
 
 });
 </script>

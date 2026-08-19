@@ -1,83 +1,5 @@
-<?php
-$totalReqCount    = !empty($requests) ? count($requests) : 0;
-$approvedReqCount = 0;
-$rejectedReqCount = 0;
-$onholdReqCount   = 0;
-
-if (!empty($requests)) {
-    foreach ($requests as $r) {
-        $st = strtoupper(trim($r['Status'] ?? ''));
-        if ($st === 'ACCEPTED') {
-            $approvedReqCount++;
-        } elseif ($st === 'REJECTED') {
-            $rejectedReqCount++;
-        } elseif ($st === 'ON-HOLD' || $st === 'ON HOLD' || $st === 'HOLD') {
-            $onholdReqCount++;
-        }
-    }
-}
-?>
-
-<section class="content pt-2">
+<section class="content">
   <div class="container-fluid">
-
-    <div class="row mb-4">
-      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
-        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #007bff !important;">
-          <div class="card-body d-flex align-items-center p-3">
-            <div class="kpi-icon-box bg-primary text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-              <i class="fas fa-clipboard-list fa-lg"></i>
-            </div>
-            <div>
-              <h3 class="font-weight-bold mb-0 text-dark"><?= $totalReqCount ?></h3>
-              <p class="text-muted small mb-0 font-weight-bold">Total Requested</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
-        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #28a745 !important;">
-          <div class="card-body d-flex align-items-center p-3">
-            <div class="kpi-icon-box bg-success text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-              <i class="fas fa-check-circle fa-lg"></i>
-            </div>
-            <div>
-              <h3 class="font-weight-bold mb-0 text-dark"><?= $approvedReqCount ?></h3>
-              <p class="text-muted small mb-0 font-weight-bold">Approved</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
-        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #dc3545 !important;">
-          <div class="card-body d-flex align-items-center p-3">
-            <div class="kpi-icon-box bg-danger text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-              <i class="fas fa-times-circle fa-lg"></i>
-            </div>
-            <div>
-              <h3 class="font-weight-bold mb-0 text-dark"><?= $rejectedReqCount ?></h3>
-              <p class="text-muted small mb-0 font-weight-bold">Rejected</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
-        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #ffc107 !important;">
-          <div class="card-body d-flex align-items-center p-3">
-            <div class="kpi-icon-box text-dark rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background-color:#ffc107 !important; color:#000 !important;">
-              <i class="fas fa-pause-circle fa-lg"></i>
-            </div>
-            <div>
-              <h3 class="font-weight-bold mb-0 text-dark"><?= $onholdReqCount ?></h3>
-              <p class="text-muted small mb-0 font-weight-bold">On Hold</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="card card-primary card-outline">
       <div class="card-header d-flex align-items-center justify-content-between">
@@ -126,8 +48,6 @@ if (!empty($requests)) {
                       <span class="badge badge-success px-2"><i class="fas fa-check-circle mr-1"></i>Accepted</span>
                     <?php elseif ($req['Status'] === 'REJECTED'): ?>
                       <span class="badge badge-danger px-2"><i class="fas fa-times-circle mr-1"></i>Rejected</span>
-                    <?php elseif ($req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD'): ?>
-                      <span class="badge badge-warning text-dark px-2" style="background-color: #ffc107; color: #212529;"><i class="fas fa-pause-circle mr-1"></i>On Hold</span>
                     <?php else: ?>
                       <span class="badge badge-secondary px-2"><?= htmlspecialchars($req['Status']); ?></span>
                     <?php endif; ?>
@@ -141,17 +61,21 @@ if (!empty($requests)) {
 
                       <?php
                       $sessionUserId = isset($employee_det['IUid']) ? (int)$employee_det['IUid'] : 0;
-                      $sessionRole = isset($employee_det['EmpRoleId']) ? (int)$employee_det['EmpRoleId'] : 0;
-                      $isHiringManager = ($sessionRole === 9);
-                      $isApproverRole  = in_array($sessionRole, [1, 3, 10, 12]);
                       $canUpdate = ($isHiringManager && (int)$req['RequestedBy'] === $sessionUserId) || in_array($sessionRole, [1, 3, 10]);
                       ?>
-                      <?php if ($canUpdate && ($req['Status'] === 'PENDING APPROVAL' || $req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD')): ?>
+                      <?php if ($canUpdate && $req['Status'] === 'PENDING APPROVAL'): ?>
                         <button type="button" class="btn btn-sm btn-primary" title="Edit Request"
                           onclick='openEditRequestModal(<?= json_encode($req, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)'>
                           <i class="fas fa-edit"></i>
                         </button>
                       <?php endif; ?>
+
+                     
+                      <?php
+                      $sessionRole = isset($employee_det['EmpRoleId']) ? (int)$employee_det['EmpRoleId'] : 0;
+                      $isHiringManager = ($sessionRole === 9);
+                      $isApproverRole  = in_array($sessionRole, [1, 3, 10, 12]); 
+                      ?>
 
                       <?php if ($req['Status'] === 'PENDING APPROVAL'): ?>
 
@@ -168,22 +92,9 @@ if (!empty($requests)) {
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-check"></i>
                           </button>
-                          <button type="button" class="btn btn-sm btn-warning text-dark" title="Hold Request"
-                            onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ON-HOLD', '<?= htmlspecialchars($req['RequestCode']); ?>')">
-                            <i class="fas fa-pause"></i>
-                          </button>
                           <button type="button" class="btn btn-sm btn-danger" title="Reject Request"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'REJECTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-times"></i>
-                          </button>
-                        <?php endif; ?>
-
-                      <?php elseif ($req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD'): ?>
-
-                        <?php if ($isHiringManager || $isApproverRole): ?>
-                          <button type="button" class="btn btn-sm btn-info" title="Remove On-Hold"
-                            onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'PENDING APPROVAL', '<?= htmlspecialchars($req['RequestCode']); ?>')">
-                            <i class="fas fa-play"></i>
                           </button>
                         <?php endif; ?>
 
@@ -706,16 +617,6 @@ function openApprovalModal(requestId, status, requestCode) {
     $('#approvalModalTitle').text('Accept Resource Request [' + requestCode + ']');
     $('#approvalTargetText').html('You are about to <span class="text-success font-weight-bold">ACCEPT</span> request <code>' + requestCode + '</code>.');
     btn.attr('class', 'btn btn-success').html('<i class="fas fa-check mr-1"></i> Confirm Acceptance');
-  } else if (status === 'ON-HOLD' || status === 'ON HOLD' || status === 'HOLD') {
-    header.attr('class', 'modal-header bg-warning text-dark');
-    $('#approvalModalTitle').text('Hold Resource Request [' + requestCode + ']');
-    $('#approvalTargetText').html('You are about to place request <code>' + requestCode + '</code> <span class="text-dark font-weight-bold">ON HOLD</span>.');
-    btn.attr('class', 'btn btn-warning text-dark').html('<i class="fas fa-pause mr-1"></i> Confirm On-Hold');
-  } else if (status === 'PENDING APPROVAL') {
-    header.attr('class', 'modal-header bg-info text-white');
-    $('#approvalModalTitle').text('Resume Resource Request [' + requestCode + ']');
-    $('#approvalTargetText').html('You are about to <span class="text-info font-weight-bold">RESUME</span> request <code>' + requestCode + '</code> to Pending Approval.');
-    btn.attr('class', 'btn btn-info').html('<i class="fas fa-play mr-1"></i> Confirm Resume');
   } else {
     header.attr('class', 'modal-header bg-danger text-white');
     $('#approvalModalTitle').text('Reject Resource Request [' + requestCode + ']');

@@ -5022,7 +5022,7 @@ public function mark_all_notifications_read() {
 
             @file_put_contents(APPPATH . 'logs/ats_debug.log', date('Y-m-d H:i:s') . " - UPDATE_RES_REQ: " . json_encode(['post' => $this->input->post(), '_POST' => $_POST, 'rawReqId' => $rawReqId, 'requestId' => $requestId, 'status' => $status, 'comment' => $comment, 'session' => $check_session]) . "\n", FILE_APPEND);
 
-            if ((!$requestId && empty($targetReq)) || !in_array($status, ["ACCEPTED", "REJECTED", "ON-HOLD", "PENDING APPROVAL"])) {
+            if ((!$requestId && empty($targetReq)) || !in_array($status, ["ACCEPTED", "REJECTED"])) {
                 echo json_encode(["status" => "error", "message" => "Invalid request parameters."]);
                 $this->db->db_debug = $db_debug_orig;
                 return;
