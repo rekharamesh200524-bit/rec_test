@@ -263,9 +263,16 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
             </h5>
           </div>
           <div class="card-body d-flex flex-column">
-            <div class="d-flex align-items-center justify-content-center mb-3 style-chart-box" style="min-height:220px;">
+            <div class="d-flex align-items-center justify-content-center mb-3 style-chart-box" style="min-height:220px; position: relative;">
               <canvas id="dynamicDistributionChart" class="chart-canvas"></canvas>
               <div id="candidatePipeline" class="w-100" style="display:none;"></div>
+              <div id="noChartDataState" class="text-center p-3 w-100" style="display:none;">
+                <div class="mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f8fafc; border: 2px dashed #cbd5e1; color: #94a3b8; font-size: 24px;">
+                  <i class="fas fa-chart-pie"></i>
+                </div>
+                <h6 class="font-weight-bold text-dark mb-1">No Data on Chart</h6>
+                <p class="text-muted small mb-0" id="noChartDataMsg">No distribution data available for the selected filters.</p>
+              </div>
             </div>
             <div id="chartDetails" class="mt-2 overflow-auto"></div>
           </div>
@@ -689,15 +696,36 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderChart(open, hold, rejected, closed) {
     const canvas = document.getElementById('dynamicDistributionChart');
     const pipelineEl = document.getElementById('candidatePipeline');
+    const noDataEl = document.getElementById('noChartDataState');
+    const noDataMsg = document.getElementById('noChartDataMsg');
     const detailsContainer = document.getElementById('chartDetails');
     if (!canvas || !pipelineEl) return;
 
     if (myChartInstance) {
       myChartInstance.destroy();
+      myChartInstance = null;
     }
 
     const total = open + hold + rejected + closed;
     detailsContainer.innerHTML = '';
+
+    if (total === 0) {
+      canvas.style.display = 'none';
+      pipelineEl.style.display = 'none';
+      if (noDataEl) {
+        noDataEl.style.display = 'block';
+        if (noDataMsg) {
+          noDataMsg.textContent = (activeToggle === 'job')
+            ? 'No job status distribution data available for the selected filters.'
+            : 'No candidate pipeline data available for the selected filters.';
+        }
+      }
+      return;
+    }
+
+    if (noDataEl) {
+      noDataEl.style.display = 'none';
+    }
 
     if (activeToggle === 'job') {
       canvas.style.display = 'block';
@@ -706,11 +734,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const labels = ['Open Jobs', 'On Hold', 'Cancelled', 'Closed'];
       const dataValues = [open, hold, rejected, closed];
       const bgColors = ['#10b981', '#f59e0b', '#ef4444', '#64748b'];
-
-      if (total === 0) {
-        detailsContainer.innerHTML = '<div class="text-center text-muted py-3">No distribution data available.</div>';
-        return;
-      }
 
       labels.forEach((label, idx) => {
         const val = dataValues[idx];
