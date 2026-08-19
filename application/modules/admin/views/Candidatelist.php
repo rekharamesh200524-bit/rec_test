@@ -8,140 +8,94 @@
 ?>
 
 
- <section class="content">
+<section class="content pt-3">
   <div class="container-fluid">
 
-    <div class="card card-warning card-outline">
+    <div class="card card-warning card-outline shadow-sm">
 
-    
-      <div class="card-header">
-
+      <div class="card-header bg-white border-bottom-0 py-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
-
-          <h3 class="card-title mb-0 mr-3 my-1">
-            <i class="fas fa-user-tie text-primary mr-2"></i> Candidate Directory
-
-            <a href="javascript:void(0)"
-               class="viewVacancyBtn badge badge-pill badge-warning text-dark ml-2"
-               data-id="<?= $jobdetails['Jid']; ?>">
-               <?= $jobdetails['JobCode']; ?>
+          <h5 class="font-weight-bold text-dark mb-0 my-1 d-flex align-items-center">
+            <i class="fas fa-user-tie text-primary mr-2"></i> Candidate Directory List
+            <a href="javascript:void(0)" class="viewVacancyBtn badge badge-pill badge-warning text-dark ml-2" data-id="<?= $jobdetails['Jid']; ?>" style="font-size: 13.5px;">
+              <?= $jobdetails['JobCode']; ?>
             </a>
-          </h3>
+          </h5>
 
-          <!-- Compare Candidates Selection Controls -->
-          <div class="d-flex align-items-center my-1 mr-auto">
-            <span class="badge badge-pill badge-light border text-dark font-weight-bold mr-2 px-3 py-2" id="compareCountBadge" style="font-size: 13px;">
-              <i class="fas fa-user-check text-primary mr-1"></i> <span id="compareSelectedCount">0</span> Selected
-            </span>
-            <button type="button" 
-                    id="btnCompareCandidates" 
-                    class="btn btn-secondary disabled btn-sm font-weight-bold px-3 py-2" 
-                    data-vacancy-id="<?= $jobdetails['Jid']; ?>"
-                    title="Please select at least 2 candidates using the checkboxes below to compare">
+         
+          <div class="d-flex align-items-center flex-wrap gap-2 my-1">
+            
+            <button type="button" id="btnToggleCompareMode" class="btn btn-outline-primary btn-sm font-weight-bold px-3 py-2 shadow-sm">
               <i class="fas fa-balance-scale mr-1"></i> Compare Candidates
             </button>
+
+          
+            <div id="compareActiveBar" class="d-none align-items-center flex-wrap gap-2">
+              <button type="button" id="btnSelectAllCandidates" class="btn btn-sm btn-outline-info font-weight-bold px-3 py-2">
+                <i class="far fa-check-square mr-1"></i> Select All
+              </button>
+              <span class="badge badge-pill badge-primary text-white font-weight-bold px-3 py-2 shadow-sm ml-1" id="compareCountBadge" style="font-size: 13px;">
+                <i class="fas fa-user-check mr-1"></i> <span id="compareSelectedCount">0</span> Selected
+              </span>
+              <button type="button" id="btnCompareCandidates" class="btn btn-primary disabled btn-sm font-weight-bold px-3 py-2 shadow-sm" data-vacancy-id="<?= $jobdetails['Jid']; ?>" title="Select at least 2 candidates using the checkboxes below to compare">
+                <i class="fas fa-columns mr-1"></i> Compare Selected
+              </button>
+              <button type="button" id="btnCancelCompareMode" class="btn btn-sm btn-outline-danger font-weight-bold px-3 py-2 ml-1">
+                <i class="fas fa-times mr-1"></i> Cancel
+              </button>
+            </div>
           </div>
-
-          <!-- Breadcrumb aligned right -->
-          <ol class="breadcrumb mb-0 my-1">
-            <li class="breadcrumb-item">
-              <a href="<?= base_url('admin/dashboard'); ?>">
-                Dashboard
-              </a>
-            </li>
-
-            <li class="breadcrumb-item">
-              <a href="<?= base_url('admin/VaccancyList'); ?>">
-                Vacancy List
-              </a>
-            </li>
-
-            <li class="breadcrumb-item active">
-              Candidate Details
-            </li>
-          </ol>
-
         </div>
-
       </div>
-     
 
-
-     
-      <div class="card-body pb-0">
-
-        <ul class="nav nav-pills nav-pills-sm nav-justified mb-3">
-
-          <li class="nav-item">
-            <a class="nav-link active filterPill rounded-pill" data-status="">
-              All
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link filterPill rounded-pill" data-status="CV Uploaded">
-              CV Uploaded
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link filterPill rounded-pill" data-status="Selected">
-              Selected
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link filterPill rounded-pill" data-status="In Progress">
-              In Progress
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link filterPill rounded-pill" data-status="On Hold">
-              On Hold
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link filterPill rounded-pill" data-status="Rejected">
-              Rejected
-            </a>
-          </li>
-
-        </ul>
-
+      <div class="card-body pb-0 pt-1">
+        <div class="mb-3">
+          <ul class="nav nav-pills nav-pills-sm nav-justified mb-3">
+            <li class="nav-item">
+              <a class="nav-link active filterPill rounded-pill" data-status="">All</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link filterPill rounded-pill" data-status="CV Uploaded">CV Uploaded</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link filterPill rounded-pill" data-status="Selected">Selected</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link filterPill rounded-pill" data-status="In Progress">In Progress</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link filterPill rounded-pill" data-status="On Hold">On Hold</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link filterPill rounded-pill" data-status="Rejected">Rejected</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    
 
-
-              <div class="card-body">
-                  <table id="example1" class="table table-bordered table-striped">
-                  <thead class="bg-success text-white">
-                  <tr>
-                    <th style="width: 40px;" class="text-center"><input type="checkbox" id="selectAllCandidates" title="Select All"></th>
-                    <th>S.No</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Mobile No</th>
-                    <th>Email</th>
-                    <th>ATS Recommendation</th> 
-                    <th>Current Status</th>
-                    <th>Verified On</th>
-                    <th>Action</th>
-                   </tr>
-                  </thead>
-                                <tbody>
-                            <?php
-                            
-                         
-
-                            if (isset($Candidatelist) && !empty($Candidatelist)) {
-                                $i = 1;
-                                foreach ($Candidatelist as $cl) {
-                            ?>
-                                <tr data-candidate-id="<?= $cl['CandidateId']; ?>">
-                                    <td class="text-center"><input type="checkbox" class="candidate-select-chk" data-candidate-id="<?= $cl['CandidateId']; ?>" value="<?= $cl['CandidateId']; ?>"></td>
-                                    <td><?= $i++; ?></td>
+      <div class="card-body pt-0">
+        <table id="example1" class="table table-bordered table-striped align-middle mb-0 table-full-width">
+          <thead class="bg-success text-white">
+            <tr>
+              <th style="width: 65px;" class="text-center">S.No <input type="checkbox" id="selectAllCandidates" class="chk-input d-none ml-1" title="Select All"></th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Mobile No</th>
+              <th>Email</th>
+              <th>ATS Recommendation</th> 
+              <th>Current Status</th>
+              <th>Verified On</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            if (isset($Candidatelist) && !empty($Candidatelist)) {
+                $i = 1;
+                foreach ($Candidatelist as $cl) {
+            ?>
+                <tr data-candidate-id="<?= $cl['CandidateId']; ?>">
+                    <td class="text-center font-weight-bold"><?= $i++; ?> <input type="checkbox" class="candidate-select-chk chk-input d-none ml-1" data-candidate-id="<?= $cl['CandidateId']; ?>" value="<?= $cl['CandidateId']; ?>"></td>
                                <td>
 <!-- <a href="javascript:void(0)"
    class="text-warning font-weight-bold viewVacancyBtn"
@@ -223,6 +177,51 @@
     $analysisData['experience'] =
         $analysisData['experience'] ?? ($cl['ExperienceMatch'] ?? '');
 
+    if (empty($analysisData['candidate_profile'])) {
+        $expDetails = [];
+        if (!empty($cl['ExperienceDetails'])) {
+            $expDetails = is_string($cl['ExperienceDetails']) ? json_decode($cl['ExperienceDetails'], true) : $cl['ExperienceDetails'];
+        }
+
+        $wHist = [];
+        $eduPattern = '/\b(bachelor|master|b\.?tech|m\.?tech|b\.?e|m\.?e|b\.?sc|m\.?sc|b\.?com|m\.?com|bba|mba|bca|mca|phd|diploma|degree|college|university|institute|school|academy|sslc|hsc|10th|12th|education|academic|passed out|cgpa|percentage)\b/i';
+        if (!empty($expDetails['jobs'])) {
+            $jIdx = 1;
+            foreach ($expDetails['jobs'] as $jItem) {
+                $rStr = !empty($jItem['role']) ? $jItem['role'] : (!empty($cl['RoleSummary']) ? $cl['RoleSummary'] : "Position #{$jIdx}");
+                $cStr = !empty($jItem['company']) ? $jItem['company'] : "Company";
+                if (preg_match($eduPattern, $rStr) || preg_match($eduPattern, $cStr)) {
+                    continue;
+                }
+                $pStr = ($jItem['from'] ?? '') . ' - ' . ($jItem['to'] ?? '');
+                $dur = ($jItem['years'] ?? 0) . ' Yrs ' . ($jItem['months'] ?? 0) . ' Mos';
+                $wHist[] = [
+                    'role' => $rStr,
+                    'company' => $cStr,
+                    'period' => $pStr,
+                    'duration' => $dur
+                ];
+                $jIdx++;
+            }
+        }
+
+        $expStr = (!empty($cl['ExpYrs']) && is_numeric($cl['ExpYrs']) && $cl['ExpYrs'] > 0) ? ($cl['ExpYrs'] . ' years of total professional experience') : 'hands-on experience';
+
+        $analysisData['candidate_profile'] = [
+            'headline' => !empty($cl['RoleSummary']) ? $cl['RoleSummary'] : (!empty($cl['JobTitle']) ? $cl['JobTitle'] : 'Candidate'),
+            'current_role' => !empty($cl['RoleSummary']) ? $cl['RoleSummary'] : 'Not specified in resume',
+            'current_company' => 'Not specified in resume',
+            'summary' => (!empty($cl['Fullname']) ? $cl['Fullname'] : 'Candidate') . " with " . $expStr . (!empty($cl['MatchedSkills']) ? " and skills in " . $cl['MatchedSkills'] : '') . '.',
+            'degree' => (!empty($cl['EducationMatch']) && $cl['EducationMatch'] !== 'Yes' && $cl['EducationMatch'] !== 'No') ? $cl['EducationMatch'] : 'Qualifications identified',
+            'institution' => 'Not specified in resume',
+            'grad_year' => 'Not specified in resume',
+            'training' => 'Not specified in resume',
+            'categorized_skills' => !empty($cl['MatchedSkills']) ? ['Core Skills' => $cl['MatchedSkills']] : [],
+            'work_history' => $wHist,
+            'projects' => []
+        ];
+    }
+
     $analysisJson = htmlspecialchars(
         json_encode($analysisData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
         ENT_QUOTES,
@@ -241,11 +240,10 @@
         <i class="fas fa-search"></i> View Analysis
     </button>
 </td>
-                                    <td><?= $cl['CurrentStatus'] ?> ?></td>
+                                    <td><?= htmlspecialchars($cl['CurrentStatus'] ?? ''); ?></td>
                                     <td><?= $cl['AppliedOn'] ?></td>  
-                                    <td>
-
-<div class="btn-group" role="group">
+<td class="text-center text-nowrap">
+<div class="d-inline-flex align-items-center justify-content-center" style="gap: 4px;">
 
 <!-- View -->
 <!-- <button type="button"
@@ -275,6 +273,13 @@
         data-status="<?= htmlspecialchars($cl['CurrentStatus'] ?? '', ENT_QUOTES); ?>"
         title="Update Stage">
 <i class="fas fa-edit"></i>
+</button>
+
+<button type="button"
+        class="btn btn-sm btn-warning btn-candidate-360 ml-1"
+        data-id="<?= $cl['CandidateId']; ?>"
+        title="Candidate 360° Profile">
+<i class="fas fa-user-circle"></i>
 </button>
 
 
@@ -356,12 +361,11 @@ if ($showOffer): ?>
     </div>
   </section>
 
-<!-- Candidate Comparison Side-by-Side Modal -->
 <div class="modal fade" id="candidateComparisonModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="max-width: 92%;">
     <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
       
-      <!-- Modal Header -->
+     
       <div class="modal-header text-white py-3 px-4 d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
         <div>
           <h5 class="modal-title font-weight-bold mb-0">
@@ -377,7 +381,7 @@ if ($showOffer): ?>
         </button>
       </div>
 
-      <!-- Modal Body -->
+     
       <div class="modal-body p-4 bg-light" id="candidateComparisonModalBody" style="max-height: 80vh; overflow-y: auto;">
         <div class="text-center py-5 text-muted">
           <i class="fas fa-spinner fa-spin fa-3x mb-3 text-primary"></i>
@@ -386,7 +390,7 @@ if ($showOffer): ?>
         </div>
       </div>
 
-      <!-- Modal Footer -->
+      
       <div class="modal-footer bg-white py-2 px-4 d-flex justify-content-between">
         <small class="text-muted"><i class="fas fa-robot text-primary mr-1"></i> Multi-Candidate Comparative Analytics Powered by HRMS AI Engine</small>
         <button type="button" class="btn btn-secondary btn-sm px-4 font-weight-bold" data-dismiss="modal">Close</button>
@@ -548,16 +552,16 @@ if ($showOffer): ?>
         <option value="Reschedule">Reschedule</option>
     </select>
 </div>
-<!-- Interview (only for Screened) -->
+
 <div class="shortlistedOnly" style="display:none">
 
-    <!-- Interview Schedule -->
+  
     <div class="form-group">
         <label>Interview Schedule</label>
         <input type="date" id="interviewDate" class="form-control">
     </div>
 
-    <!-- Interview Type -->
+   
     <div class="form-group">
         <label>Interview Mode </label>
         <select id="interviewType" class="form-control">
@@ -567,7 +571,7 @@ if ($showOffer): ?>
         </select>
     </div>
 
-    <!-- Interview Level -->
+   
     <div class="form-group">
         <label>Interview Level</label>
         <select id="interviewLevel" class="form-control">
@@ -575,7 +579,7 @@ if ($showOffer): ?>
         </select>
     </div>
 
-    <!-- Interviewer -->
+ 
     <div class="form-group">
         <label>Interviewer</label>
         <select id="interviewerId" class="form-control">
@@ -587,7 +591,7 @@ if ($showOffer): ?>
     </div>
 
 </div>
-<!-- Follow Up (Switch Off / RNR) -->
+
 <div class="followupOnly" style="display:none">
 
 <div class="form-group">
@@ -625,21 +629,45 @@ Save
 </div>
 
 
+
 <div class="modal fade" id="candidateDetailsModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
-                <h5 class="modal-title">Candidate Details</h5>
+                <h5 class="modal-title"><i class="fas fa-route mr-2 text-info"></i>Candidate Details</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
             <div class="modal-body" id="candidateDetailsBody">
                 <div class="text-center">
                     <i class="fa fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
+<!-- Candidate 360° Modal (New Separate Feature) -->
+<div class="modal fade" id="candidate360Modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 14px; overflow: hidden;">
+            <div class="modal-header text-white py-3 px-4" style="background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4);">
+                        <i class="fas fa-user-astronaut text-primary" style="font-size: 16px;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-weight-bold mb-0 text-white" style="letter-spacing: -0.2px; font-size: 17px;">Candidate 360° Profile</h5>
+                        <small class="text-white-50" style="font-size: 11px;">Complete Candidate Analytics & Evaluation Hub</small>
+                    </div>
+                </div>
+                <button type="button" class="close text-white opacity-75 hover-opacity-100" data-dismiss="modal" aria-label="Close" style="outline: none; font-size: 22px;">&times;</button>
+            </div>
+            <div class="modal-body p-3 bg-light" id="candidate360Body">
+                <div class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+                    <p class="mt-2 font-weight-bold text-dark">Loading Candidate 360° Profile...</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -679,7 +707,7 @@ Save
 
   </div>
  </div>
-</div>   <!-- CLOSE vacancy modal completely -->
+</div>  
 
 <div id="vacancyOverlay"></div>
 
@@ -771,7 +799,7 @@ Save
    
     });
 
-/////
+
 
 function loadNextStages(currentOrder){
 
@@ -796,7 +824,7 @@ function loadNextStages(currentOrder){
 }
 
 
-////
+
 
 $(document).on('click','.openCandidateStage',function(){
 
@@ -829,7 +857,7 @@ $(document).on('click','.openCandidateStage',function(){
        $('#stageGroup').hide();
        $('#actionGroup').show();
 
-       // Hide Screened option if candidate is already screened or moved beyond screening
+      
        if (status.includes('screen') || (status !== 'cv uploaded' && status !== 'uploaded' && status !== '')) {
            $('#stageAction option[value="Screened"]').hide();
        } else {
@@ -1152,7 +1180,13 @@ $(document).ready(function () {
             type: 'POST',
             data: { status: status, jid: jid },
             success: function (res) {
+                if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
+                    $('#example1').DataTable().destroy();
+                }
                 $('#example1 tbody').html(res);
+                if (typeof window.initCandidateDataTable === 'function') {
+                    window.initCandidateDataTable();
+                }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             },
             error: function (xhr) {
@@ -1354,376 +1388,661 @@ $(document).on('click', '#saveHiring', function () {
 
         $('#hiringPanel').removeClass('open');
         $('#vacancyOverlay').removeClass('show');
-
-        location.reload();
-
-    });
+});
 
 });
-$(document).on('click', '.viewCandidateDetails', function () {
 
-    let candidateId = $(this).data('id');
+   
+    function renderCandidate360(data) {
+        let c = data.candidate || {};
+        let stages = data.stages || [];
+        let interviews = data.interviews || [];
+        let panelScores = data.panelScores || [];
+        let disagreements = data.disagreements || [];
+        let panelSummary = data.panelSummary || null;
+        let aiQuestions = data.aiQuestions || [];
+        let offers = data.offers || [];
+        let hiring = data.hiring || null;
 
-    $('#candidateDetailsModal').modal('show');
-    $('#candidateDetailsBody').html(
-        '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i></div>'
-    );
+        let sb = c.score_breakdown || {};
+        let expDetails = c.experience_details || [];
 
-    $.ajax({
-        url: base_url + "admin/getCandidateIdDetails",
-        type: "POST",
-        data: { candidate_id: candidateId },
-        dataType: "json",
-        success: function (res) {
+        let mustHaveStr = c.VacancyMustHaveSkills || 'React, Node.js, MongoDB, REST API';
+        let mustHaveList = mustHaveStr.split(',').map(s => s.trim()).filter(Boolean);
+        let matchedSkillsStr = c.MatchedSkills || '';
+        let matchedSkillsList = matchedSkillsStr.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 
-            if (res.status !== 'success') {
-                $('#candidateDetailsBody').html('<div class="alert alert-danger">No data found</div>');
-                return;
-            }
+        let mustHaveCovered = 0;
+        mustHaveList.forEach(sk => {
+            if (matchedSkillsList.includes(sk.toLowerCase())) mustHaveCovered++;
+        });
 
-            let c = res.data.candidate;
-            let stages = res.data.stages;
-            let interviews = res.data.interviews;
-            let offers = res.data.offers;
-            let followups = res.data.followups;
+        let atsMatchScore = c.ProfileMatchPer ? c.ProfileMatchPer : 'N/A';
+        let panelScoreDisplay = panelSummary ? panelSummary.overall_avg + ' / 5 (' + panelSummary.overall_pct + '%)' : 'Not Evaluated';
 
-            let html = `<div class="container-fluid">`;
+        let candidateName = (c.Fullname && c.Fullname.trim() !== '' && c.Fullname !== 'N/A') ? c.Fullname : ((c.CandidateCode && c.CandidateCode.trim() !== '') ? c.CandidateCode : 'Candidate Profile');
 
-            /* BASIC INFO */
-            html += `
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Basic Information</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Name:</strong> ${c.Fullname ?? '-'}</p>
-                            <p><strong>Email:</strong> ${c.Email ?? '-'}</p>
-                            <p><strong>Phone:</strong> ${c.PhoneNo ?? '-'}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Experience:</strong> ${c.ExpYrs ?? 0} Years</p>
-                            <p><strong>ATS Recommendation:</strong>
-                                <span class="badge ${
-                                    (c.ProfileMatchPer === 'Strong Match' || c.ProfileMatchPer === 'Strongly Match' || c.ProfileMatchPer === 'Recommended') ? 'badge-success' :
-                                    (c.ProfileMatchPer === 'Low Match' || c.ProfileMatchPer === 'Not Recommended') ? 'badge-danger' :
-                                    (c.ProfileMatchPer === 'Potential Match' || c.ProfileMatchPer === 'Review Required') ? 'badge-warning' :
-                                    'badge-secondary'}">
-                                    ${c.ProfileMatchPer === 'Recommended' ? 'Strong Match' : (c.ProfileMatchPer === 'Review Required' ? 'Potential Match' : (c.ProfileMatchPer === 'Not Recommended' ? 'Low Match' : (c.ProfileMatchPer ?? 'Potential Match')))}
-                                </span>
-                            </p>
-                            <p><strong>Status:</strong>
-                                <span class="badge ${
-                                    c.ATS_Status && c.ATS_Status.toLowerCase().includes('shortlisted') ? 'badge-success' :
-                                    c.ATS_Status && c.ATS_Status.toLowerCase().includes('selected') ? 'badge-success' :
-                                    c.ATS_Status && c.ATS_Status.toLowerCase().includes('rejected') ? 'badge-danger' :
-                                    c.ATS_Status && c.ATS_Status.toLowerCase().includes('hold') ? 'badge-warning' :
-                                    'badge-secondary'}">
-                                    ${c.ATS_Status ?? '-'}
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-            /* ================= EXPERIENCE BREAKDOWN ================= */
-html += `
-<div class="card card-warning collapsed-card">
-    <div class="card-header">
-        <h3 class="card-title">Experience Breakdown</h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-    </div>
-    <div class="card-body">`;
- 
+        let atsBadgeBg = 'style="background: #3b82f6; color: #fff;"';
+        if (atsMatchScore.includes('Strong')) {
+            atsBadgeBg = 'style="background: #10b981; color: #fff;"';
+        } else if (atsMatchScore.includes('Potential')) {
+            atsBadgeBg = 'style="background: #f59e0b; color: #fff;"';
+        } else if (atsMatchScore.includes('Low') || atsMatchScore.includes('Not')) {
+            atsBadgeBg = 'style="background: #ef4444; color: #fff;"';
+        }
 
-
-let exp = c.experience_details;
-
-
-if (typeof exp === "string") {
-    try {
-        exp = JSON.parse(exp);
-    } catch (e) {
-        exp = null;
-    }
-}
-
-if (exp && exp.jobs && exp.jobs.length > 0) {
-
-    exp.jobs.forEach(function(e) {
+        let html = `<div class="candidate-360-container font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif;">`;
 
         html += `
-        <div class="border p-2 mb-2">
-            <strong>${e.from} - ${e.to}</strong><br>
-            Duration: ${(e.years ?? 0)} Years ${(e.months ?? 0)} Months
+        <div class="card border-0 shadow-sm mb-3 rounded-lg p-3 text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div style="max-width: 65%;">
+              <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <span class="badge px-2 py-1 font-weight-bold text-uppercase" style="font-size: 10px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 4px; letter-spacing: 0.5px;">
+                  <i class="fas fa-certificate mr-1"></i>Candidate 360° Profile
+                </span>
+                <span class="badge px-2 py-1 font-weight-bold" style="font-size: 11px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1;">
+                  <i class="fas fa-barcode mr-1 text-info"></i>${c.CandidateCode || 'N/A'}
+                </span>
+              </div>
+              <h4 class="font-weight-bold mb-1 text-white" style="font-size: 22px; letter-spacing: -0.3px;">${candidateName}</h4>
+              <div class="d-flex flex-wrap align-items-center text-white-50 small gap-3 mt-1" style="font-size: 12px; line-height: 1.6;">
+                <span class="mr-3"><i class="fas fa-briefcase text-primary mr-1"></i><strong>${c.JobTitle || 'Vacancy'}</strong> <span class="text-white-50">(${c.JobCode || 'N/A'})</span></span>
+                ${c.Email ? `<span class="mr-3"><i class="fas fa-envelope text-info mr-1"></i>${c.Email}</span>` : ''}
+                ${c.PhoneNo ? `<span class="mr-3" title="${c.PhoneNo}"><i class="fas fa-phone text-success mr-1"></i>${c.PhoneNo}</span>` : ''}
+              </div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap align-items-center">
+              <div class="rounded px-3 py-2 text-center shadow-sm" style="min-width: 105px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px);">
+                <small class="text-uppercase font-weight-bold d-block text-white-50 mb-1" style="font-size: 10px; letter-spacing: 0.5px;">ATS Fit</small>
+                <span class="badge px-2 py-1 font-weight-bold" ${atsBadgeBg} style="font-size: 11px;">${atsMatchScore}</span>
+              </div>
+              <div class="rounded px-3 py-2 text-center shadow-sm" style="min-width: 115px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px);">
+                <small class="text-uppercase font-weight-bold d-block text-white-50 mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Panel Score</small>
+                <span class="h6 font-weight-bold text-success mb-0" style="font-size: 13px;">${panelScoreDisplay}</span>
+              </div>
+              <div class="rounded px-3 py-2 text-center shadow-sm" style="min-width: 105px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px);">
+                <small class="text-uppercase font-weight-bold d-block text-white-50 mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Stage</small>
+                <span class="badge badge-info font-weight-bold" style="font-size: 11px;">${c.CurrentStage || 'Applied'}</span>
+              </div>
+            </div>
+          </div>
         </div>`;
-    });
 
-    html += `
-    <div class="alert alert-info mt-3">
-        <strong>Total Experience:</strong> ${exp.total}
-    </div>`;
-}
-html += `</div></div>`;
- 
+        html += `
+        <ul class="nav nav-pills nav-justified bg-white p-1 rounded-lg mb-3 border shadow-sm" id="c360TabNav" role="tablist" style="border-radius: 10px; border-color: #e2e8f0 !important;">
+          <li class="nav-item"><a class="nav-link active font-weight-bold py-2 px-2 small rounded-lg" id="t-overview" data-toggle="pill" href="#c360-overview"><i class="fas fa-chart-pie mr-1"></i> Overview</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-timeline" data-toggle="pill" href="#c360-timeline"><i class="fas fa-history mr-1"></i> Timeline</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-ats" data-toggle="pill" href="#c360-ats"><i class="fas fa-robot mr-1"></i> ATS Analysis</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-skills" data-toggle="pill" href="#c360-skills"><i class="fas fa-tasks mr-1"></i> Skills</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-evaluations" data-toggle="pill" href="#c360-evaluations"><i class="fas fa-user-check mr-1"></i> Evaluations (${panelScores.length})</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-aiquestions" data-toggle="pill" href="#c360-aiquestions"><i class="fas fa-brain mr-1"></i> AI Qs (${aiQuestions.length})</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-resume" data-toggle="pill" href="#c360-resume"><i class="fas fa-file-alt mr-1"></i> Resume</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg" id="t-offer" data-toggle="pill" href="#c360-offer"><i class="fas fa-handshake mr-1"></i> Offer</a></li>
+          <li class="nav-item"><a class="nav-link font-weight-bold py-2 px-2 small rounded-lg text-dark" id="t-decision" data-toggle="pill" href="#c360-decision" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4);"><i class="fas fa-balance-scale text-warning mr-1"></i> Decision</a></li>
+        </ul>`;
 
-            
+        html += `<div class="tab-content border-0 p-1" id="c360TabContent">`;
+
+        html += `
+        <div class="tab-pane fade show active" id="c360-overview" role="tabpanel">
+          <div class="row">
+            <div class="col-md-5 mb-3">
+              <div class="card h-100 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                <div class="card-header text-white font-weight-bold py-2 px-3" style="background: #0f172a;"><i class="fas fa-chart-bar text-primary mr-2"></i>Performance Metrics</div>
+                <div class="card-body p-3 bg-white">
+                  <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="text-muted font-weight-bold small">ATS Fit Score:</span>
+                    <span class="badge px-2 py-1 font-weight-bold" ${atsBadgeBg}>${atsMatchScore}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="text-muted font-weight-bold small">Interview Panel Avg:</span>
+                    <span class="badge badge-success font-weight-bold px-2 py-1">${panelScoreDisplay}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="text-muted font-weight-bold small">Must-Have Skills Coverage:</span>
+                    <span class="badge badge-info font-weight-bold px-2 py-1">${mustHaveCovered} / ${mustHaveList.length} (${mustHaveList.length > 0 ? Math.round((mustHaveCovered/mustHaveList.length)*100) : 0}%)</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="text-muted font-weight-bold small">Relevant Experience:</span>
+                    <span class="text-dark font-weight-bold small">${c.ExpYrs ? c.ExpYrs + ' Years' : 'Not Available'}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted font-weight-bold small">Current Application Status:</span>
+                    <span class="badge badge-dark font-weight-bold px-2 py-1">${c.CurrentStatus || 'Applied'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-7 mb-3">
+              <div class="card h-100 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                <div class="card-header text-white font-weight-bold py-2 px-3" style="background: #0f172a;"><i class="fas fa-bullseye text-warning mr-2"></i>Requirements & Evidence</div>
+                <div class="card-body p-3 bg-white">
+                  <h6 class="font-weight-bold text-dark mb-2 small text-uppercase text-muted" style="letter-spacing: 0.5px;">Must-Have Role Requirements</h6>
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    ${mustHaveList.map(sk => {
+                      let isMatched = matchedSkillsList.includes(sk.toLowerCase());
+                      return isMatched 
+                        ? `<span class="badge px-3 py-2 mr-1 mb-1 font-weight-bold" style="background: #e6f4ea; color: #137333; border: 1px solid #ceead6; border-radius: 20px; font-size: 11px;"><i class="fas fa-check-circle mr-1 text-success"></i>${sk}</span>`
+                        : `<span class="badge px-3 py-2 mr-1 mb-1 font-weight-normal" style="background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 11px;"><i class="fas fa-minus-circle mr-1 text-muted"></i>${sk}</span>`;
+                    }).join('')}
+                  </div>
+                  <hr style="border-top: 1px dashed #e2e8f0;">
+                  <h6 class="font-weight-bold text-dark mb-2 small text-uppercase text-muted" style="letter-spacing: 0.5px;">Interviewer Consensus Highlights</h6>
+                  ${panelSummary ? `
+                    <p class="small text-dark mb-1"><i class="fas fa-user-check text-success mr-2"></i>Evaluated by <strong>${panelSummary.eval_count}</strong> interviewer(s). Panel score average: <strong>${panelSummary.overall_avg} / 5 (${panelSummary.overall_pct}%)</strong>.</p>
+                    ${disagreements.length > 0 ? `<div class="alert alert-warning py-1 px-2 small mb-0 mt-2" style="border-radius: 6px;"><i class="fas fa-exclamation-triangle mr-1"></i>Note: ${disagreements.length} score variance item(s) detected between interviewers. See Evaluations tab.</div>` : `<div class="alert alert-success py-1 px-2 small mb-0 mt-2" style="border-radius: 6px;"><i class="fas fa-check-circle mr-1"></i>Interviewers evaluated with high consistency across criteria.</div>`}
+                  ` : `<p class="text-muted small mb-0"><i class="fas fa-info-circle mr-1"></i>No structured human interview evaluations saved yet.</p>`}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+       
+        html += `
+        <div class="tab-pane fade" id="c360-timeline" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-route mr-2 text-warning"></i>Complete Recruitment Journey Pipeline</h5>
+            <div class="timeline timeline-inverse">`;
+        if (stages.length > 0) {
+          stages.forEach(s => {
+            let badgeColor = 'bg-info';
+            let act = (s.Action || '').toLowerCase();
+            if (act.includes('rejected')) badgeColor = 'bg-danger';
+            else if (act.includes('shortlisted') || act.includes('selected') || act.includes('hired')) badgeColor = 'bg-success';
+            else if (act.includes('hold')) badgeColor = 'bg-warning';
+
             html += `
-            <div class="card card-info collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Job Details</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+            <div>
+              <i class="fas fa-user-tag ${badgeColor}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="far fa-clock mr-1"></i>${s.ActionAt || '-'}</span>
+                <h3 class="timeline-header font-weight-bold text-primary">${s.StageName || 'Stage Update'}</h3>
+                <div class="timeline-body">
+                  <p class="mb-1"><strong>Action:</strong> <span class="badge ${badgeColor.replace('bg-', 'badge-')}">${s.Action || '-'}</span></p>
+                  <p class="mb-1"><strong>Performed By:</strong> ${s.ActionByName || 'HR Admin'}</p>
+                  <p class="mb-0"><strong>Remarks:</strong> ${s.Remarks || 'No remarks recorded'}</p>
                 </div>
-                <div class="card-body">
-                    <p><strong>Job Title:</strong> ${c.JobTitle ?? '-'}</p>
-                    <p><strong>Location:</strong> ${c.JobLocation ?? '-'}</p>
-                    <p><strong>Employment Type:</strong> ${c.EmploymentType ?? '-'}</p>
-                </div>
+              </div>
             </div>`;
+          });
+        } else {
+          html += `<div class="p-3 text-muted">No stage tracking events recorded yet.</div>`;
+        }
+        html += `</div></div></div>`;
 
-           
-            html += `
-            <div class="card card-secondary collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Stage Timeline</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+        
+        html += `
+        <div class="tab-pane fade" id="c360-ats" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-robot mr-2 text-info"></i>ATS Screening Engine Breakdown</h5>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 bg-light">
+                  <h6 class="font-weight-bold text-dark border-bottom pb-2">Must-Have Skills Audit</h6>
+                  ${mustHaveList.map(sk => {
+                    let isMatched = matchedSkillsList.includes(sk.toLowerCase());
+                    return `<div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="font-weight-bold text-secondary">${sk}</span>
+                      <span class="badge ${isMatched ? 'badge-success' : 'badge-danger'} px-2 py-1">${isMatched ? '✓ Matched' : '⚠ Missing / Weak'}</span>
+                    </div>`;
+                  }).join('')}
                 </div>
-                <div class="card-body">
-                    <div class="timeline timeline-inverse">`;
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="border rounded p-3 bg-light">
+                  <h6 class="font-weight-bold text-dark border-bottom pb-2">Match Parameters</h6>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="font-weight-bold text-muted">Experience Match:</span>
+                    <span class="badge badge-info">${c.ExperienceMatch || 'Not Specified'}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="font-weight-bold text-muted">Education Match:</span>
+                    <span class="badge badge-info">${c.EducationMatch || 'Not Specified'}</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="font-weight-bold text-muted">ATS Fit Recommendation:</span>
+                    <span class="badge badge-success">${c.ProfileMatchPer || 'Review Required'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
 
-            if (stages.length > 0) {
-                stages.forEach(function (s) {
-                    let badgeColor = 'bg-info';
-                    if (s.Action && s.Action.toLowerCase().includes('rejected')) badgeColor = 'bg-danger';
-                    else if (s.Action && s.Action.toLowerCase().includes('shortlisted')) badgeColor = 'bg-success';
-                    else if (s.Action && s.Action.toLowerCase().includes('hold')) badgeColor = 'bg-warning';
+       
+        html += `
+        <div class="tab-pane fade" id="c360-skills" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-tasks mr-2 text-success"></i>Extracted Candidate Skills & Evidence</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped align-middle">
+                <thead class="bg-secondary text-white">
+                  <tr>
+                    <th>Skill Name</th>
+                    <th>Category</th>
+                    <th>Evidence Level</th>
+                    <th>Project Context / Source</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+        let allExtractedSkills = mustHaveList.concat((c.MatchedSkills || '').split(',').map(s=>s.trim()).filter(Boolean));
+        let uniqueSkills = Array.from(new Set(allExtractedSkills));
+        if (uniqueSkills.length > 0) {
+          uniqueSkills.forEach(sk => {
+            let isCovered = matchedSkillsList.includes(sk.toLowerCase());
+            html += `
+            <tr>
+              <td class="font-weight-bold text-dark">${sk}</td>
+              <td><span class="badge badge-light border">Role Keyword</span></td>
+              <td><span class="badge ${isCovered ? 'badge-success' : 'badge-warning'} px-2 py-1">${isCovered ? '✓ Strong Evidence' : '⚠ Weak / Missing'}</span></td>
+              <td class="small text-muted">${isCovered ? 'Extracted from Resume Experience & Projects' : 'Skill missing in uploaded resume text'}</td>
+            </tr>`;
+          });
+        } else {
+          html += `<tr><td colspan="4" class="text-center text-muted">No extracted skill evidence found.</td></tr>`;
+        }
+        html += `</tbody></table></div></div></div>`;
 
-                    html += `
-                    <div>
-                        <i class="fas fa-user ${badgeColor}"></i>
-                        <div class="timeline-item">
-                            <span class="time"><i class="far fa-clock"></i> ${s.ActionAt}</span>
-                            <h3 class="timeline-header">${s.StageName}</h3>
-                            <div class="timeline-body">
-                                <strong>Action:</strong> ${s.Action ?? '-'}<br>
-                                <strong>By:</strong> ${s.ActionByName ?? 'System'}<br>
-                                <strong>Remarks:</strong> ${s.Remarks ?? '-'}
+     
+        html += `
+        <div class="tab-pane fade" id="c360-evaluations" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-user-check mr-2 text-warning"></i>Interviewer Evaluation Reports & Panel Consensus</h5>`;
+
+        if (panelSummary) {
+          html += `
+          <div class="card border-success bg-light mb-4 shadow-sm">
+            <div class="card-body p-3">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                  <h6 class="font-weight-bold text-success mb-1"><i class="fas fa-award mr-1"></i>Panel Consensus Summary (${panelSummary.eval_count} Interviewers)</h6>
+                  <span class="text-muted small">Category averages across all structured human evaluations</span>
+                </div>
+                <div class="h5 font-weight-bold text-success mb-0 bg-white px-3 py-2 rounded border">
+                  Panel Average: ${panelSummary.overall_avg} / 5 (${panelSummary.overall_pct}%)
+                </div>
+              </div>
+              <div class="row mt-3 text-center">
+                <div class="col"><small class="text-muted d-block">Skill</small><strong class="h6 text-dark">${panelSummary.avg_skill} / 5</strong></div>
+                <div class="col"><small class="text-muted d-block">Communication</small><strong class="h6 text-dark">${panelSummary.avg_comm} / 5</strong></div>
+                <div class="col"><small class="text-muted d-block">Problem Solving</small><strong class="h6 text-dark">${panelSummary.avg_prob} / 5</strong></div>
+                <div class="col"><small class="text-muted d-block">Culture Fit</small><strong class="h6 text-dark">${panelSummary.avg_cult} / 5</strong></div>
+                <div class="col"><small class="text-muted d-block">Leadership</small><strong class="h6 text-dark">${panelSummary.avg_lead} / 5</strong></div>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        if (disagreements.length > 0) {
+          html += `
+          <div class="alert alert-warning border-warning shadow-sm mb-4">
+            <h6 class="font-weight-bold text-dark mb-1"><i class="fas fa-exclamation-triangle text-warning mr-2"></i>Interviewer Score Discrepancies Detected</h6>
+            <ul class="mb-0 pl-3 small text-dark">`;
+          disagreements.forEach(d => {
+            html += `<li><strong>${d.category}:</strong> Ratings range from ${d.min}/5 to ${d.max}/5 (${d.diff} point variance). Interviewers provided different assessments. HR review recommended.</li>`;
+          });
+          html += `</ul></div>`;
+        }
+
+        if (panelScores.length > 0) {
+          html += `<h6 class="font-weight-bold text-dark mb-3"><i class="fas fa-id-card mr-1"></i>Individual Interviewer Reports</h6><div class="row">`;
+          panelScores.forEach((ps, idx) => {
+            html += `
+            <div class="col-md-6 mb-3">
+              <div class="card h-100 border-secondary shadow-sm">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                  <span class="font-weight-bold">${ps.interviewer} <small class="text-white-50">(${ps.designation || 'Interviewer'})</small></span>
+                  <span class="badge badge-warning text-dark font-weight-bold">${ps.round}</span>
+                </div>
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <span class="text-muted small">Interviewer Decision:</span>
+                    <span class="badge ${ps.result.toLowerCase().includes('selected') ? 'badge-success' : (ps.result.toLowerCase().includes('reject') ? 'badge-danger' : 'badge-warning')} font-weight-bold px-2 py-1">${ps.result}</span>
+                  </div>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1"><span>Technical Skill:</span><strong>${ps.skill} / 5</strong></div>
+                    <div class="d-flex justify-content-between small mb-1"><span>Communication:</span><strong>${ps.comm} / 5</strong></div>
+                    <div class="d-flex justify-content-between small mb-1"><span>Problem Solving:</span><strong>${ps.prob} / 5</strong></div>
+                    <div class="d-flex justify-content-between small mb-1"><span>Culture Fit:</span><strong>${ps.cult} / 5</strong></div>
+                    <div class="d-flex justify-content-between small mb-1"><span>Leadership:</span><strong>${ps.lead} / 5</strong></div>
+                  </div>
+                  <div class="bg-light p-2 rounded text-center mb-2 border">
+                    <small class="text-uppercase font-weight-bold text-muted d-block" style="font-size:10px;">Interviewer Overall</small>
+                    <span class="h6 font-weight-bold text-primary mb-0">${ps.overall.toFixed(2)} / 5 (${Math.round((ps.overall/5)*100)}%)</span>
+                  </div>
+                  <p class="small text-muted mb-0"><strong>Feedback:</strong> <em>"${ps.feedback || 'No qualitative feedback recorded.'}"</em></p>
+                </div>
+              </div>
+            </div>`;
+          });
+          html += `</div>`;
+
+          if (panelScores.length >= 2) {
+            html += `
+            <h6 class="font-weight-bold text-dark mt-3 mb-2"><i class="fas fa-columns mr-1"></i>Interviewer Score Matrix</h6>
+            <div class="table-responsive mb-3">
+              <table class="table table-bordered table-sm text-center">
+                <thead class="bg-primary text-white">
+                  <tr>
+                    <th class="text-left">Evaluation Criteria</th>
+                    ${panelScores.map(ps => `<th>${ps.interviewer}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-left font-weight-bold">Skill</td>${panelScores.map(ps => `<td>${ps.skill}/5</td>`).join('')}</tr>
+                  <tr><td class="text-left font-weight-bold">Communication</td>${panelScores.map(ps => `<td>${ps.comm}/5</td>`).join('')}</tr>
+                  <tr><td class="text-left font-weight-bold">Problem Solving</td>${panelScores.map(ps => `<td>${ps.prob}/5</td>`).join('')}</tr>
+                  <tr><td class="text-left font-weight-bold">Culture Fit</td>${panelScores.map(ps => `<td>${ps.cult}/5</td>`).join('')}</tr>
+                  <tr><td class="text-left font-weight-bold">Leadership</td>${panelScores.map(ps => `<td>${ps.lead}/5</td>`).join('')}</tr>
+                  <tr class="bg-light font-weight-bold"><td class="text-left">Overall Score</td>${panelScores.map(ps => `<td class="text-primary">${Math.round((ps.overall/5)*100)}%</td>`).join('')}</tr>
+                </tbody>
+              </table>
+            </div>`;
+          }
+
+        } else {
+          html += `<div class="alert alert-secondary text-center py-4 mb-0"><i class="fas fa-info-circle mr-2"></i>No structured interviewer evaluations have been completed for this candidate yet.</div>`;
+        }
+
+        html += `</div></div>`;
+
+        
+        html += `
+        <div class="tab-pane fade" id="c360-aiquestions" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-brain mr-2 text-purple"></i>AI Personalised Questions Audit</h5>`;
+        if (aiQuestions.length > 0) {
+          html += `
+          <p class="small text-muted mb-3"><i class="fas fa-check-circle text-success mr-1"></i>Total <strong>${aiQuestions.length}</strong> AI personalized questions generated for candidate assessment.</p>
+          <div class="list-group mb-3">`;
+          aiQuestions.forEach((q, idx) => {
+            html += `
+            <div class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                <h6 class="mb-0 font-weight-bold text-dark">Q${idx+1}. ${q.question}</h6>
+                <span class="badge badge-primary px-2 py-1">${q.question_type || 'General'}</span>
+              </div>
+              <p class="mb-1 small text-muted"><strong>Skill Assessed:</strong> <span class="badge badge-light border">${q.skill || 'Core'}</span> | <strong>Difficulty:</strong> ${q.difficulty || 'Medium'}</p>
+              <small class="text-info"><strong>AI Rationale:</strong> ${q.reason || 'Personalized role assessment'}</small>
+            </div>`;
+          });
+          html += `</div>`;
+        } else {
+          html += `<div class="p-3 text-muted">No AI interview questions generated for this candidate yet.</div>`;
+        }
+        html += `</div></div>`;
+
+     
+        html += `
+        <div class="tab-pane fade" id="c360-resume" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="font-weight-bold text-primary mb-0"><i class="fas fa-file-alt mr-2"></i>Extracted Resume & Project History</h5>
+              ${c.ResumePath ? `<a href="${base_url + c.ResumePath}" target="_blank" class="btn btn-sm btn-outline-primary font-weight-bold"><i class="fas fa-external-link-alt mr-1"></i>View Original Resume PDF</a>` : ''}
+            </div>
+            <div class="border rounded p-3 bg-light mb-3">
+              <h6 class="font-weight-bold text-dark border-bottom pb-2">Candidate Experience Summary</h6>
+              <p class="mb-1"><strong>Total Experience:</strong> ${c.ExpYrs ? c.ExpYrs + ' Years' : 'Not Specified'}</p>
+              <p class="mb-1"><strong>Source:</strong> ${c.Source || 'Recruitment Portal'}</p>
+              <p class="mb-0"><strong>Verified Date:</strong> ${c.VerifiedAt || '-'}</p>
+            </div>
+          </div>
+        </div>`;
+
+       
+        html += `
+        <div class="tab-pane fade" id="c360-offer" role="tabpanel">
+          <div class="card border-0 shadow-sm p-3">
+            <h5 class="font-weight-bold text-primary mb-3"><i class="fas fa-handshake mr-2 text-success"></i>Offer & Hiring Records</h5>`;
+        if (offers.length > 0 || hiring) {
+          if (offers.length > 0) {
+            let of = offers[0];
+            html += `
+            <div class="border rounded p-3 bg-light mb-3">
+              <h6 class="font-weight-bold text-success border-bottom pb-2">Candidate Offer Details</h6>
+              <p class="mb-1"><strong>Offer Status:</strong> <span class="badge badge-success">${of.OfferStatus || 'Issued'}</span></p>
+              <p class="mb-1"><strong>Offer Date:</strong> ${of.OfferDate || '-'}</p>
+              <p class="mb-1"><strong>Expected Joining Date:</strong> ${of.ExpectedJoiningDate || '-'}</p>
+              <p class="mb-0"><strong>Notice Period:</strong> ${of.NoticePeriodDays ? of.NoticePeriodDays + ' Days' : '-'}</p>
+            </div>`;
+          }
+          if (hiring) {
+            html += `
+            <div class="border rounded p-3 bg-light">
+              <h6 class="font-weight-bold text-primary border-bottom pb-2">Final Hiring Record</h6>
+              <p class="mb-1"><strong>Salary Offered:</strong> ₹${hiring.SalaryOffered || '-'}</p>
+              <p class="mb-1"><strong>Joining Date:</strong> ${hiring.JoiningDate || '-'}</p>
+              <p class="mb-0"><strong>Hiring Remarks:</strong> ${hiring.Remarks || '-'}</p>
+            </div>`;
+          }
+        } else {
+          html += `<div class="alert alert-light text-center py-4 border"><i class="fas fa-info-circle mr-2 text-info"></i>No offer or hiring record created yet for this candidate.</div>`;
+        }
+        html += `</div></div>`;
+
+       
+        html += `
+        <div class="tab-pane fade" id="c360-decision" role="tabpanel">
+          <div class="card border-warning shadow-sm p-3">
+            <h5 class="font-weight-bold text-dark mb-3"><i class="fas fa-balance-scale text-warning mr-2"></i>HR Final Hiring Decision & Advisory Executive Summary</h5>
+
+            <div class="row mb-3">
+              <div class="col-md-6 mb-2">
+                <div class="border rounded p-3 bg-light">
+                  <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-thumbs-up mr-1"></i>Key Strengths</h6>
+                  <ul class="mb-0 pl-3 small text-dark">
+                    <li>Strong ATS role fit score (<strong>${atsMatchScore}</strong>)</li>
+                    <li>Must-Have Skill coverage: <strong>${mustHaveCovered} / ${mustHaveList.length}</strong></li>
+                    ${panelSummary ? `<li>Interview Panel Average score: <strong>${panelSummary.overall_avg} / 5 (${panelSummary.overall_pct}%)</strong></li>` : ''}
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="border rounded p-3 bg-light">
+                  <h6 class="font-weight-bold text-danger mb-2"><i class="fas fa-exclamation-circle mr-1"></i>Key Considerations</h6>
+                  <ul class="mb-0 pl-3 small text-dark">
+                    ${disagreements.length > 0 ? `<li>${disagreements.length} interviewer score discrepancy item(s) detected.</li>` : `<li>High consistency across interviewer evaluation scores.</li>`}
+                    <li>Ensure expected joining date and notice period alignment.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-info bg-light mb-4 shadow-sm">
+              <div class="card-body p-3">
+                <h6 class="font-weight-bold text-info mb-1"><i class="fas fa-robot mr-2"></i>AI Advisory Executive Summary <small class="text-muted">(Fact-Based Advisory Only)</small></h6>
+                <p class="small text-dark mb-0">
+                  "Candidate <strong>${c.Fullname || 'Candidate'}</strong> demonstrates technical alignment for the <strong>${c.JobTitle || 'vacancy'}</strong> position with an ATS match score of <strong>${atsMatchScore}</strong> and ${mustHaveCovered} of ${mustHaveList.length} must-have skills verified. ${panelSummary ? `Human interviewers evaluated the candidate with a panel score average of ${panelSummary.overall_avg}/5 (${panelSummary.overall_pct}%).` : 'Human interview evaluation pending.'} ${disagreements.length > 0 ? 'Note: Score variance exists between interviewers on certain soft skills and should be reviewed by HR before final decision.' : 'Interviewer evaluations are consistent across criteria.'}"
+                </p>
+              </div>
+            </div>
+
+            <div class="border rounded p-3 bg-white shadow-sm">
+              <h6 class="font-weight-bold text-dark mb-3"><i class="fas fa-gavel text-primary mr-2"></i>Record HR Final Decision</h6>
+              <input type="hidden" id="c360AppId" value="${c.ApplicationId || ''}">
+              <div class="form-group mb-3">
+                <label class="font-weight-bold small text-dark">Final Decision Option <span class="text-danger">*</span></label>
+                <select id="c360DecisionVal" class="form-control">
+                  <option value="">Select HR Decision</option>
+                  <option value="Hire">Hire (Approve Candidate)</option>
+                  <option value="Keep in Consideration">Keep in Consideration</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Reject">Reject Candidate</option>
+                </select>
+              </div>
+              <div class="form-group mb-3">
+                <label class="font-weight-bold small text-dark">Decision Rationale & Remarks</label>
+                <textarea id="c360Remarks" class="form-control" rows="3" placeholder="Enter HR rationale for final hiring decision..."></textarea>
+              </div>
+              <button type="button" class="btn btn-primary font-weight-bold btn-block shadow-sm" id="btnSaveC360Decision">
+                <i class="fas fa-save mr-1"></i> Save Final Hiring Decision
+              </button>
+            </div>
+
+          </div>
+        </div>`;
+
+        html += `</div></div>`;
+        return html;
+    }
+
+   
+    $(document).on('click', '.viewCandidateDetails', function () {
+        let candidateId = $(this).data('id');
+
+        $('#candidateDetailsModal').modal('show');
+        $('#candidateDetailsBody').html(
+            '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i></div>'
+        );
+
+        $.ajax({
+            url: base_url + "admin/getCandidateIdDetails",
+            type: "POST",
+            data: { candidate_id: candidateId },
+            dataType: "json",
+            success: function (res) {
+                if (res.status !== 'success') {
+                    $('#candidateDetailsBody').html('<div class="alert alert-danger">No data found</div>');
+                    return;
+                }
+
+                let c = res.data.candidate;
+                let stages = res.data.stages || [];
+                let interviews = res.data.interviews || [];
+
+                let html = `<div class="container-fluid">`;
+
+                html += `
+                <div class="card card-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0"><i class="fas fa-id-card mr-2"></i>Basic Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Name:</strong> ${c.Fullname ?? '-'}</p>
+                                <p class="mb-1"><strong>Job Title:</strong> <span class="badge badge-primary px-2 py-1 font-weight-bold"><i class="fas fa-briefcase mr-1"></i>${c.JobTitle ?? '-'}</span></p>
+                                ${c.Role || c.RoleSummary ? `<p class="mb-1"><strong>Role:</strong> <span class="badge badge-info px-2 py-1 font-weight-bold"><i class="fas fa-user-tag mr-1"></i>${c.Role || c.RoleSummary}</span></p>` : ''}
+                                <p class="mb-1"><strong>Email:</strong> ${c.Email ?? '-'}</p>
+                                <p class="mb-1"><strong>Phone:</strong> ${c.PhoneNo ?? '-'}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Experience:</strong> ${c.ExpYrs ?? 0} Years</p>
+                                <p class="mb-1"><strong>ATS Recommendation:</strong> <span class="badge badge-success">${c.ProfileMatchPer ?? 'Potential Match'}</span></p>
+                                <p class="mb-1"><strong>Current Status:</strong> <span class="badge badge-info">${c.CurrentStatus ?? '-'}</span></p>
                             </div>
                         </div>
-                    </div>`;
-                });
-            } else {
-                html += `
-                <div>
-                    <i class="fas fa-info bg-secondary"></i>
-                    <div class="timeline-item">
-                        <div class="timeline-body">No stage tracking found</div>
                     </div>
                 </div>`;
-            }
 
-            html += `<div><i class="far fa-clock bg-gray"></i></div></div></div></div>`;
+                html += `<h5 class="mb-3 font-weight-bold text-dark"><i class="fas fa-route mr-2 text-info"></i>Stage Timeline Track</h5>`;
+                html += `<div class="timeline timeline-inverse">`;
 
-            html += `
-            <div class="card card-dark collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Interviews</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="timeline timeline-inverse">`;
+                if (stages.length > 0) {
+                    stages.forEach(function (s) {
+                        let badgeColor = 'bg-info';
+                        let act = (s.Action || '').toLowerCase();
+                        if (act.includes('rejected')) badgeColor = 'bg-danger';
+                        else if (act.includes('shortlisted')) badgeColor = 'bg-success';
+                        else if (act.includes('hold')) badgeColor = 'bg-warning';
 
-            if (interviews && interviews.length > 0) {
-                interviews.forEach(function (i) {
-                    let badgeColor = 'bg-info';
-                    if (i.Result && i.Result.toLowerCase().includes('selected')) badgeColor = 'bg-success';
-                    else if (i.Result && i.Result.toLowerCase().includes('rejected')) badgeColor = 'bg-danger';
-                    else if (i.Result && i.Result.toLowerCase().includes('assigned')) badgeColor = 'bg-warning';
-
+                        html += `
+                        <div>
+                            <i class="fas fa-user ${badgeColor}"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="far fa-clock"></i> ${s.ActionAt ?? '-'}</span>
+                                <h3 class="timeline-header">${s.StageName ?? 'Stage Update'}</h3>
+                                <div class="timeline-body">
+                                    <strong>Action:</strong> ${s.Action ?? '-'}<br>
+                                    <strong>By:</strong> ${s.ActionByName ?? 'System'}<br>
+                                    <strong>Remarks:</strong> ${s.Remarks ?? '-'}
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                } else {
                     html += `
                     <div>
-                        <i class="fas fa-user-tie ${badgeColor}"></i>
+                        <i class="fas fa-info bg-secondary"></i>
                         <div class="timeline-item">
-                            <span class="time"><i class="far fa-clock"></i> ${(i.ScheduledAt && i.ScheduledAt !== '0000-00-00 00:00:00') ? i.ScheduledAt : '-'}</span>
-                            <h3 class="timeline-header">Interview Round ${i.InterviewRound ?? '-'}</h3>
-                            <div class="timeline-body">
-                                <strong>Type:</strong> ${i.InterviewType ?? '-'}<br>
-                                <strong>Result:</strong> ${i.Result ?? 'Assigned'}<br>
-                                <strong>Feedback:</strong> ${i.Feedback ?? '-'}
-                            </div>
+                            <div class="timeline-body">No stage tracking found</div>
                         </div>
                     </div>`;
-                });
-            } else {
-                html += `
-                <div>
-                    <i class="fas fa-info bg-secondary"></i>
-                    <div class="timeline-item">
-                        <div class="timeline-body">No interviews scheduled</div>
-                    </div>
-                </div>`;
+                }
+
+                html += `<div><i class="far fa-clock bg-gray"></i></div></div></div>`;
+
+                $('#candidateDetailsBody').html(html);
             }
-
-            html += `<div><i class="far fa-clock bg-gray"></i></div></div></div></div>`;
-
-            
-            html += `
-            <div class="card card-success collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Offers</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">`;
-
-            if (offers && offers.length > 0) {
-                offers.forEach(function (o) {
-                    html += `
-                    <div class="border p-2 mb-2">
-                        <strong>Status:</strong> ${o.OfferStatus ?? '-'}<br>
-                        <strong>Expected Joining:</strong> ${o.ExpectedJoiningDate ?? '-'}
-                    </div>`;
-                });
-            } else {
-                html += `<p>No offer details</p>`;
-            }
-
-            html += `</div></div>`;
-
-           
-            html += `
-            <div class="card card-warning collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Follow Ups</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">`;
-
-            if (followups && followups.length > 0) {
-                followups.forEach(function (f) {
-                    html += `
-                    <div class="border p-2 mb-2">
-                        <strong>Type:</strong> ${f.FollowUpType ?? '-'}<br>
-                        <strong>Notes:</strong> ${f.FollowUpNotes ?? '-'}
-                    </div>`;
-                });
-            } else {
-                html += `<p>No follow-ups</p>`;
-            }
-
-            html += `</div></div></div>`;
-
-            $('#candidateDetailsBody').html(html);
-        }
+        });
     });
-});
 
+   
+    $(document).on('click', '.btn-candidate-360', function (e) {
+        e.preventDefault();
+        let candidateId = $(this).data('id');
 
+        $('#candidate360Modal').modal('show');
+        $('#candidate360Body').html(
+            '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x text-warning"></i><p class="mt-2 font-weight-bold text-dark">Loading Candidate 360° Profile...</p></div>'
+        );
 
-$(document).on('click', '.viewCandidateSimple', function () {
-
-    let candidateId = $(this).data('id');
-
-    $('#candidateDetailsModal').modal('show');
-    $('#candidateDetailsBody').html(
-        '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i></div>'
-    );
-
-    $.ajax({
-        url: base_url + "admin/getCandidateIdDetails",
-        type: "POST",
-        data: { candidate_id: candidateId },
-        dataType: "json",
-        success: function (res) {
-
-            if (res.status !== 'success') {
-                $('#candidateDetailsBody').html('<div class="alert alert-danger">No data found</div>');
-                return;
+        $.ajax({
+            url: base_url + "admin/getCandidate360Details",
+            type: "POST",
+            data: { candidate_id: candidateId },
+            dataType: "json",
+            success: function (res) {
+                if (res.status !== 'success') {
+                    $('#candidate360Body').html('<div class="alert alert-danger font-weight-bold"><i class="fas fa-exclamation-circle mr-1"></i>Unable to load Candidate 360° data.</div>');
+                    return;
+                }
+                let html = renderCandidate360(res.data);
+                $('#candidate360Body').html(html);
+            },
+            error: function (xhr) {
+                console.log('Error loading candidate 360 details:', xhr.responseText);
+                $('#candidate360Body').html('<div class="alert alert-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i>Unable to load Candidate 360° data. Please try again.</div>');
             }
-
-            let c = res.data.candidate;
-            let stages = res.data.stages;
-
-            let html = `
-            <div class="card card-primary">
-                <div class="card-body">
-                    <h5>${c.Fullname ?? '-'}</h5>
-                    <p><strong>Email:</strong> ${c.Email ?? '-'}</p>
-                    <p><strong>Phone:</strong> ${c.PhoneNo ?? '-'}</p>
-                    <p><strong>Status:</strong>
-                        <span class="badge ${
-                            c.ATS_Status && c.ATS_Status.toLowerCase().includes('shortlisted') ? 'badge-success' :
-                            c.ATS_Status && c.ATS_Status.toLowerCase().includes('selected') ? 'badge-success' :
-                            c.ATS_Status && c.ATS_Status.toLowerCase().includes('rejected') ? 'badge-danger' :
-                            c.ATS_Status && c.ATS_Status.toLowerCase().includes('hold') ? 'badge-warning' :
-                            'badge-secondary'}">
-                            ${c.ATS_Status ?? '-'}
-                        </span>
-                    </p>
-                </div>
-            </div>`;
-
-            html += `<div class="timeline timeline-inverse">`;
-
-            if (stages.length > 0) {
-                stages.forEach(function (s) {
-                    let badgeColor = 'bg-info';
-                    if (s.Action && s.Action.toLowerCase().includes('rejected')) badgeColor = 'bg-danger';
-                    else if (s.Action && s.Action.toLowerCase().includes('shortlisted')) badgeColor = 'bg-success';
-                    else if (s.Action && s.Action.toLowerCase().includes('hold')) badgeColor = 'bg-warning';
-
-                    html += `
-                    <div>
-                        <i class="fas fa-user ${badgeColor}"></i>
-                        <div class="timeline-item">
-                            <span class="time"><i class="far fa-clock"></i> ${s.ActionAt}</span>
-                            <h3 class="timeline-header">${s.StageName}</h3>
-                            <div class="timeline-body">
-                                <strong>Action:</strong> ${s.Action ?? '-'}<br>
-                                <strong>Remarks:</strong> ${s.Remarks ?? '-'}
-                            </div>
-                        </div>
-                    </div>`;
-                });
-            } else {
-                html += `<p class="text-muted p-2">No stage tracking found</p>`;
-            }
-
-            html += `<div><i class="far fa-clock bg-gray"></i></div></div>`;
-
-            $('#candidateDetailsBody').html(html);
-        }
+        });
     });
-});
+
+    $(document).on('click', '#btnSaveC360Decision', function(e) {
+        e.preventDefault();
+        let appId = $('#c360AppId').val();
+        let decision = $('#c360DecisionVal').val();
+        let remarks = $('#c360Remarks').val();
+
+        if (!appId || !decision) {
+            if (typeof toastr !== 'undefined') toastr.error('Please select a Final Decision option.');
+            else alert('Please select a Final Decision option.');
+            return;
+        }
+
+        $.ajax({
+            url: base_url + "admin/saveCandidate360Decision",
+            type: "POST",
+            data: { application_id: appId, decision: decision, remarks: remarks },
+            dataType: "json",
+            success: function(res) {
+                if (res.status === 'success') {
+                    if (typeof toastr !== 'undefined') toastr.success(res.msg);
+                    else alert(res.msg);
+                    $('#candidate360Modal').modal('hide');
+                    location.reload();
+                } else {
+                    if (typeof toastr !== 'undefined') toastr.error(res.msg || 'Failed to save decision.');
+                    else alert(res.msg || 'Failed to save decision.');
+                }
+            },
+            error: function(xhr) {
+                console.log('Error saving decision:', xhr.responseText);
+            }
+        });
+    });
 $(document).on('click', '.btnScoreHelp', function () {
 
     let btn = $(this);
@@ -1780,7 +2099,7 @@ $(document).on('click', '.btnScoreHelp', function () {
         badgeClass = 'badge-danger';
     }
 
-    // Build Categorized Skills HTML
+    
     let skillsCatHtml = '';
     if (Object.keys(categorizedSkills).length > 0) {
         for (let cat in categorizedSkills) {
@@ -1792,27 +2111,35 @@ $(document).on('click', '.btnScoreHelp', function () {
         skillsCatHtml = '<p class="text-muted mb-0">No specific technical skills categorized.</p>';
     }
 
-    // Build Work History HTML
+    
     let workHistHtml = '';
     if (workHistory.length > 0) {
+        let seenWorkKeys = {};
         workHistory.forEach(function(w) {
-            workHistHtml += '<li class="mb-2"><i class="fas fa-briefcase text-primary mr-2"></i><strong>' + w.role + '</strong> — ' + w.company + '<small class="text-muted d-block ml-4">' + w.period + ' (' + w.duration + ')</small></li>';
+            let roleStr = w.role || 'Role';
+            let companyStr = w.company || 'Company';
+            let key = roleStr.toLowerCase() + '|' + companyStr.toLowerCase() + '|' + (w.period || '');
+            if (!seenWorkKeys[key]) {
+                seenWorkKeys[key] = true;
+                workHistHtml += '<li class="mb-2"><i class="fas fa-briefcase text-primary mr-2"></i><strong>' + roleStr + '</strong> — ' + companyStr + '<small class="text-muted d-block ml-4">' + w.period + ' (' + w.duration + ')</small></li>';
+            }
         });
     } else {
         workHistHtml = '<li class="text-muted">No employment history extracted.</li>';
     }
 
-    // Build Projects HTML
+    
     let projectsHtml = '';
     if (projects.length > 0) {
         projects.forEach(function(p) {
-            projectsHtml += '<li class="mb-2"><i class="fas fa-folder-open text-info mr-2"></i><strong>' + p.title + '</strong></li>';
+            let techStr = p.technology ? ' <span class="badge badge-light text-primary border ml-2" style="font-weight: 500;"><i class="fas fa-code text-info mr-1"></i>' + p.technology + '</span>' : '';
+            projectsHtml += '<li class="mb-2"><i class="fas fa-folder-open text-info mr-2"></i><strong>' + p.title + '</strong>' + techStr + '</li>';
         });
     } else {
         projectsHtml = '<li class="text-muted">No explicit projects identified in resume.</li>';
     }
 
-    // Build Evidence HTML
+    
     let evidenceHtml = '';
     evidence.forEach(function(item) {
         if (item && item.toString().trim() !== '') {
@@ -1821,7 +2148,7 @@ $(document).on('click', '.btnScoreHelp', function () {
     });
     if (evidenceHtml === '') evidenceHtml = '<li class="text-muted">No specific supporting evidence recorded.</li>';
 
-    // Build Missing Requirements HTML
+    
     let missingHtml = '';
     missing.forEach(function(item) {
         if (item && item.toString().trim() !== '') {
@@ -1963,16 +2290,16 @@ $(document).on('click', '.btnScoreHelp', function () {
 </script>
  
 <script>
-$(document).ready(function() {
-    setTimeout(function() {
-        if ($.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().destroy();
-        }
+window.initCandidateDataTable = function() {
+    if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
+        $('#example1').DataTable().destroy();
+    }
+    if ($.fn.DataTable) {
         $('#example1').DataTable({
             "responsive": true,
             "autoWidth": false,
             "columnDefs": [
-                { "orderable": false, "targets": 0 }
+                { "orderable": false, "targets": [8] }
             ],
             "drawCallback": function() {
                 if (typeof reapplyCheckboxStates === 'function') {
@@ -1980,17 +2307,54 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+};
+
+$(document).ready(function() {
+    setTimeout(function() {
+        window.initCandidateDataTable();
+
         $(window).on('resize orientationchange', function() {
             if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
                 $('#example1').DataTable().columns.adjust().responsive.recalc();
             }
         });
     }, 100);
+
+  
+    $(document).on('click', '.filterPill', function (e) {
+        e.preventDefault();
+
+        $('.filterPill').removeClass('active');
+        $(this).addClass('active');
+
+        let status = $(this).data('status');
+        let jid = "<?= $jobdetails['Jid']; ?>";
+
+        $.ajax({
+            url: base_url + 'admin/filterCandidates',
+            type: 'POST',
+            data: { status: status, jid: jid },
+            success: function (res) {
+                if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
+                    $('#example1').DataTable().destroy();
+                }
+                $('#example1 tbody').html(res);
+                if (typeof window.initCandidateDataTable === 'function') {
+                    window.initCandidateDataTable();
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            error: function (xhr) {
+                console.log('ERROR:', xhr.responseText);
+            }
+        });
+    });
 });
 </script>
 
 <script>
-// Candidate Comparison Feature - Phase 1 Selection Engine
+
 var selectedCandidateIds = new Set();
 
 function updateCompareUI() {
@@ -2023,6 +2387,7 @@ function syncSelectAllCheckbox() {
     var visibleChks = $('.candidate-select-chk');
     if (visibleChks.length === 0) {
         $('#selectAllCandidates').prop('checked', false);
+        $('#btnSelectAllCandidates').html('<i class="far fa-check-square mr-1"></i> Select All');
         return;
     }
     var allChecked = true;
@@ -2033,9 +2398,19 @@ function syncSelectAllCheckbox() {
         }
     });
     $('#selectAllCandidates').prop('checked', allChecked);
+    if (allChecked) {
+        $('#btnSelectAllCandidates').html('<i class="fas fa-check-square mr-1"></i> Deselect All');
+    } else {
+        $('#btnSelectAllCandidates').html('<i class="far fa-check-square mr-1"></i> Select All');
+    }
 }
 
 function reapplyCheckboxStates() {
+    if ($('#btnToggleCompareMode').hasClass('d-none')) {
+        $('.chk-input').removeClass('d-none');
+    } else {
+        $('.chk-input').addClass('d-none');
+    }
     $('.candidate-select-chk').each(function() {
         var cid = $(this).val();
         if (selectedCandidateIds.has(cid)) {
@@ -2048,7 +2423,62 @@ function reapplyCheckboxStates() {
 }
 
 $(document).ready(function() {
-    // Individual Checkbox Click - Unlimited selection allowed
+  
+    $(document).on('click', '#btnToggleCompareMode', function(e) {
+        e.preventDefault();
+        $('.chk-input').removeClass('d-none');
+        $('#btnToggleCompareMode').addClass('d-none');
+        $('#compareActiveBar').removeClass('d-none').addClass('d-flex');
+        if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
+            $('#example1').DataTable().columns.adjust().responsive.recalc();
+        }
+    });
+
+ 
+    $(document).on('click', '#btnCancelCompareMode', function(e) {
+        e.preventDefault();
+        selectedCandidateIds.clear();
+        $('.candidate-select-chk, #selectAllCandidates').prop('checked', false);
+        updateCompareUI();
+        $('.chk-input').addClass('d-none');
+        $('#compareActiveBar').removeClass('d-flex').addClass('d-none');
+        $('#btnToggleCompareMode').removeClass('d-none');
+        if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
+            $('#example1').DataTable().columns.adjust().responsive.recalc();
+        }
+    });
+
+   
+    $(document).on('click', '#btnSelectAllCandidates', function(e) {
+        e.preventDefault();
+        var visibleChks = $('.candidate-select-chk');
+        if (visibleChks.length === 0) return;
+
+        var allChecked = true;
+        visibleChks.each(function() {
+            if (!$(this).is(':checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        if (allChecked) {
+            visibleChks.each(function() {
+                var cid = $(this).val();
+                $(this).prop('checked', false);
+                selectedCandidateIds.delete(cid);
+            });
+        } else {
+            visibleChks.each(function() {
+                var cid = $(this).val();
+                selectedCandidateIds.add(cid);
+                $(this).prop('checked', true);
+            });
+        }
+        updateCompareUI();
+    });
+
+    
     $(document).on('click change', '.candidate-select-chk', function(e) {
         var cid = $(this).val();
         if ($(this).is(':checked')) {
@@ -2059,8 +2489,12 @@ $(document).ready(function() {
         updateCompareUI();
     });
 
-    // Select All Checkbox Click - Selects all visible candidates without limit
-    $(document).on('click change', '#selectAllCandidates', function(e) {
+   
+    $(document).on('click', '#selectAllCandidates', function(e) {
+        e.stopPropagation();
+    });
+
+    $(document).on('change', '#selectAllCandidates', function(e) {
         var isChecked = $(this).is(':checked');
         var visibleChks = $('.candidate-select-chk');
 
@@ -2080,7 +2514,7 @@ $(document).ready(function() {
         updateCompareUI();
     });
 
-    // Compare Candidates Button Click -> Opens Side-by-Side Comparison Modal
+
     $(document).on('click', '#btnCompareCandidates', function(e) {
         e.preventDefault();
         var selectedArray = Array.from(selectedCandidateIds);
@@ -2095,7 +2529,7 @@ $(document).ready(function() {
             return false;
         }
 
-        // Show Modal and Loading State
+
         $('#candidateComparisonModalBody').html(`
           <div class="text-center py-5 text-muted">
             <i class="fas fa-spinner fa-spin fa-3x mb-3 text-primary"></i>
@@ -2105,7 +2539,7 @@ $(document).ready(function() {
         `);
         $('#candidateComparisonModal').modal('show');
 
-        // Fetch Comparison Data
+
         $.ajax({
             url: '<?= base_url('admin/compareCandidates'); ?>',
             type: 'POST',
@@ -2132,7 +2566,6 @@ $(document).ready(function() {
         });
     });
 
-    // Reapply checkbox states on AJAX complete (e.g. status tab filtering)
     $(document).ajaxComplete(function() {
         setTimeout(function() {
             reapplyCheckboxStates();
@@ -2154,21 +2587,27 @@ function renderComparisonView(res) {
 
     var html = '';
 
-    // 1. AI Summary Verdict Card
     if (res.ai_summary) {
         var ai = res.ai_summary;
+        var leadingBadgeCls = (ai.top_choice && ai.top_choice.indexOf('No Suitable') !== -1) ? 'badge-danger' : 'badge-success';
+        var leadingIcon = (ai.top_choice && ai.top_choice.indexOf('No Suitable') !== -1) ? 'fa-exclamation-triangle' : 'fa-trophy';
         html += `
         <div class="card border-0 shadow-sm mb-4" style="border-radius:10px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 5px solid #0284c7 !important;">
           <div class="card-body p-3">
             <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
-              <span class="badge badge-success px-3 py-2 font-weight-bold mr-2" style="font-size:13.5px;">
-                <i class="fas fa-trophy mr-1"></i> Leading Fit: ${ai.top_choice}
+              <span class="badge ${leadingBadgeCls} px-3 py-2 font-weight-bold mr-2" style="font-size:13.5px;">
+                <i class="fas ${leadingIcon} mr-1"></i> Leading Fit: ${ai.top_choice}
               </span>
               <span class="text-muted small font-weight-bold"><i class="fas fa-robot text-primary mr-1"></i> AI Executive Differentiator Summary</span>
             </div>
             <p class="text-dark font-weight-bold mb-2" style="font-size:14px; line-height:1.4;">${ai.recommendation}</p>
             <div class="row">
-              ${ai.differentiators ? ai.differentiators.map(function(d) { return '<div class="col-md-6 mb-1 text-muted small"><i class="fas fa-check-circle text-info mr-1"></i> ' + d + '</div>'; }).join('') : ''}
+              ${ai.differentiators ? ai.differentiators.map(function(d) {
+                  var isNotMatch = d.toLowerCase().indexOf('not suitable') !== -1 || d.toLowerCase().indexOf('mismatch') !== -1;
+                  var isWarning = d.toLowerCase().indexOf('matches 0/') !== -1 || d.toLowerCase().indexOf('missing:') !== -1;
+                  var icon = isNotMatch ? '<i class="fas fa-times-circle text-danger mr-1"></i>' : (isWarning ? '<i class="fas fa-exclamation-triangle text-warning mr-1"></i>' : '<i class="fas fa-check-circle text-info mr-1"></i>');
+                  return '<div class="col-md-6 mb-1 text-muted small">' + icon + d + '</div>';
+              }).join('') : ''}
             </div>
           </div>
         </div>`;
@@ -2176,7 +2615,6 @@ function renderComparisonView(res) {
 
     var tableMinWidth = Math.max(750, (cList.length * 240) + 180);
 
-    // 2. Side-by-Side Matrix Table
     html += `
     <div class="table-responsive bg-white rounded shadow-sm border p-2">
       <table class="table table-bordered align-middle mb-0 comparison-matrix-table" style="table-layout: fixed; min-width: ${tableMinWidth}px;">
@@ -2205,15 +2643,22 @@ function renderComparisonView(res) {
           <tr>
             <td class="font-weight-bold" style="background-color: #f8fafc !important; color: #1e293b !important;"><i class="fas fa-chart-line text-info mr-2"></i>ATS Fit Match</td>
             ${cList.map(function(c) {
-                var badgeCls = 'badge-success';
-                var scoreText = c.ats_score;
-                if (scoreText === 'Review Required') badgeCls = 'badge-warning';
-                else if (scoreText === 'Not Recommended') badgeCls = 'badge-danger';
-                else if (!isNaN(parseFloat(scoreText))) {
+                var badgeCls = 'badge-primary';
+                var scoreText = c.ats_score || 'N/A';
+                var sLower = String(scoreText).toLowerCase();
+
+                if (sLower.indexOf('strong') !== -1) {
+                    badgeCls = 'badge-success';
+                } else if (sLower.indexOf('potential') !== -1 || sLower.indexOf('review') !== -1) {
+                    badgeCls = 'badge-warning';
+                } else if (sLower.indexOf('not suitable') !== -1 || sLower.indexOf('wrong domain') !== -1 || sLower.indexOf('mismatch') !== -1 || sLower.indexOf('not recommended') !== -1 || sLower.indexOf('low') !== -1) {
+                    badgeCls = 'badge-danger';
+                } else if (!isNaN(parseFloat(scoreText))) {
                     var val = parseFloat(scoreText);
-                    if (val < 50) badgeCls = 'badge-danger';
+                    if (val < 40) badgeCls = 'badge-danger';
                     else if (val < 75) badgeCls = 'badge-warning';
-                    scoreText = val.toFixed(2) + '%';
+                    else badgeCls = 'badge-success';
+                    scoreText = val.toFixed(0) + '%';
                 }
                 return `
                 <td class="text-center" style="background-color: #ffffff !important;">

@@ -45,8 +45,14 @@ $(document).on('click', '.uploadResumeBtn', function () {
               this.on("success", function (file, res) {
                   console.log("Server Response:", res);
                   if (res.status === 'success') {
+                      let detailStr = '';
+                      if (res.data.score !== undefined && res.data.score !== null) {
+                          detailStr = ` (${res.data.score}%)`;
+                      } else if (res.data.recommendation) {
+                          detailStr = ` (${res.data.recommendation})`;
+                      }
                       toastr.success(
-                          `${res.data.name} → ${res.data.status} (${res.data.score}%)`
+                          `${res.data.name} → ${res.data.status}${detailStr}`
                       );
                       setTimeout(() => {
                           window.location.href = res.redirect;

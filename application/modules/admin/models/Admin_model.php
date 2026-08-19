@@ -15,7 +15,6 @@ class Admin_model extends CI_Model
 
     $roleId = (int)$roleId;
 
-    // STEP 1: Get only ACTIVE menu IDs (Status = 1)
     $activeMenuIds = $this->db
         ->select('IHMid')
         ->from('IHRolePermissions')
@@ -30,7 +29,6 @@ class Admin_model extends CI_Model
 
     $activeIds = array_column($activeMenuIds, 'IHMid');
 
-    // STEP 2: Get parent IDs of active menus
     $this->db->select('ParentId');
     $this->db->from('IHMenus');
     $this->db->where_in('IHMid', $activeIds);
@@ -39,14 +37,12 @@ class Admin_model extends CI_Model
 
     $parentIds = array_column($parents, 'ParentId');
 
-    // STEP 3: Merge active IDs + parent IDs
     $allAllowedIds = array_unique(array_merge($activeIds, $parentIds));
 
     if(empty($allAllowedIds)){
         return [];
     }
 
-    // STEP 4: Fetch menus
     $this->db->select('*');
     $this->db->from('IHMenus');
     $this->db->where_in('IHMid', $allAllowedIds);
@@ -103,53 +99,55 @@ public function getBreadcrumb($url)
 
 function getUserDepartments(){
 
-	     $this->db->select('dep.*');/*emp.desg_date');*/   
+	     $this->db->select('dep.*'); 
          $this->db->where('dep.Status',1);
          $this->db->order_by('dep.Departmentname','ASC');
         $query = $this->db->get('Departments as dep')->result_array();
-          // echo $this->db->last_query(); exit;
+         
         return $query; 
 }
 
 function getDepartments(){
 
-         $this->db->select('dep.*');/*emp.desg_date');*/   
-         // $this->db->where('dep.Status',1);
+         $this->db->select('dep.*');
          $this->db->order_by('dep.Departmentname','ASC');
         $query = $this->db->get('Departments as dep')->result_array();
-          // echo $this->db->last_query(); exit;
+      
         return $query; 
 }
 function getUserRoles(){
 
-	     $this->db->select('er.*');/*emp.desg_date');*/   
+	     $this->db->select('er.*');
          $this->db->where('er.Status',1);
-         // $this->db->where_not('er.Status',1);
          $this->db->order_by('er.RoleName','ASC');
         $query = $this->db->get('EmpRoles as er')->result_array();
-          // echo $this->db->last_query(); exit;
+         
         return $query; 
 }
 function getUsers(){
 
-         $this->db->select('ihu.*');/*emp.desg_date');*/   
-         // $this->db->where('ihu.UStatus',1);
+         $this->db->select('ihu.*'); 
           $this->db->order_by('ihu.CreatedAT','ASC');
         $query = $this->db->get('IHUsers as ihu')->result_array();
-          // echo $this->db->last_query(); exit;
+          
         return $query; 
 }
 
 function get_VaccancyList(){ 
 
     $this->db->from('IHRJobsList jl');
+    $this->db->join('resource_requests rr', 'rr.ConvertedJid = jl.Jid', 'left');
+
+    // Only include vacancies that are standalone or converted from an ASSIGNED resource request
+    $this->db->where('(rr.RequestId IS NULL OR rr.Status = "ASSIGNED")', null, false);
+    $this->db->where('(jl.AssignedRecruiterManagerId IS NOT NULL OR rr.RequestId IS NULL)', null, false);
 
     $check_session = $this->session->userdata('logged_in');
     if (!empty($check_session) && isset($check_session['EmpRoleId'])) {
         $roleId = (int)$check_session['EmpRoleId'];
         $currentUserId = (int)$check_session['IUid'];
 
-        if ($roleId === 10 || $roleId === 11) { // Recruitment Manager (10) or Recruiter (11)
+        if ($roleId === 10 || $roleId === 11) { 
             $this->db->group_start();
             $this->db->where('jl.AssignedRecruiterManagerId', $currentUserId);
             $this->db->or_group_start();
@@ -178,12 +176,10 @@ function get_VaccancyList(){
     $query = $this->db->get();
     $result = $query->result_array();
       
-         // $query = $this->db->get('IHRJobsList as jl')->result_array();
-         // echo $this->db->last_query(); exit;
+        
         return $result; 
 
 }
-// rst.StageOrder AS CurrentStageOrder, this line added for tracking
 public function getCandidatesList($Jid){
 
       $this->db->select("
@@ -202,7 +198,6 @@ public function getCandidatesList($Jid){
     $this->db->join('JobSkills js', 'j.Jid = js.Jid', 'left');
     $this->db->join('IHSkills s', 'js.SkillId = s.SkillId', 'left');
     $this->db->join('CandidateStageTracking cst', 'ja.ApplicationId = cst.ApplicationId', 'left');
-    // $this->db->join('RecruitmentStages rst', 'rst.StageId = cst.StageId', 'left');
     $this->db->join('RecruitmentStages rst', 'rst.StageId = ja.StageId', 'left');
     $this->db->join('IHUsers u', 'u.IUid = cst.ActionBy', 'left');
 
@@ -213,13 +208,11 @@ public function getCandidatesList($Jid){
 
     $query = $this->db->get()->result_array();
     
-    // echo $this->db->last_query(); exit;
         return $query; 
 }
 
 
 
-    // --- RESOURCE REQUEST METHODS ---
 
     public function getAllUsers()
     {
@@ -286,11 +279,7 @@ public function getCandidatesList($Jid){
         return !empty($res) ? $res[0] : null;
     }
 
-    // public function insertResourceRequest($data)
-    // {
-    //     $this->db->insert('resource_requests', $data);
-    //     return $this->db->insert_id();
-    // }
+   
 public function insertResourceRequest($data)
 {
     $result = $this->db->insert('resource_requests', $data);

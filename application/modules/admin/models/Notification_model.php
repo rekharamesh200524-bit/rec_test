@@ -49,13 +49,11 @@ class Notification_model extends CI_Model {
         $this->db->from('IHrNotifications');
         $this->db->where('Status', 'Unread');
         
-        // Notification must target the specific user OR their role
         $this->db->group_start();
         $this->db->where('TargetUserId', $userId);
         
         if ($roleId) {
             $this->db->or_where('TargetRoleId', $roleId);
-            // HR fallback: Role 1 (Superadmin) and Role 2 (HR Admin) often share notifications
             if ($roleId == 1 || $roleId == 2) {
                 $this->db->or_where_in('TargetRoleId', [1, 2]);
             }
@@ -63,23 +61,19 @@ class Notification_model extends CI_Model {
         $this->db->group_end();
         
         $this->db->order_by('CreatedAt', 'DESC');
-        $this->db->limit(20); // Get latest 20 notifications max
+        $this->db->limit(20); 
         
         return $this->db->get()->result();
     }
 
-    /**
-     * Mark a specific notification as read
-     */
+   
     public function markAsRead($notificationId, $userId) {
         $this->db->where('NotificationId', $notificationId);
         $this->db->update('IHrNotifications', array('Status' => 'Read'));
         return $this->db->affected_rows() > 0;
     }
 
-    /**
-     * Mark all notifications as read for a user
-     */
+   
     public function markAllAsRead($userId, $roleId) {
         $this->db->where('Status', 'Unread');
         

@@ -35,7 +35,6 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    /* ── OUTER SHELL: true 100vh two-column ── */
     .login-shell {
       display: flex;
       flex-direction: row;
@@ -53,10 +52,8 @@
       justify-content: flex-end;
       padding: 3rem;
       overflow: hidden;
-      /* background removed — using <img class="bg-img"> inside for guaranteed center */
     }
 
-    /* Full-cover image tag: object-fit beats any Bootstrap background override */
     .panel-left .bg-img {
       position: absolute;
       inset: 0;
@@ -68,7 +65,6 @@
       display: block;
     }
 
-    /* Dark gradient scrim */
     .panel-left::after {
       content: '';
       position: absolute;
@@ -173,7 +169,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mobile brand — hidden on desktop */
     .mobile-brand {
       display: none;
       align-items: center;
@@ -199,7 +194,6 @@
     .mobile-brand .brand-name { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-h); line-height: 1.2; }
     .mobile-brand .brand-tag  { font-size: 0.65rem; color: var(--text-m); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Headings */
     .form-shell h1 {
       font-family: 'Sora', sans-serif;
       font-weight: 600;
@@ -215,7 +209,6 @@
       margin-bottom: 2rem;
     }
 
-    /* Alerts */
     .alert {
       border-radius: 9px;
       padding: 0.75rem 1rem;
@@ -231,7 +224,6 @@
     .alert-danger  { background: var(--danger-bg);  color: var(--danger);  border: 1px solid #f5c0bc; }
     .alert i { margin-top: 1px; flex-shrink: 0; }
 
-    /* Fields */
     .field { margin-bottom: 1.15rem; }
 
     .field-label {
@@ -297,7 +289,6 @@
 
     .iw .tpw:hover { color: var(--brand); }
 
-    /* Extras row */
     .extras {
       display: flex;
       align-items: center;
@@ -332,7 +323,6 @@
 
     .fgt:hover { text-decoration: underline; }
 
-    /* Submit */
     .btn-submit {
       width: 100%;
       height: 48px;
@@ -374,10 +364,8 @@
     @media (max-width: 768px) {
       .login-shell { flex-direction: column; }
 
-      /* Hide image panel */
       .panel-left  { display: none; }
 
-      /* Form takes full screen */
       .panel-right {
         width: 100%;
         min-height: 100vh;
@@ -388,7 +376,6 @@
 
       .form-shell { max-width: 440px; }
 
-      /* Show mobile brand */
       .mobile-brand { display: flex; }
     }
 
@@ -402,7 +389,6 @@
 <div class="login-shell">
 
   <div class="panel-left">
-    <!-- bg-img: object-fit:cover + object-position:center guarantees centering, unlike background shorthand which Bootstrap can override -->
     <img class="bg-img" src="<?=$theme_path?>/assets/dist/img/copy.png" alt="">
     <div class="pl-brand">
       <div class="mark">I</div>
@@ -413,13 +399,7 @@
     </div>
 
     <div class="pl-copy">
-      <!-- <h2>Manage your workforce<br>smarter, faster.</h2>
-      <p>A unified platform for HR operations — attendance, payroll, appraisals and more, all in one place.</p>
-      <div class="pl-dots">
-        <span class="active"></span>
-        <span></span>
-        <span></span>
-      </div> -->
+     
       <div class="pl-copy">
   <h2>Streamline your hiring process.</h2>
 
@@ -429,11 +409,6 @@
     all in one ATS platform.
   </p>
 
-  <!-- <div class="pl-dots">
-    <span class="active"></span>
-    <span></span>
-    <span></span>
-  </div> -->
 </div>
     </div>
   </div>
@@ -442,7 +417,7 @@
   <div class="panel-right">
     <div class="form-shell">
 
-      <!-- Mobile-only brand badge -->
+   
       <div class="mobile-brand">
         <div class="mark">I</div>
         <div>
@@ -454,7 +429,7 @@
       <h1>Welcome back</h1>
       <p class="sub">Sign in to continue to your workspace</p>
 
-      <!-- Form — action/method/names untouched -->
+     
       <form action="<?php echo site_url('admin/CheckLoginData'); ?>" method="post" multipart="">
 
         <div class="field">
@@ -498,7 +473,7 @@
     </div>
   </div>
 
-</div><!-- /.login-shell -->
+</div>
 
 <!-- jQuery -->
 <script src="<?=$theme_path?>/assets/plugins/jquery/jquery.min.js"></script>

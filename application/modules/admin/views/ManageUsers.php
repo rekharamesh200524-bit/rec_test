@@ -3,14 +3,14 @@
          
      if(empty($employee_det)) { redirect($this->config->item('base_url').'admin/index'); }
     $theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
-    // Flashdata for form repopulation after validation error
+    
     $fv         = $this->session->flashdata('form_values');
     $fv         = is_array($fv) ? $fv : [];
     $hasError   = (bool) $this->session->flashdata('error');
     $hasSuccess = (bool) $this->session->flashdata('success');
 ?>
  
-        <!-- Main content -->
+       
     <section class="content">
       <div class="container-fluid">
 
@@ -25,7 +25,7 @@
                         </a>
                     </div>
               </div>
-              <!-- /.card-header -->
+             
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -44,7 +44,6 @@
                                 <tbody>
                             <?php
                             
-                            // echo "<pre>"; print_r($users); exit;
 
                             if (isset($users) && !empty($users)) {
                                 $i = 1;
@@ -65,7 +64,7 @@
 
                                           <div class="btn-group" role="group">
 
-                                                <!-- Edit -->
+                                               
                                                 <button type="button"
                                                         class="btn btn-sm btn-primary editUserBtn"
                                                         title="Edit User"
@@ -82,7 +81,7 @@
                                                 </button>
 
                                                 <?php if ($usr['UStatus'] == 1) { ?>
-                                                    <!-- Deactivate -->
+                                                    
                                                     <button type="button"
                                                             class="btn btn-sm btn-danger userStatusBtn"
                                                             data-id="<?= $usr['IUid']; ?>"
@@ -91,7 +90,7 @@
                                                         <i class="fas fa-user-slash"></i>
                                                     </button>
                                                 <?php } else { ?>
-                                                    <!-- Activate -->
+                                                   
                                                     <button type="button"
                                                             class="btn btn-sm btn-success userStatusBtn"
                                                             data-id="<?= $usr['IUid']; ?>"
@@ -114,13 +113,13 @@
                             </tbody> 
                     </table>
                   </div>
-                  <!-- /.card-body -->
+                
                 </div>
-                <!-- /.card -->
-      </div><!-- /.container-fluid -->
+              
+      </div>
     </section>
-    <!-- /.content -->
-<!-- Edit User -->
+ 
+
 <div class="modal fade" id="editUserModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -414,7 +413,7 @@ $(document).ready(function () {
         $('#rightFormOverlay').removeClass('show');
     });
 
-    // Auto-reopen the panel when there is a validation error
+    
     <?php if ($hasError): ?>
     $('#rightForm').addClass('open');
     $('#rightFormOverlay').addClass('show');

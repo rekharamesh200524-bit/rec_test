@@ -1,7 +1,7 @@
 <section class="content">
   <div class="container-fluid">
 
-    <!-- ================= SMALL CARDS ================= -->
+    
     <div class="row">
 
       <div class="col-lg-3 col-md-6 col-sm-12">
@@ -47,7 +47,7 @@
     </div>
 
 
-    <!-- ================= DONUT CHART ================= -->
+   
    <div class="row mt-4">
 
   <div class="col-lg-6 col-md-6 col-sm-12">
@@ -83,10 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var donutValues = <?= $donut_values ?>;
 
   var colors = [
-    '#28a745',  // Green
-    '#007bff',  // Blue
-    '#ffc107',  // Yellow
-    '#dc3545'   // Red
+    '#28a745',  
+    '#007bff', 
+    '#ffc107',  
+    '#dc3545'  
   ];
 
   var total = donutValues.reduce((a, b) => a + b, 0);
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // ===== DETAILS BELOW DONUT =====
+ 
   var detailsContainer = document.getElementById('vacancyDetails');
   detailsContainer.innerHTML = '';
 

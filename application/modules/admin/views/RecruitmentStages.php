@@ -8,7 +8,7 @@ if (empty($employee_det)) {
 $theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
 ?>
 
-<!-- Main content -->
+
 <section class="content">
   <div class="container-fluid">
 
@@ -191,8 +191,7 @@ $theme_path = $this->config->item('theme_locations').$this->config->item('active
   </div>
 </div>
 
-<!-- modal for confirmation -->
- <!-- Status Confirm Modal -->
+
 <div class="modal fade" id="stageStatusModal" tabindex="-1">
   <div class="modal-dialog modal-md modal-dialog-centered">
     <div class="modal-content">
@@ -249,7 +248,7 @@ $(document).ready(function () {
 
 });
 
-// OPEN EDIT FORM
+
 $(document).on('click', '.editStageBtn', function () {
 
     $('#edit_StageId').val($(this).data('id'));
@@ -261,14 +260,14 @@ $(document).on('click', '.editStageBtn', function () {
     $('#rightFormOverlay').addClass('show');
 });
 
-// CLOSE EDIT FORM
+
 $('#closeEditForm, #rightFormOverlay').on('click', function () {
     $('#editRightForm').removeClass('open');
     $('#rightFormOverlay').removeClass('show');
 });
 
 
-///script for confirmation modal
+
 $(document).on('click', '.stageStatusBtn', function () {
 
     let url = $(this).data('url');

@@ -50,31 +50,71 @@ class ATS_Engine {
             $email = strtolower($matches[0]);
         }
 
-        // Extract Candidate Name
+        // Extract Candidate Name with Job Title exclusion & Email Username matching
         $name  = '';
+        $emailPrefix = '';
+        if (!empty($email)) {
+            $eParts = explode('@', $email);
+            $emailPrefix = preg_replace('/[^a-z]/', '', strtolower($eParts[0]));
+        }
+
+        $jobTitlePattern = '/\b(developer|engineer|administrator|analyst|architect|consultant|manager|lead|executive|specialist|officer|designer|tester|programmer|intern|associate|trainee|director|coordinator|head|software|full stack|frontend|backend|salesforce|python|java|php|react|angular|node|dotnet|\.net|devops|data|cloud|qa|qc|ui\/ux|curriculum vitae|resume|profile|application|candidacy|personal details|contact)\b/i';
+        $locationPattern = '/road|street|nagar|district|state|india|tamil nadu|chennai|mumbai|delhi|bangalore|hyderabad|andhra|telangana|karnataka|kerala|pincode|dob|gender|male|female|email|mobile|phone|aggregate/i';
+
+        $candidateName = '';
+        $bestMatchName = '';
         $lines = preg_split('/\r\n|\r|\n/', $rawText);
+
         foreach ($lines as $line) {
+            $line = preg_replace('/[^\x20-\x7E]/', '', $line);
             $line = trim($line);
             if ($line == '' || preg_match('/^\d+$/', $line)) continue;
-            if (filter_var($line, FILTER_VALIDATE_EMAIL)) continue;
+            if (filter_var($line, FILTER_VALIDATE_EMAIL) || strpos($line, '@') !== false) continue;
             if (preg_match('/(\+91|91)?\s?[6-9]\d{9}/', $line)) continue;
             if (preg_match('/career|objective|summary|profile|education|experience|skills|projects/i', $line)) continue;
+            if (preg_match($jobTitlePattern, $line)) continue;
+            if (preg_match($locationPattern, $line)) continue;
 
             $cleanedLine = preg_replace('/\s+/', ' ', $line);
-            if (preg_match('/^([A-Za-z][A-Za-z.\s]{2,40})/', $cleanedLine, $m)) {
-                $candidateName = trim($m[1]);
-                if (!preg_match('/road|street|nagar|district|state|india|tamil nadu|chennai|mumbai|delhi|bangalore|hyderabad/i', $candidateName)) {
-                    $name = ucwords(strtolower($candidateName));
-                    break;
+            if (preg_match('/^([A-Za-z][A-Za-z.\s]{2,40})$/', $cleanedLine, $m)) {
+                $possible = ucwords(strtolower(trim($m[1])));
+                if (empty($candidateName)) {
+                    $candidateName = $possible;
+                }
+
+                if (!empty($emailPrefix)) {
+                    $nameWords = explode(' ', strtolower($possible));
+                    foreach ($nameWords as $nw) {
+                        if (strlen($nw) >= 3 && strpos($emailPrefix, $nw) !== false) {
+                            $bestMatchName = $possible;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        }
+        $name = !empty($bestMatchName) ? $bestMatchName : (!empty($candidateName) ? $candidateName : 'Candidate');
+
+        // Extract Mobile Number(s) with support for spaces/hyphens (e.g. +91 96007 42358, 81483 14442)
+        $mobileNumbers = null;
+        $extractedMobiles = [];
+        $phoneRegex = '/(?:\+?91[\s\-]?)?(?:0)?\b([6-9]\d{4}[\s\-]?\d{5}|[6-9]\d{2}[\s\-]?\d{3}[\s\-]?\d{4}|[6-9]\d{9})\b/';
+
+        if (preg_match_all($phoneRegex, $rawText, $phoneMatches)) {
+            foreach ($phoneMatches[0] as $rawPhone) {
+                $digits = preg_replace('/[^\d]/', '', $rawPhone);
+                if (strlen($digits) >= 10) {
+                    $clean10 = substr($digits, -10);
+                    if (preg_match('/^[6-9]\d{9}$/', $clean10)) {
+                        $extractedMobiles[] = $clean10;
+                    }
                 }
             }
         }
 
-        // Extract Mobile Number(s)
-        $mobileNumbers = null;
-        if (preg_match_all('/(\+?\s?91[\s\-]?)?[6-9]\d{9}/', $rawText, $matches)) {
-            $uniqueMobiles = array_unique($matches[0]);
-            $mobileNumbers = !empty($uniqueMobiles) ? implode(', ', $uniqueMobiles) : null;
+        if (!empty($extractedMobiles)) {
+            $uniqueMobiles = array_unique($extractedMobiles);
+            $mobileNumbers = implode(', ', $uniqueMobiles);
         }
 
         // 4. EXTRACT TOTAL YEARS OF EXPERIENCE
@@ -387,7 +427,14 @@ class ATS_Engine {
 
         if (preg_match('/([A-Z0-9\.\&\-\s]{3,50}\s+(?:Pvt\.?\s*Ltd\.?|Ltd\.?|Inc\.?|Technologies|Labs|Solutions|Services|Software|Infotech|Systems|Corporation))/i', $rawText, $cm)) {
             $companyLines = preg_split('/\r\n|\r|\n/', trim($cm[1]));
-            $currentCompany = trim(end($companyLines));
+            $rawCompany = trim(end($companyLines));
+            if (preg_match('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $rawCompany)) {
+                $cParts = preg_split('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $rawCompany);
+                $rawCompany = trim($cParts[0], " \t\n\r\0\x0B.,-");
+            }
+            if (!empty($rawCompany) && strlen($rawCompany) >= 3) {
+                $currentCompany = $rawCompany;
+            }
         }
 
         if ($headline !== 'Not specified in resume' && strpos($headline, 'Candidate') === false) {
@@ -484,25 +531,67 @@ class ATS_Engine {
         // 7. Work History
         $workHistory = [];
         if (!empty($experienceDetails['jobs'])) {
+            $jIndex = 1;
             foreach ($experienceDetails['jobs'] as $j) {
                 $period = $j['from'] . ' - ' . $j['to'];
+
+                $roleStr = !empty($j['role']) && strlen(trim($j['role'])) >= 2 ? trim($j['role']) : ($currentRole !== 'Not specified in resume' ? $currentRole : "Position #{$jIndex}");
+                $compStr = !empty($j['company']) && strlen(trim($j['company'])) >= 2 ? trim($j['company']) : ($currentCompany !== 'Not specified in resume' ? $currentCompany : "Company");
+
+                if (strlen($compStr) > 60 || preg_match('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $compStr)) {
+                    $cParts = preg_split('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $compStr);
+                    $compStr = trim($cParts[0], " \t\n\r\0\x0B.,-");
+                    if (empty($compStr) || strlen($compStr) < 3) {
+                        $compStr = ($currentCompany !== 'Not specified in resume' && !preg_match('/\b(ability|learn|adapt)\b/i', $currentCompany)) ? $currentCompany : 'Company';
+                    }
+                }
+
+                if (strlen($roleStr) > 60 || preg_match('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $roleStr)) {
+                    $rParts = preg_split('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $roleStr);
+                    $roleStr = trim($rParts[0], " \t\n\r\0\x0B.,-");
+                    if (empty($roleStr) || strlen($roleStr) < 3) {
+                        $roleStr = ($currentRole !== 'Not specified in resume') ? $currentRole : "Role #{$jIndex}";
+                    }
+                }
+
                 $workHistory[] = [
-                    'role' => $currentRole !== 'Not specified in resume' ? $currentRole : 'Role',
-                    'company' => $currentCompany !== 'Not specified in resume' ? $currentCompany : 'Company',
-                    'period' => $period,
+                    'role'     => $roleStr,
+                    'company'  => $compStr,
+                    'period'   => $period,
                     'duration' => $j['years'] . ' Yrs ' . $j['months'] . ' Mos'
                 ];
+                $jIndex++;
             }
         }
 
-        // 8. Projects
+        // 8. Projects with Technology Stack Extraction
         $projects = [];
-        if (preg_match_all('/project[s]?\s*[:\-]?\s*([A-Za-z0-9\s\.\-]{3,50})/i', $rawText, $pm)) {
-            $uniqueProjects = array_unique(array_map('trim', $pm[1]));
-            foreach (array_slice($uniqueProjects, 0, 4) as $pName) {
-                if (strlen($pName) > 3 && !preg_match('/work|history|experience|skills|education/i', $pName)) {
+        $knownTechs = ['Salesforce', 'Apex', 'LWC', 'Flow', 'Sales Cloud', 'Service Cloud', 'Health Cloud', 'OmniStudio', 'Gearset', 'SOQL', 'JavaScript', 'HTML', 'CSS', 'React', 'Node', 'Express', 'Java', 'Spring Boot', 'Python', 'Django', 'Flask', 'PHP', 'CodeIgniter', 'Laravel', 'MySQL', 'PostgreSQL', 'MongoDB', 'Oracle', 'REST API', 'Basware', 'Tally', 'AWS', 'Azure', 'Docker', 'Kubernetes'];
+
+        if (preg_match_all('/project[s]?\s*[:\-]\s*([A-Za-z0-9\s\,\&\.]{3,60})(?=\n|\r|role|$)/i', $rawText, $pm, PREG_OFFSET_CAPTURE)) {
+            foreach ($pm[1] as $pMatch) {
+                $pName = preg_replace('/\s+/', ' ', trim($pMatch[0]));
+                $offset = $pMatch[1];
+
+                if (strlen($pName) > 2 && !preg_match('/summary|experience|skills|education|details/i', $pName)) {
+                    $snippet = substr($rawText, $offset, 400);
+
+                    $techs = [];
+                    if (preg_match('/(?:technologies|environment|tech stack|tools|built with)\s*[:\-]\s*(.*?)(?=\n|\r|$)/i', $snippet, $tm)) {
+                        $techs[] = trim($tm[1]);
+                    }
+
+                    foreach ($knownTechs as $kt) {
+                        if (stripos($snippet, $kt) !== false && !in_array($kt, $techs)) {
+                            $techs[] = $kt;
+                        }
+                    }
+
+                    $techStr = !empty($techs) ? implode(', ', array_slice(array_unique($techs), 0, 6)) : '';
+
                     $projects[] = [
-                        'title' => ucwords($pName)
+                        'title'      => ucwords($pName),
+                        'technology' => $techStr
                     ];
                 }
             }
@@ -1192,7 +1281,10 @@ class ATS_Engine {
         $content = '';
         if ($zip->open($file) === TRUE) {
             $xml = $zip->getFromName('word/document.xml');
-            $content = strip_tags($xml);
+            if ($xml) {
+                $xml = str_replace(['</w:p>', '<w:br/>', '<w:br>', '</w:tr>'], "\n", $xml);
+                $content = strip_tags($xml);
+            }
             $zip->close();
         }
         return $content;
@@ -1200,26 +1292,33 @@ class ATS_Engine {
 
     private function extractExperienceDetails($text)
     {
-        $start = false;
-        $expKeywords = [
-            'experience', 'work experience', 'professional experience', 'employment',
-            'internship', 'career history', 'employment history', 'work history', 'professional background'
-        ];
+        $expText = $text;
+        if (preg_match('/(?:professional experience|work experience|employment history|career history|work history)(.*?)(?=education|declaration|certifications|$)/is', $text, $em)) {
+            $expText = $em[1];
+        } else {
+            $start = false;
+            $expKeywords = [
+                'experience', 'work experience', 'professional experience', 'employment',
+                'internship', 'career history', 'employment history', 'work history', 'professional background'
+            ];
 
-        foreach ($expKeywords as $word) {
-            $pos = stripos($text, $word);
-            if ($pos !== false) {
-                $start = $pos;
-                break;
+            foreach ($expKeywords as $word) {
+                $pos = stripos($text, $word);
+                if ($pos !== false) {
+                    $start = $pos;
+                    break;
+                }
+            }
+
+            if ($start !== false) {
+                $expText = substr($text, $start);
             }
         }
 
-        if ($start !== false) {
-            $text = substr($text, $start);
-        }
-
         $jobs = [];
-        $text = preg_replace('/(\d{1,2})(st|nd|rd|th)/i', '$1', $text);
+        $cleanText = str_replace(['–', '—', '&ndash;', '&mdash;'], '-', $expText);
+        $cleanText = preg_replace('/(\d+)\s*[\t\r\n]+\s*(\d+)/', '$1$2', $cleanText);
+        $cleanText = preg_replace('/(\d{1,2})(st|nd|rd|th)/i', '$1', $cleanText);
         preg_match_all('/
         (
         (jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*[\s\-\.]*\d{4}
@@ -1228,7 +1327,7 @@ class ATS_Engine {
         |
         \d{4}
         )
-        \s*(to|-|–|—)\s*
+        \s*(?:to|-)\s*
         (
         present|current|now
         |
@@ -1238,15 +1337,20 @@ class ATS_Engine {
         |
         \d{4}
         )
-        /ix', $text, $matches);
+        /ix', $cleanText, $matches, PREG_OFFSET_CAPTURE);
+
+        $eduKeywordsPattern = '/\b(bachelor|master|b\.?tech|m\.?tech|b\.?e|m\.?e|b\.?sc|m\.?sc|b\.?com|m\.?com|bba|mba|bca|mca|phd|diploma|degree|college|university|institute|school|academy|sslc|hsc|10th|12th|education|academic|passed out|cgpa|percentage)\b/i';
 
         if (!empty($matches[0])) {
-            foreach ($matches[0] as $range) {
-                $parts = preg_split('/\s*(to|-|–|—)\s*/', $range);
+            foreach ($matches[0] as $match) {
+                $rangeStr = $match[0];
+                $offset   = $match[1];
+
+                $parts = preg_split('/\s*(?:to|-)\s*/i', $rangeStr);
                 if (count($parts) < 2) continue;
 
-                $from = trim($parts[0]);
-                $to   = trim($parts[1]);
+                $from = trim($parts[0], " \t\n\r\0\x0B()[],.-");
+                $to   = trim($parts[1], " \t\n\r\0\x0B()[],.-");
 
                 if (preg_match('/^\d{4}$/', $from)) $from .= " jan";
                 if (preg_match('/^\d{4}$/', $to))   $to   .= " jan";
@@ -1260,11 +1364,100 @@ class ATS_Engine {
                 $years  = floor($months / 12);
                 $remMon = $months % 12;
 
+                // Extract preceding lines for specific role & company
+                $beforeText = substr($cleanText, 0, $offset);
+                $lines = array_values(array_filter(array_map('trim', explode("\n", $beforeText))));
+
+                $compStr = isset($lines[count($lines)-1]) ? $lines[count($lines)-1] : '';
+                $roleStr = isset($lines[count($lines)-2]) ? $lines[count($lines)-2] : '';
+
+                // Clean bullet symbols and unprintable unicode characters
+                $compStr = preg_replace('/[^\x20-\x7E]/', '', $compStr);
+                $roleStr = preg_replace('/[^\x20-\x7E]/', '', $roleStr);
+                $compStr = preg_replace('/\s+/', ' ', trim($compStr));
+                $roleStr = preg_replace('/\s+/', ' ', trim($roleStr));
+
+                // Filter out Education entries
+                if (preg_match($eduKeywordsPattern, $roleStr) || preg_match($eduKeywordsPattern, $compStr)) {
+                    continue;
+                }
+
+                if (preg_match('/employer\s*[:\-]\s*(.*)/i', $compStr, $empMatch)) {
+                    $compStr = trim($empMatch[1]);
+                } elseif (preg_match('/tenure|period|employment/i', $compStr)) {
+                    if (preg_match('/employer\s*[:\-]\s*(.*)/i', $beforeText, $empMatch2)) {
+                        $compStr = trim($empMatch2[1]);
+                    }
+                }
+                if (preg_match('/designation\s*[:\-]\s*(.*)/i', $roleStr, $desMatch)) {
+                    $roleStr = trim($desMatch[1]);
+                }
+
+                if (empty($roleStr) || strlen($roleStr) < 3 || preg_match('/developments|experience|summary|skills|projects|tenure|employer/i', $roleStr)) {
+                    $afterText = substr($cleanText, $offset + strlen($rangeStr));
+                    $afterLines = array_values(array_filter(array_map('trim', explode("\n", $afterText))));
+                    $checkAfter = isset($afterLines[0]) ? preg_replace('/[^\x20-\x7E]/', '', $afterLines[0]) : '';
+                    if (preg_match('/designation\s*[:\-]\s*(.*)/i', $checkAfter, $desMatch2)) {
+                        $roleStr = trim($desMatch2[1]);
+                    } elseif (preg_match('/(.*?)\s*(?:-|–|—|at|@)\s*(.*)/i', $compStr, $splitM)) {
+                        $roleStr = trim($splitM[1]);
+                        $compStr = trim($splitM[2]);
+                    }
+                }
+
+                if (preg_match('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $compStr)) {
+                    $cParts = preg_split('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $compStr);
+                    $compStr = trim($cParts[0], " \t\n\r\0\x0B.,-");
+                }
+                if (strlen($compStr) > 50) $compStr = substr($compStr, 0, 50);
+
+                if (preg_match('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $roleStr)) {
+                    $rParts = preg_split('/\b(ability|learn|adapt|technologies|experience|responsible|skills|worked|working|soft skills|technical skills)\b/i', $roleStr);
+                    $roleStr = trim($rParts[0], " \t\n\r\0\x0B.,-");
+                }
+                if (strlen($roleStr) > 50) $roleStr = substr($roleStr, 0, 50);
+
                 $jobs[] = [
-                    "from" => $from,
-                    "to"   => $to,
-                    "years" => $years,
-                    "months" => $remMon
+                    "from"    => $from,
+                    "to"      => $to,
+                    "years"   => $years,
+                    "months"  => $remMon,
+                    "role"    => ucwords(strtolower($roleStr)),
+                    "company" => ucwords(strtolower($compStr))
+                ];
+            }
+        }
+
+        if (empty($jobs)) {
+            if (preg_match('/employer\s*[:\-]\s*(.*?)(?=\n|\r|$)/i', $text, $empM)) {
+                $comp = preg_replace('/\s+/', ' ', trim($empM[1]));
+                $role = 'Professional';
+                if (preg_match('/designation\s*[:\-]\s*(.*?)(?=\n|\r|$)/i', $text, $desM)) {
+                    $role = preg_replace('/\s+/', ' ', trim($desM[1]));
+                }
+                $from = 'Jan 2022';
+                $to = 'Present';
+                if (preg_match('/tenure\s*[:\-]\s*(.*?)(?=\n|\r|$)/i', $text, $tenM)) {
+                    $tenStr = str_replace(['–', '—'], '-', trim($tenM[1]));
+                    $parts = explode('-', $tenStr);
+                    if (count($parts) >= 2) {
+                        $from = trim($parts[0]);
+                        $to = trim($parts[1]);
+                    }
+                }
+                $fromDate = strtotime($from) ?: time();
+                $toDate   = (stripos($to, 'present') !== false || stripos($to, 'current') !== false || stripos($to, 'now') !== false) ? time() : (strtotime($to) ?: time());
+                $months   = max(1, floor(($toDate - $fromDate) / (60*60*24*30)));
+                $years    = floor($months / 12);
+                $remMon   = $months % 12;
+
+                $jobs[] = [
+                    "from"    => $from,
+                    "to"      => $to,
+                    "years"   => $years,
+                    "months"  => $remMon,
+                    "role"    => ucwords($role),
+                    "company" => ucwords($comp)
                 ];
             }
         }

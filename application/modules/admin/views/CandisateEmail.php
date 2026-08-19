@@ -5,7 +5,6 @@ $isReschedule = ($action === 'reschedule');
 ?>
 <?php 
 if(!empty($candidatelist)) {
-    // candidate present
 } else {
     redirect($this->config->item('base_url').'admin/index');
 }
@@ -24,17 +23,14 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
     <style>
         body { margin:0; padding:0; background-color:#f4f6f8; font-family:system-ui,sans-serif; }
         .container { max-width:620px; margin:0 auto; background:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.07); }
-        /* --- Header styles --- */
         .header-online  { background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%); padding:28px; text-align:center; color:#fff; }
         .header-offline { background:linear-gradient(135deg,#2e7d32 0%,#1b5e20 100%); padding:28px; text-align:center; color:#fff; }
         .header-reject  { background:#3F51B5; padding:25px; text-align:center; color:#fff; }
         .header h1 { margin:0; font-size:22px; font-weight:700; }
         .header p  { margin:6px 0 0; font-size:13px; opacity:0.85; }
         .badge { display:inline-block; background:rgba(255,255,255,0.2); color:#fff; padding:4px 14px; border-radius:20px; font-size:12px; margin-top:10px; }
-        /* --- Body --- */
         .content { padding:30px; color:#555; font-size:14px; line-height:24px; }
         .content p { margin:0 0 14px; }
-        /* --- Info box --- */
         .info-box { border-radius:6px; padding:18px 20px; margin:20px 0; }
         .info-box.online  { background:#f0f6ff; border-left:4px solid #1a73e8; }
         .info-box.offline { background:#f0fff4; border-left:4px solid #2e7d32; }
@@ -42,15 +38,12 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
         .info-box td { padding:7px 0; font-size:14px; }
         .info-box td:first-child { color:#666; width:130px; }
         .info-box td:last-child  { font-weight:600; color:#222; }
-        /* --- Meet button --- */
         .meet-btn { text-align:center; margin:24px 0; }
         .meet-btn a { background:linear-gradient(135deg,#1a73e8,#0d47a1); color:#fff; padding:13px 32px; text-decoration:none; border-radius:6px; font-size:15px; font-weight:700; display:inline-block; }
         .meet-link-text { text-align:center; font-size:12px; color:#999; margin-top:8px; word-break:break-all; }
-        /* --- Call letter --- */
         .call-letter-box { border:2px solid #2e7d32; border-radius:8px; padding:24px; margin:20px 0; background:#f9fff9; }
         .call-letter-box h3 { margin:0 0 14px; color:#2e7d32; font-size:16px; }
         .call-letter-box p  { margin:0 0 10px; font-size:14px; color:#444; }
-        /* --- Footer --- */
         .footer { padding:20px 30px; background:#fafafa; color:#777; font-size:12px; line-height:20px; border-top:1px solid #eee; }
     </style>
 </head>
@@ -59,7 +52,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
     <tr><td align="center">
         <div class="container">
 
-            <!-- ===== HEADER ===== -->
             <?php if ($action == 'rejected'): ?>
             <div class="header header-reject"><h1>Application Update</h1></div>
 
@@ -98,7 +90,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
             </div>
             <?php endif; ?>
 
-            <!-- ===== BODY ===== -->
             <div class="content">
                 <p>Dear <strong><?php echo htmlspecialchars($candidatelist->Fullname); ?></strong>,</p>
 
@@ -110,7 +101,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
                     <p>Please note that your interview for the <strong><?php echo htmlspecialchars($jobTitle); ?></strong> position has been <strong>RESCHEDULED</strong>.</p>
                     
                     <?php if ($mode == 'offline'): ?>
-                        <!-- OFFLINE RESCHEDULE CALL LETTER -->
                         <p>Below are your updated in-person interview details:</p>
 
                         <div class="call-letter-box">
@@ -147,7 +137,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
                         <p>Please arrive 10–15 minutes before the updated time. If you have any questions, contact us at <strong>info@inetcsc.com</strong>.</p>
 
                     <?php else: ?>
-                        <!-- ONLINE RESCHEDULE -->
                         <p>Below are your updated online interview details:</p>
 
                         <div class="info-box online">
@@ -176,7 +165,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
                     <?php endif; ?>
 
                 <?php elseif ($mode == 'offline'): ?>
-                    <!-- CALL LETTER -->
                     <p>We are pleased to inform you that you have been shortlisted for the <strong><?php echo htmlspecialchars($jobTitle); ?></strong> position and are invited for an in-person interview.</p>
 
                     <div class="call-letter-box">
@@ -213,7 +201,6 @@ $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($inte
                     <p>Please arrive 10–15 minutes before the scheduled time. If you need to reschedule, contact us at <strong>info@inetcsc.com</strong>.</p>
 
                 <?php elseif ($mode == 'online'): ?>
-                    <!-- ONLINE INTERVIEW -->
                     <p>Congratulations! Your profile has been shortlisted for the <strong><?php echo htmlspecialchars($jobTitle); ?></strong> position. An online interview has been scheduled for you.</p>
 
                     <div class="info-box online">

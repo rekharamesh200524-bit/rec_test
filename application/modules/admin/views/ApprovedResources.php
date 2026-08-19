@@ -7,7 +7,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
 ?>
 
 
-<!-- Main content -->
+
 <section class="content">
   <div class="container-fluid">
     
@@ -80,7 +80,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                     </td>
                     <td>
                       <div class="btn-group" role="group">
-                        <!-- Edit Job -->
+                       
                         <button type="button" 
                                 class="btn btn-sm btn-primary editJobBtn" 
                                 title="Edit Job" 
@@ -89,7 +89,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                           <i class="fas fa-edit"></i>
                         </button>
 
-                        <!-- View Details -->
+                       
                         <button type="button" 
                                 class="btn btn-sm btn-secondary btn-view-details" 
                                 title="View Details" 
@@ -97,7 +97,6 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                           <i class="fas fa-eye"></i>
                         </button>
 
-                        <!-- Assign / Reassign Recruiter (ONLY SHOWN IF ALL MANDATORY FIELDS ARE FILLED OR ALREADY ASSIGNED) -->
                         <?php if (!empty($row['AssignedRecruiterManagerId']) || $row['Status'] === 'ASSIGNED'): ?>
                           <button type="button" 
                                   class="btn btn-sm btn-warning btn-assign" 
@@ -133,9 +132,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
   </div>
 </section>
 
-<!-- ==========================================
-     MODAL: ASSIGN RECRUITER MANAGER
-     ========================================== -->
+
 <div class="modal fade" id="assignRecruiterModal" tabindex="-1" role="dialog" aria-labelledby="assignRecruiterModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content border-0 shadow-lg">
@@ -176,9 +173,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
   </div>
 </div>
 
-<!-- ==========================================
-     MODAL: VIEW DETAILS
-     ========================================== -->
+
 <div class="modal fade" id="approvedDetailsModal" tabindex="-1" role="dialog" aria-labelledby="approvedDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content border-0 shadow">
@@ -187,7 +182,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body" id="detailsModalBody">
-        <!-- Dynamic Content injected via JS -->
+     
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -196,9 +191,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
   </div>
 </div>
 
-<!-- ==========================================
-     SIDE PANEL: EDIT VACANCY (EXACT SAME AS VACANCY LIST)
-     ========================================== -->
+
 <div id="editVacancyPanel" class="right-form">
   <form id="editVacancyForm" action="<?= base_url('admin/updateVacancy') ?>" method="post">
       <input type="hidden" name="jid" id="edit_jid">
@@ -246,7 +239,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
               </div>
 
               <div class="bs-stepper-content">
-                  <!-- STEP 1 -->
+                 
                   <div id="edit-logins-part" class="content">
                       <div class="form-group">
                           <label>Job Code*</label>
@@ -278,7 +271,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                       <button type="button" class="btn btn-primary" onclick="editStepper.next()">Next</button>
                   </div>
 
-                  <!-- STEP 2 -->
+                 
                   <div id="edit-information-part" class="content">
                       <div class="form-group">
                           <label>Work Mode*</label><br>
@@ -324,7 +317,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                       <button type="button" class="btn btn-primary" onclick="editStepper.next()">Next</button>
                   </div>
 
-                  <!-- STEP 3 -->
+                  
                   <div id="edit-skill-part" class="content">
                       <div class="form-group">
                           <label>Positions*</label>
@@ -369,7 +362,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                       <button type="button" class="btn btn-primary" onclick="editStepper.next()">Next <i class="fas fa-arrow-right ml-1"></i></button>
                   </div>
 
-                  <!-- STEP 4: CTC -->
+               
                   <div id="edit-ctc-part" class="content">
                       <div class="form-group">
                           <label class="font-weight-bold"><i class="fas fa-money-bill-wave text-success mr-1"></i> Salary / CTC (LPA) <span class="text-danger">*</span></label>
@@ -388,7 +381,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                           </select>
                       </div>
 
-                      <!-- INTERVIEW PANEL LEVELS (APPROVED RESOURCES EDIT ONLY) -->
+                     
                       <div class="form-group border-top pt-3 mt-3">
                           <div class="d-flex align-items-center justify-content-between mb-2">
                               <label class="font-weight-bold text-primary mb-0">
@@ -401,7 +394,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                           <small class="form-text text-muted mb-3">Level 1 & Level 2 are mandatory. Up to 4 levels maximum.</small>
 
                           <div id="interviewPanelContainer">
-                              <!-- Level 1 (Mandatory) -->
+                           
                               <div class="form-group mb-2" data-level="1">
                                   <label class="font-weight-bold">Level 1 Interviewer <span class="text-danger">*</span></label>
                                   <select name="interviewPanel[1]" id="edit_interviewPanel_1" class="form-control interview-panel-select" required>
@@ -414,7 +407,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                                   </select>
                               </div>
 
-                              <!-- Level 2 (Mandatory) -->
+                              
                               <div class="form-group mb-2" data-level="2">
                                   <label class="font-weight-bold">Level 2 Interviewer <span class="text-danger">*</span></label>
                                   <select name="interviewPanel[2]" id="edit_interviewPanel_2" class="form-control interview-panel-select" required>
@@ -427,7 +420,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
                                   </select>
                               </div>
 
-                              <!-- Dynamic Level 3 & Level 4 container -->
+                            
                               <div id="dynamicLevelsContainer"></div>
                           </div>
                       </div>
@@ -441,7 +434,7 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
   </form>
 </div>
 
-<!-- Overlay -->
+
 <div id="vacancyOverlay"></div>
 
 <script>
@@ -615,7 +608,7 @@ $(document).ready(function() {
         key: 'EducationRequired'
     });
 
-    // Work mode & Emp type toggle buttons
+
     $('.edit-work-mode').on('click', function() {
         $('.edit-work-mode').removeClass('active');
         $(this).addClass('active');
@@ -634,7 +627,7 @@ $(document).ready(function() {
         return (num % 1 === 0) ? num.toFixed(0) : num.toString();
     }
 
-    // Experience dropdown population
+  
     function populateEditExpMin() {
         let html = '<option value="">Select Min Exp</option>';
         for (let i = 0; i <= 20; i++) {
@@ -655,13 +648,13 @@ $(document).ready(function() {
         populateEditExpMax($(this).val());
     });
 
-    // Close panel logic
+   
     $('#closeEditVacancyPanel, #vacancyOverlay').on('click', function() {
         $('#editVacancyPanel').removeClass('open');
         $('#vacancyOverlay').removeClass('show');
     });
 
-// JS Options template for IHUsers dropdown
+
 var ihUsersOptionsHtml = '<option value="">Select Interviewer</option>';
 <?php if (!empty($ctc_approvers)): ?>
     <?php foreach ($ctc_approvers as $u): ?>
@@ -718,7 +711,7 @@ $(document).on('click', '.remove-level-btn', function() {
     updateAddLevelBtnState();
 });
 
-    // Open Edit Panel
+    
     $(document).on('click', '.editJobBtn', function() {
         let jid = $(this).data('id');
         let reqData = $(this).data('req');
@@ -795,7 +788,7 @@ $(document).on('click', '.remove-level-btn', function() {
                 $('#vacancyOverlay').addClass('show');
             });
         } else {
-            // Unconverted Approved Request
+            
             $('#edit_jid').val(0);
             $('#edit_requestId').val(reqData.RequestId || reqData.RequestCode || 0);
             $('#edit_requestCode').val(reqData.RequestCode || '');
@@ -836,12 +829,12 @@ $(document).on('click', '.remove-level-btn', function() {
         }
     });
 
-    // Submit Edit Vacancy Form via AJAX
+    
     $('#editVacancyForm').on('submit', function(e) {
         e.preventDefault();
         $('#btnUpdateVacancySubmit').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Updating...');
 
-        // Sync all chip containers to their hidden inputs before serializing
+      
         function syncChips(chipsId, hiddenId) {
             var chips = document.getElementById(chipsId);
             var hidden = document.getElementById(hiddenId);
@@ -884,7 +877,7 @@ $(document).on('click', '.remove-level-btn', function() {
         });
     });
 
-    // Open Assign Modal
+    
     $(document).on('click', '.btn-assign', function() {
         let reqId = $(this).data('id');
         let code  = $(this).data('code');
@@ -905,7 +898,7 @@ $(document).on('click', '.remove-level-btn', function() {
         $('#assignRecruiterModal').modal('show');
     });
 
-    // Submit Assign Form via AJAX
+    
     $('#assignRecruiterForm').on('submit', function(e) {
         e.preventDefault();
         let reqId = $('#assign_requestId').val();
@@ -940,7 +933,7 @@ $(document).on('click', '.remove-level-btn', function() {
         });
     });
 
-    // View Details Modal
+   
     $(document).on('click', '.btn-view-details', function() {
         let d = $(this).data('req');
         if (typeof d === 'string') {

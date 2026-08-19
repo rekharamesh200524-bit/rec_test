@@ -22,126 +22,158 @@ foreach ($menus as $menu) {
 ?>
 
 <style>
-/* ROLE PERMISSIONS PREMIUM STYLING */
-.role-select-box {
-  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-  border: 1px solid #cbd5e1;
-  border-radius: 14px;
-  padding: 20px 24px;
+/* Modern High-Contrast Custom Toggle Switches */
+.custom-switch {
+    padding-left: 3.2rem !important;
 }
 
-.perm-module-card {
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  height: 100%;
+.custom-switch .custom-control-label {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
 }
 
-.perm-module-card:hover {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
-}
-
-.perm-module-header {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  padding: 16px 20px;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.perm-module-body {
-  padding: 18px 20px;
-}
-
-.perm-item-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  transition: all 0.25s ease;
-}
-
-.perm-item-row:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  transform: translateX(4px);
-}
-
-.perm-item-label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 0;
-  width: 100%;
-}
-
-.perm-icon-pill {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: #e0e7ff;
-  color: #4338ca;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-/* Custom iOS Switch Styling */
 .custom-switch .custom-control-label::before {
-  width: 44px !important;
-  height: 24px !important;
-  border-radius: 20px !important;
-  background-color: #cbd5e1 !important;
-  border: none !important;
-  top: -2px !important;
+    left: -3.2rem !important;
+    width: 2.8rem !important;
+    height: 1.5rem !important;
+    pointer-events: all;
+    border-radius: 1rem !important;
+    background-color: #cbd5e1 !important; /* OFF track: Light slate gray */
+    border: 2px solid #94a3b8 !important;
+    transition: background-color 0.25s ease-in-out, border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out !important;
 }
 
 .custom-switch .custom-control-label::after {
-  width: 18px !important;
-  height: 18px !important;
-  border-radius: 50% !important;
-  background-color: #ffffff !important;
-  top: 1px !important;
-  left: -40px !important;
-  transition: transform 0.25s ease, background-color 0.25s ease !important;
+    top: calc(0.18rem) !important;
+    left: calc(-3rem) !important;
+    width: calc(1.15rem) !important;
+    height: calc(1.15rem) !important;
+    background-color: #ffffff !important; /* OFF handle: White circle */
+    border-radius: 50% !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+    transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out !important;
 }
 
+/* ON State: Vibrant Emerald Green Track + White Handle Slide Right */
 .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #6366f1 !important;
+    background-color: #28a745 !important; /* ON track: Emerald Green */
+    border-color: #1e7e34 !important;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.4) !important;
 }
 
 .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
-  transform: translateX(20px) !important;
+    background-color: #ffffff !important;
+    transform: translateX(1.3rem) !important;
+}
+
+/* Status Label Badge Next to Switch */
+.switch-status-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.switch-status-label.status-on {
+    background-color: #28a745;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(40,167,69,0.2);
+}
+
+.switch-status-label.status-off {
+    background-color: #64748b;
+    color: #ffffff;
+}
+
+/* Module Header & Item Container Styling */
+.perm-module-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    overflow: hidden;
+    height: 100%;
+}
+
+.perm-module-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.perm-module-body {
+    padding: 16px;
+}
+
+.perm-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.perm-item-row.active-perm {
+    background: #f0fdf4 !important;
+    border-color: #86efac !important;
+    border-left: 4px solid #28a745 !important;
+}
+
+.perm-item-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: #334155;
+}
+
+.perm-icon-pill {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.perm-item-row.active-perm .perm-icon-pill {
+    background: #28a745;
+    color: #ffffff;
 }
 </style>
 
 <section class="content pt-3 pb-4">
   <div class="container-fluid">
-    <div class="card card-primary card-outline shadow-sm border-0" style="border-radius:16px;">
+    <div class="card card-primary card-outline shadow-sm border-0 modal-content-rounded-xl">
       
       <!-- CARD HEADER -->
       <div class="card-header bg-white py-3 border-bottom">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
           <div>
-            <h3 class="card-title font-weight-bold mb-1 text-dark d-flex align-items-center">
+            <h4 class="font-weight-bold mb-1 text-dark" style="float:none !important; display:block !important;">
               <i class="fas fa-user-shield text-primary mr-2"></i> Role Access & Permissions Engine
-            </h3>
-            <p class="text-muted small mb-0">Manage system module access and feature permissions for organizational roles.</p>
+            </h4>
+            <div class="text-muted small" style="clear:both;">
+              Manage system module access and feature permissions for organizational roles.
+            </div>
           </div>
 
           <div class="d-flex gap-2 mt-2 mt-sm-0">
@@ -318,12 +350,36 @@ document.addEventListener('DOMContentLoaded', function(){
     var roleDropdown = document.getElementById('roleDropdown');
     var saveBtn      = document.getElementById('savePermissions');
 
+    function syncSwitchUI(cb) {
+        if (!cb) return;
+        var itemRow = cb.closest('.perm-item-row');
+        if (cb.checked) {
+            if (itemRow) itemRow.classList.add('active-perm');
+        } else {
+            if (itemRow) itemRow.classList.remove('active-perm');
+        }
+    }
+
+    function syncAllSwitchesUI() {
+        document.querySelectorAll('.menuCheckbox').forEach(function(cb){
+            syncSwitchUI(cb);
+        });
+    }
+
+    // Attach change listener to all checkboxes
+    document.querySelectorAll('.menuCheckbox').forEach(function(cb){
+        cb.addEventListener('change', function(){
+            syncSwitchUI(this);
+        });
+    });
+
     // LOAD PERMISSIONS
     function loadPermissions(roleId){
 
         document.querySelectorAll('.menuCheckbox').forEach(function(cb){
             cb.checked = false;
         });
+        syncAllSwitchesUI();
 
         var formData = new FormData();
         formData.append('roleId', roleId);
@@ -338,6 +394,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 var cb = document.querySelector('.menuCheckbox[value="'+menuId+'"]');
                 if(cb) cb.checked = true;
             });
+            syncAllSwitchesUI();
         })
         .catch(err => console.error('Load error:', err));
     }
@@ -347,6 +404,11 @@ document.addEventListener('DOMContentLoaded', function(){
         var roleId = this.value;
         if(roleId != ""){
             loadPermissions(roleId);
+        } else {
+            document.querySelectorAll('.menuCheckbox').forEach(function(cb){
+                cb.checked = false;
+            });
+            syncAllSwitchesUI();
         }
     });
 
@@ -357,6 +419,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if(selectedRole){
         roleDropdown.value = selectedRole;
         loadPermissions(selectedRole);
+    } else {
+        syncAllSwitchesUI();
     }
 
     // OPEN CONFIRM MODAL
@@ -376,8 +440,10 @@ document.addEventListener('DOMContentLoaded', function(){
             document.querySelectorAll('.childMenu').forEach(function(child){
                 if(child.dataset.parent == parentId){
                     child.checked = parent.checked;
+                    syncSwitchUI(child);
                 }
             });
+            syncSwitchUI(this);
         });
     });
 
@@ -388,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function(){
             document.querySelectorAll('.menuCheckbox').forEach(function(cb){
                 cb.checked = true;
             });
+            syncAllSwitchesUI();
         });
     }
 
@@ -398,6 +465,7 @@ document.addEventListener('DOMContentLoaded', function(){
             document.querySelectorAll('.menuCheckbox').forEach(function(cb){
                 cb.checked = false;
             });
+            syncAllSwitchesUI();
         });
     }
 

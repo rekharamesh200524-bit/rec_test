@@ -1,11 +1,9 @@
   <?php
     $employee_det = $this->session->userdata('logged_in'); 
-    // echo "<pre>"; print_r($departments); exit;
      if(empty($employee_det)) { redirect($this->config->item('base_url').'admin/index'); }
          $theme_path = $this->config->item('theme_locations').$this->config->item('active_template'); 
 
 ?>
-     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
             <div class="card card-info card-outline">
@@ -19,7 +17,6 @@
                         </a>
                     </div>
               </div>
-              <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead class="bg-success text-white">
@@ -33,7 +30,6 @@
                                 <tbody>
                             <?php
                             
-                            // echo "<pre>"; print_r($users); exit;
 
                             if (isset($department) && !empty($department)) {
                                 $i = 1;
@@ -53,7 +49,7 @@
 
                                           <div class="btn-group" role="group">
 
-                                                <!-- Edit -->
+                                                
                                                 <button type="button"
                                                         class="btn btn-sm btn-primary editUserBtn"
                                                         title="Edit Department"
@@ -63,7 +59,7 @@
                                                 </button>
 
                                                 <?php if ($dep['Status'] == 1) { ?>
-                                                    <!-- Deactivate -->
+                                                   
                                                     <button type="button"
                                                             class="btn btn-sm btn-danger userStatusBtn"
                                                             data-id="<?= $dep['Did']; ?>"
@@ -72,7 +68,7 @@
                                                        <i class="fas fa-times"></i>
                                                     </button>
                                                 <?php } else { ?>
-                                                    <!-- Activate -->
+                                                    
                                                     <button type="button"
                                                             class="btn btn-sm btn-success userStatusBtn"
                                                             data-id="<?= $dep['Did']; ?>"
@@ -95,13 +91,11 @@
                             </tbody> 
                     </table>
                   </div>
-                  <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
-    <!-- /.content -->
-<!-- Edit User -->
+   
+
 <div class="modal fade" id="editUserModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -162,7 +156,7 @@
     </div>
 
     <div class="right-form-body">
-               <!-- YOUR EXISTING FORM STARTS -->
+              
         <form class="form-valide" id="addDepartmentForm"
               action="<?= base_url('admin/SaveDepartment'); ?>"
               method="post">
@@ -188,7 +182,7 @@
                 </div>
             </div>
         </form>
-        <!-- YOUR FORM ENDS -->
+       
     </div>
 </div>
 

@@ -55,10 +55,8 @@
       justify-content: flex-end;
       padding: 3rem;
       overflow: hidden;
-      /* background removed — using <img class="bg-img"> inside for guaranteed center */
     }
 
-    /* Full-cover image tag: object-fit beats any Bootstrap background override */
     .panel-left .bg-img {
       position: absolute;
       inset: 0;
@@ -70,7 +68,6 @@
       display: block;
     }
 
-    /* Dark gradient scrim */
     .panel-left::after {
       content: '';
       position: absolute;
@@ -175,7 +172,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mobile brand — hidden on desktop */
     .mobile-brand {
       display: none;
       align-items: center;
@@ -201,7 +197,6 @@
     .mobile-brand .brand-name { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-h); line-height: 1.2; }
     .mobile-brand .brand-tag  { font-size: 0.65rem; color: var(--text-m); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Headings */
     .form-shell h1 {
       font-family: 'Sora', sans-serif;
       font-weight: 600;
@@ -233,7 +228,6 @@
     .alert-danger  { background: var(--danger-bg);  color: var(--danger);  border: 1px solid #f5c0bc; }
     .alert i { margin-top: 1px; flex-shrink: 0; }
 
-    /* Fields */
     .field { margin-bottom: 1.15rem; }
 
     .field-label {
@@ -376,10 +370,8 @@
     @media (max-width: 768px) {
       .login-shell { flex-direction: column; }
 
-      /* Hide image panel */
       .panel-left  { display: none; }
 
-      /* Form takes full screen */
       .panel-right {
         width: 100%;
         min-height: 100vh;
@@ -390,7 +382,6 @@
 
       .form-shell { max-width: 440px; }
 
-      /* Show mobile brand */
       .mobile-brand { display: flex; }
     }
 
@@ -428,7 +419,6 @@
   <div class="panel-right">
     <div class="form-shell">
 
-      <!-- Mobile-only brand badge -->
       <div class="mobile-brand">
         <div class="mark">I</div>
         <div>
@@ -442,7 +432,6 @@
 
 
 
-      <!-- Form -->
       <form action="<?php echo $this->config->item('base_url'); ?>admin/ForgotPassword"  method="post">
 
         <div class="field">

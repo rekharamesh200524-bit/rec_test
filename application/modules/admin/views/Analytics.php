@@ -1,5 +1,5 @@
 <?php
-// Fallback arrays to prevent PHP warnings
+
 $all_jobs_history = isset($all_jobs_history) ? $all_jobs_history : [];
 $all_candidates_history = isset($all_candidates_history) ? $all_candidates_history : [];
 $all_requests_history = isset($all_requests_history) ? $all_requests_history : [];
@@ -21,396 +21,9 @@ $closed_jobs = isset($closed_jobs) ? $closed_jobs : 0;
 $fill_rate = ($total_jobs > 0) ? round(($closed_jobs / $total_jobs) * 100, 1) : 0;
 ?>
 
-<style>
-/* ============================================================
-   EXECUTIVE POWER BI LIGHT THEME RECRUITMENT ANALYTICS ENGINE
-   ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
-.pbi-analytics-wrapper {
-  font-family: 'Segoe UI', 'Plus Jakarta Sans', -apple-system, sans-serif;
-  background-color: #f8fafc;
-  color: #1f2937;
-  padding: 12px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-.pbi-analytics-wrapper .row {
-  margin-left: -6px;
-  margin-right: -6px;
-}
-
-.pbi-analytics-wrapper [class*="col-"] {
-  padding-left: 6px;
-  padding-right: 6px;
-}
-
-/* Header Bar */
-.pbi-analytics-header {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 14px 20px;
-  margin-bottom: 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.pbi-brand-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.pbi-brand-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 16px;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
-
-.pbi-analytics-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 19px;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 2px;
-}
-
-.pbi-analytics-subtitle {
-  font-size: 11.5px;
-  color: #64748b;
-  margin-bottom: 0;
-}
-
-.pbi-live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #def7ec;
-  color: #03543f;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid #bcf0da;
-}
-
-.pbi-pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #0e9f6e;
-  box-shadow: 0 0 8px #0e9f6e;
-}
-
-/* Left Filter Sidebar */
-.pbi-sidebar-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 14px 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  height: 100%;
-}
-
-.pbi-sidebar-title {
-  font-size: 11.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #334155;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.pbi-slicer-group {
-  margin-bottom: 10px;
-}
-
-.pbi-slicer-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #64748b;
-  margin-bottom: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.pbi-slicer-select {
-  background-color: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  border-radius: 6px !important;
-  font-size: 11.5px !important;
-  height: 32px !important;
-  padding: 3px 6px !important;
-}
-
-.pbi-slicer-select:focus {
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
-}
-
-.pbi-btn-reset {
-  background: #2563eb !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  border: none !important;
-  border-radius: 6px !important;
-  width: 100% !important;
-  padding: 7px !important;
-  font-size: 11.5px !important;
-  margin-top: 6px !important;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
-  transition: all 0.2s ease !important;
-}
-
-.pbi-btn-reset:hover {
-  background: #1d4ed8 !important;
-  transform: translateY(-1px);
-}
-
-/* Light Visual Cards */
-.pbi-visual-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  position: relative;
-  transition: all 0.2s ease;
-  height: calc(100% - 12px);
-  overflow: hidden;
-}
-
-.pbi-visual-card {
-  cursor: pointer !important;
-}
-
-.pbi-visual-card:hover {
-  border-color: #2563eb !important;
-  box-shadow: 0 4px 14px rgba(37,99,235,0.15) !important;
-  transform: translateY(-2px);
-  transition: all 0.2s ease;
-}
-
-.pbi-card-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-
-/* KPI Scorecard Cards */
-.pbi-kpi-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 12px 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  position: relative;
-  transition: all 0.2s ease;
-  height: 100%;
-  cursor: pointer;
-}
-
-.pbi-kpi-card:hover {
-  box-shadow: 0 4px 12px rgba(37,99,235,0.12);
-  border-color: #2563eb;
-  transform: translateY(-2px);
-}
-
-.pbi-kpi-title {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 4px;
-}
-
-.pbi-kpi-border-blue   { border-top: 4px solid #2563eb; }
-.pbi-kpi-border-purple { border-top: 4px solid #7c3aed; }
-.pbi-kpi-border-green  { border-top: 4px solid #059669; }
-.pbi-kpi-border-amber  { border-top: 4px solid #d97706; }
-
-.kpi-scorecard-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.kpi-main-val {
-  font-family: 'Outfit', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1;
-}
-
-.kpi-sub-badge {
-  font-size: 10px;
-  font-weight: 700;
-  margin-top: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.kpi-badge-green { color: #059669; }
-.kpi-badge-red   { color: #dc2626; }
-.kpi-badge-cyan  { color: #0284c7; }
-
-.sparkline-svg {
-  width: 75px;
-  height: 30px;
-}
-
-/* Horizontal Ranking Bars */
-.ranking-bar-item {
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.ranking-bar-item:hover .ranking-bar-info span:first-child {
-  color: #2563eb;
-}
-
-.ranking-bar-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #334155;
-  margin-bottom: 2px;
-}
-
-.ranking-bar-track {
-  height: 6px;
-  background: #f1f5f9;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-}
-
-.ranking-bar-fill {
-  height: 100%;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #0284c7 0%, #2563eb 100%);
-}
-
-.ranking-bar-fill-purple {
-  background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
-}
-
-/* Notice Period & Availability Rating Item */
-.ats-rating-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-  margin-bottom: 9px;
-  font-size: 11px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.ats-rating-item:hover .ats-rating-lbl {
-  color: #2563eb;
-}
-
-.ats-rating-lbl {
-  flex: 0 0 auto;
-  color: #334155;
-  font-weight: 700;
-  font-size: 10.5px;
-  white-space: nowrap;
-}
-
-.ats-rating-track {
-  flex: 1 1 auto;
-  height: 6px;
-  background: #f1f5f9;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-  margin: 0 6px;
-  min-width: 20px;
-}
-
-.ats-rating-fill {
-  height: 100%;
-  border-radius: 10px;
-  background: #059669;
-}
-
-.ats-rating-val {
-  flex: 0 0 auto;
-  white-space: nowrap;
-  text-align: right;
-  font-weight: 700;
-  color: #0f172a;
-  font-size: 10.5px;
-}
-
-/* Modal Table Styling */
-.pbi-drill-table {
-  width: 100% !important;
-  border-collapse: collapse !important;
-}
-
-.pbi-drill-table thead th {
-  background: #1e293b !important;
-  color: #ffffff !important;
-  font-size: 11.5px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  padding: 8px 10px !important;
-}
-
-.pbi-drill-table tbody td {
-  padding: 8px 10px !important;
-  font-size: 12px !important;
-  color: #1f2937 !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  vertical-align: middle !important;
-}
-
-.pbi-drill-table tbody tr:hover {
-  background-color: #f8fafc !important;
-}
-
-canvas {
-  cursor: pointer !important;
-}
-</style>
-
 <div class="pbi-analytics-wrapper">
 
-  <!-- ===== HEADER BAR ===== -->
+  
   <div class="pbi-analytics-header">
     <div class="pbi-brand-box">
       <div class="pbi-brand-icon">
@@ -433,7 +46,7 @@ canvas {
   </div>
 
   <div class="row">
-    <!-- ===== LEFT VERTICAL FILTER SIDEBAR ===== -->
+ 
     <div class="col-xl-2 col-lg-3 col-md-12 mb-3">
       <div class="pbi-sidebar-card">
         <div class="pbi-sidebar-title">
@@ -487,12 +100,12 @@ canvas {
       </div>
     </div>
 
-    <!-- ===== RIGHT ANALYTICS MAIN CONTENT ===== -->
+   
     <div class="col-xl-10 col-lg-9 col-md-12">
       
-      <!-- TOP 4 KPI SCORECARDS WITH MINI SPARKLINE TRENDS -->
+    
       <div class="row">
-        <!-- SCORECARD 1: VACANCIES CREATED -->
+      
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-3">
           <div class="pbi-kpi-card pbi-kpi-border-blue" data-drill="jobs" data-filter="all">
             <div class="pbi-kpi-title">Total Vacancies</div>
@@ -508,7 +121,7 @@ canvas {
           </div>
         </div>
 
-        <!-- SCORECARD 2: VACANCIES CLOSED -->
+      
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-3">
           <div class="pbi-kpi-card pbi-kpi-border-green" data-drill="jobs" data-filter="closed">
             <div class="pbi-kpi-title">Vacancies Closed</div>
@@ -524,7 +137,7 @@ canvas {
           </div>
         </div>
 
-        <!-- SCORECARD 3: CLOSURE RATE -->
+        
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-3">
           <div class="pbi-kpi-card pbi-kpi-border-amber" data-drill="candidates" data-filter="hired">
             <div class="pbi-kpi-title">Position Fill Rate</div>
@@ -540,7 +153,7 @@ canvas {
           </div>
         </div>
 
-        <!-- SCORECARD 4: WITHIN SLA -->
+       
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-3">
           <div class="pbi-kpi-card pbi-kpi-border-purple" data-drill="candidates" data-filter="all">
             <div class="pbi-kpi-title">Candidate Pool Volume</div>
@@ -557,9 +170,9 @@ canvas {
         </div>
       </div>
 
-      <!-- MIDDLE ROW 1: 4 POWER BI RECRUITMENT VISUALS -->
+    
       <div class="row">
-        <!-- VISUAL 1: VACANCIES BY PRIORITY -->
+       
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
           <div class="pbi-visual-card pbi-chart-card h-100" data-chart="priority">
             <div class="pbi-card-title">Vacancies by Priority</div>
@@ -585,7 +198,7 @@ canvas {
           </div>
         </div>
 
-        <!-- VISUAL 2: VACANCIES BY DEPARTMENT -->
+     
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
           <div class="pbi-visual-card pbi-chart-card h-100" data-chart="department">
             <div class="pbi-card-title">Vacancies by Department</div>
@@ -595,7 +208,7 @@ canvas {
           </div>
         </div>
 
-        <!-- VISUAL 3: DEDICATED TOP PANEL INTERVIEWERS CARD -->
+       
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
           <div class="pbi-visual-card h-100">
             <div class="pbi-card-title">
@@ -626,7 +239,7 @@ canvas {
           </div>
         </div>
 
-        <!-- VISUAL 4: TOP RECRUITER MANAGERS CARD (FILTERED) -->
+       
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
           <div class="pbi-visual-card h-100">
             <div class="pbi-card-title">
@@ -664,9 +277,9 @@ canvas {
         </div>
       </div>
 
-      <!-- BOTTOM ROW 2: 3 EQUAL-WIDTH VISUAL CARDS -->
+    
       <div class="row">
-        <!-- VISUAL 5: JOBS BY EMPLOYMENT TYPE -->
+        
         <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
           <div class="pbi-visual-card pbi-chart-card h-100" data-chart="employment">
             <div class="pbi-card-title">Jobs by Employment Type</div>
@@ -688,7 +301,7 @@ canvas {
           </div>
         </div>
 
-        <!-- VISUAL 6: RECRUITMENT VELOCITY OVERTIME -->
+       
         <div class="col-xl-4 col-lg-6 col-md-12 mb-3">
           <div class="pbi-visual-card pbi-chart-card h-100" data-chart="velocity">
             <div class="pbi-card-title">
@@ -701,7 +314,7 @@ canvas {
           </div>
         </div>
 
-        <!-- VISUAL 7: CANDIDATE AVAILABILITY & NOTICE PERIOD BANDS -->
+       
         <div class="col-xl-4 col-lg-12 col-md-12 mb-3">
           <div class="pbi-visual-card h-100">
             <div class="pbi-card-title">
@@ -739,12 +352,12 @@ canvas {
 
 </div>
 
-<!-- ===== POWER BI DRILL-DOWN MODAL ===== -->
+
 <div class="modal fade" id="pbiDrillModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
     <div class="modal-content border-0 shadow-lg" style="border-radius:12px; overflow:hidden;">
       
-      <!-- Modal Header -->
+     
       <div class="modal-header bg-dark text-white px-4 py-3 align-items-center">
         <div>
           <h5 class="modal-title font-weight-bold mb-0 text-white" id="pbiDrillTitle">
@@ -757,7 +370,7 @@ canvas {
         </button>
       </div>
 
-      <!-- Modal Body -->
+    
       <div class="modal-body p-4" style="background:#f8fafc;">
         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
           <div>
@@ -778,7 +391,7 @@ canvas {
         </div>
       </div>
 
-      <!-- Modal Footer -->
+    
       <div class="modal-footer bg-light px-4 py-2">
         <button type="button" class="btn btn-secondary font-weight-bold px-4" data-dismiss="modal" style="border-radius:6px;">Close Drill-Down</button>
       </div>
@@ -787,7 +400,7 @@ canvas {
   </div>
 </div>
 
-<!-- DYNAMIC POWER BI SLICER & SLICE-LEVEL DRILL-DOWN ENGINE -->
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -796,8 +409,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const rawRecruiters = <?= json_encode($recruiter_analytics); ?>;
   const rawInterviewsSummary = <?= json_encode($interviewer_summary); ?>;
   const rawInterviewsDetail = <?= json_encode($interviewer_details); ?>;
+  const rawDepartments = <?= json_encode(array_values(array_unique(array_filter(array_column($departments, 'Departmentname'))))); ?>;
 
-  // Active state datasets (dynamically updated by slicers)
   let activeJobs = [...rawJobs];
   let activeCandidates = [...rawCandidates];
   let activeInterviews = [...rawInterviewsDetail];
@@ -807,7 +420,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let workChartInst = null;
   let overChartInst = null;
 
-  // Helper to extract clicked element index across Chart.js versions
   function getClickedIndex(evt, activeElements, chartInst) {
     let elements = (activeElements && activeElements.length) ? activeElements : [];
     if (!elements.length && chartInst) {
@@ -828,7 +440,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   }
 
-  // GLOBAL DRILL-DOWN MODAL DISPLAY
   window.openDrillDownModal = function (title, subtitle, type, dataArray) {
     dataArray = dataArray || [];
     document.getElementById('pbiDrillTitle').innerHTML = `<i class="fas fa-search-plus text-primary mr-2"></i> ${title}`;
@@ -958,29 +569,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // REACTIVE SLICERS ENGINE
   function applySlicers() {
     const yearVal = document.getElementById('slicerYear').value;
     const deptVal = document.getElementById('slicerDepartment').value;
     const recVal  = document.getElementById('slicerRecruiter').value;
     const statVal = document.getElementById('slicerStatus').value;
 
-    // Filter Jobs
+    // 1. Filter activeJobs
     activeJobs = rawJobs.filter(j => {
-      // Year Filter
       if (yearVal !== 'all') {
         const jYear = j.PostedOn ? new Date(j.PostedOn).getFullYear().toString() : '2026';
         if (jYear !== yearVal) return false;
       }
-      // Department Filter
       if (deptVal !== 'all') {
         if ((j.Departmentname || '').toLowerCase() !== deptVal.toLowerCase()) return false;
       }
-      // Recruiter Filter
       if (recVal !== 'all') {
         if ((j.RecruiterName || '').toLowerCase() !== recVal.toLowerCase()) return false;
       }
-      // Status Filter
       if (statVal !== 'all') {
         const st = (j.JobStatus || '').toLowerCase();
         if (statVal.toLowerCase() === 'open' && (st !== 'open' && st !== 're-open')) return false;
@@ -990,23 +596,39 @@ document.addEventListener("DOMContentLoaded", function () {
       return true;
     });
 
-    // Filter Candidates according to active jobs/dept
+    const activeJids = new Set(activeJobs.map(j => String(j.Jid)));
+
+    // 2. Filter activeCandidates
     activeCandidates = rawCandidates.filter(c => {
+      if (yearVal !== 'all') {
+        const cYear = c.AppliedOn ? new Date(c.AppliedOn).getFullYear().toString() : '2026';
+        if (cYear !== yearVal) return false;
+      }
       if (deptVal !== 'all') {
         if ((c.Departmentname || '').toLowerCase() !== deptVal.toLowerCase()) return false;
       }
-      return true;
-    });
-
-    // Filter Interviews
-    activeInterviews = rawInterviewsDetail.filter(i => {
-      if (deptVal !== 'all') {
-        if ((i.Departmentname || '').toLowerCase() !== deptVal.toLowerCase()) return false;
+      if (recVal !== 'all' || statVal !== 'all') {
+        if (c.Jid && activeJids.size > 0 && !activeJids.has(String(c.Jid))) return false;
       }
       return true;
     });
 
-    // Update KPI Card Displays
+    // 3. Filter activeInterviews
+    activeInterviews = rawInterviewsDetail.filter(i => {
+      if (yearVal !== 'all') {
+        const iYear = i.ScheduledAt ? new Date(i.ScheduledAt).getFullYear().toString() : '2026';
+        if (iYear !== yearVal) return false;
+      }
+      if (deptVal !== 'all') {
+        if ((i.Departmentname || '').toLowerCase() !== deptVal.toLowerCase()) return false;
+      }
+      if (recVal !== 'all') {
+        if ((i.InterviewerName || '').toLowerCase() !== recVal.toLowerCase()) return false;
+      }
+      return true;
+    });
+
+    // 4. KPI Cards
     const totalJobsCount = activeJobs.length;
     const closedJobsCount = activeJobs.filter(j => (j.JobStatus || '').toLowerCase() === 'closed' || (j.JobStatus || '').toLowerCase() === 'filled').length;
     const rate = totalJobsCount > 0 ? ((closedJobsCount / totalJobsCount) * 100).toFixed(1) : 0;
@@ -1017,14 +639,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('kpiValRate').innerText = `${rate}%`;
     document.getElementById('kpiValPool').innerText = poolCount;
 
-    // Calculate priority breakdown
+    // 5. Vacancies by Priority
     let highP = 0, midP = 0, lowP = 0;
-    activeJobs.forEach((j, idx) => {
-      if (idx % 3 === 0) highP++;
-      else if (idx % 3 === 1) midP++;
+    activeJobs.forEach(j => {
+      const openings = parseInt(j.NoofOpenings || 1);
+      if (openings >= 3) highP++;
+      else if (openings === 2) midP++;
       else lowP++;
     });
-    if (totalJobsCount > 0 && highP === 0) { highP = totalJobsCount; }
 
     const highPct = totalJobsCount > 0 ? ((highP / totalJobsCount) * 100).toFixed(1) : 0;
     const midPct  = totalJobsCount > 0 ? ((midP / totalJobsCount) * 100).toFixed(1) : 0;
@@ -1039,7 +661,92 @@ document.addEventListener("DOMContentLoaded", function () {
       priorityChartInst.update();
     }
 
-    // Work type breakdown
+    // 6. Vacancies by Department Bar Chart
+    const deptMap = {};
+    if (rawDepartments && rawDepartments.length > 0) {
+      rawDepartments.forEach(d => deptMap[d] = 0);
+    }
+    activeJobs.forEach(j => {
+      const dName = j.Departmentname || 'General';
+      deptMap[dName] = (deptMap[dName] || 0) + 1;
+    });
+
+    const deptLabels = Object.keys(deptMap);
+    const deptDataValues = Object.values(deptMap);
+
+    if (catChartInst) {
+      catChartInst.data.labels = deptLabels;
+      catChartInst.data.datasets[0].data = deptDataValues;
+      catChartInst.update();
+    }
+
+    // 7. Top Recruiter Managers List
+    const recruiterCounts = {};
+    activeJobs.forEach(j => {
+      const rName = j.RecruiterName || 'Unassigned';
+      recruiterCounts[rName] = (recruiterCounts[rName] || 0) + 1;
+    });
+
+    const recContainer = document.getElementById('recruitersListContainer');
+    if (recContainer) {
+      const sortedRecs = Object.keys(recruiterCounts).sort((a, b) => recruiterCounts[b] - recruiterCounts[a]);
+      if (sortedRecs.length === 0 || totalJobsCount === 0) {
+        recContainer.innerHTML = `<div class="text-muted small py-3 text-center">No active recruiter managers for selected filter.</div>`;
+      } else {
+        let rHtml = '';
+        sortedRecs.forEach(rName => {
+          const cnt = recruiterCounts[rName];
+          const pct = Math.max(25, Math.round((cnt / totalJobsCount) * 100));
+          rHtml += `
+            <div class="ranking-bar-item recruiter-item" data-name="${rName}">
+              <div class="ranking-bar-info">
+                <span><i class="fas fa-user-tie text-primary mr-1"></i> ${rName}</span>
+                <span class="text-primary font-weight-bold">${cnt} Vacancies</span>
+              </div>
+              <div class="ranking-bar-track">
+                <div class="ranking-bar-fill" style="width: ${pct}%;"></div>
+              </div>
+            </div>`;
+        });
+        recContainer.innerHTML = rHtml;
+      }
+    }
+
+    // 8. Top Panel Interviewers List
+    const interviewerCounts = {};
+    activeInterviews.forEach(i => {
+      const iName = i.InterviewerName || 'Interviewer';
+      interviewerCounts[iName] = (interviewerCounts[iName] || 0) + 1;
+    });
+
+    const intContainer = document.getElementById('interviewersListContainer');
+    if (intContainer) {
+      const sortedInts = Object.keys(interviewerCounts).sort((a, b) => interviewerCounts[b] - interviewerCounts[a]);
+      const maxInts = sortedInts.length > 0 ? interviewerCounts[sortedInts[0]] : 1;
+
+      if (sortedInts.length === 0) {
+        intContainer.innerHTML = `<div class="text-muted small py-3 text-center">No interviewer panel records for selected filter.</div>`;
+      } else {
+        let iHtml = '';
+        sortedInts.forEach(iName => {
+          const cnt = interviewerCounts[iName];
+          const pct = Math.max(20, Math.round((cnt / maxInts) * 100));
+          iHtml += `
+            <div class="ranking-bar-item interviewer-item" data-name="${iName}">
+              <div class="ranking-bar-info">
+                <span><i class="fas fa-user-check text-success mr-1"></i> ${iName}</span>
+                <span class="text-success font-weight-bold">${cnt} Rounds</span>
+              </div>
+              <div class="ranking-bar-track">
+                <div class="ranking-bar-fill ranking-bar-fill-purple" style="width: ${pct}%;"></div>
+              </div>
+            </div>`;
+        });
+        intContainer.innerHTML = iHtml;
+      }
+    }
+
+    // 9. Jobs by Employment Type Donut Chart
     let ftCount = 0, ctCount = 0;
     activeJobs.forEach(j => {
       const type = (j.EmploymentType || '').toLowerCase();
@@ -1057,26 +764,62 @@ document.addEventListener("DOMContentLoaded", function () {
       workChartInst.update();
     }
 
-    // Candidate notice breakdown
-    const candTotal = activeCandidates.length || 1;
-    let imm = Math.ceil(activeCandidates.length * 0.5);
-    let n15 = Math.floor(activeCandidates.length * 0.25);
-    let n30 = Math.floor(activeCandidates.length * 0.25);
-    let n60 = activeCandidates.length - (imm + n15 + n30);
-    if (n60 < 0) n60 = 0;
+    // 10. Recruitment Velocity Overtime Line Chart
+    const createdMonthly = new Array(12).fill(0);
+    const closedMonthly  = new Array(12).fill(0);
 
-    document.getElementById('valImmediate').innerText = `${imm} (${Math.round((imm/candTotal)*100)}%)`;
-    document.getElementById('val15').innerText        = `${n15} (${Math.round((n15/candTotal)*100)}%)`;
-    document.getElementById('val30').innerText        = `${n30} (${Math.round((n30/candTotal)*100)}%)`;
-    document.getElementById('val60').innerText        = `${n60} (${Math.round((n60/candTotal)*100)}%)`;
+    activeJobs.forEach(j => {
+      if (j.PostedOn) {
+        const d = new Date(j.PostedOn);
+        if (!isNaN(d.getTime())) {
+          const mIdx = d.getMonth();
+          createdMonthly[mIdx]++;
+          const st = (j.JobStatus || '').toLowerCase();
+          if (st === 'closed' || st === 'filled') {
+            closedMonthly[mIdx]++;
+          }
+        }
+      }
+    });
 
-    document.getElementById('trackImmediate').style.width = `${Math.round((imm/candTotal)*100)}%`;
-    document.getElementById('track15').style.width        = `${Math.round((n15/candTotal)*100)}%`;
-    document.getElementById('track30').style.width        = `${Math.round((n30/candTotal)*100)}%`;
-    document.getElementById('track60').style.width        = `${Math.round((n60/candTotal)*100)}%`;
+    if (overChartInst) {
+      overChartInst.data.datasets[0].data = closedMonthly;
+      overChartInst.data.datasets[1].data = createdMonthly;
+      overChartInst.update();
+    }
+
+    // 11. Candidate Availability & Notice Period
+    const candTotal = activeCandidates.length;
+    if (candTotal === 0) {
+      document.getElementById('valImmediate').innerText = `0 (0%)`;
+      document.getElementById('val15').innerText        = `0 (0%)`;
+      document.getElementById('val30').innerText        = `0 (0%)`;
+      document.getElementById('val60').innerText        = `0 (0%)`;
+
+      document.getElementById('trackImmediate').style.width = `0%`;
+      document.getElementById('track15').style.width        = `0%`;
+      document.getElementById('track30').style.width        = `0%`;
+      document.getElementById('track60').style.width        = `0%`;
+    } else {
+      let imm = Math.ceil(candTotal * 0.5);
+      let n15 = Math.floor(candTotal * 0.25);
+      let n30 = Math.floor(candTotal * 0.25);
+      let n60 = candTotal - (imm + n15 + n30);
+      if (n60 < 0) n60 = 0;
+
+      document.getElementById('valImmediate').innerText = `${imm} (${Math.round((imm/candTotal)*100)}%)`;
+      document.getElementById('val15').innerText        = `${n15} (${Math.round((n15/candTotal)*100)}%)`;
+      document.getElementById('val30').innerText        = `${n30} (${Math.round((n30/candTotal)*100)}%)`;
+      document.getElementById('val60').innerText        = `${n60} (${Math.round((n60/candTotal)*100)}%)`;
+
+      document.getElementById('trackImmediate').style.width = `${Math.round((imm/candTotal)*100)}%`;
+      document.getElementById('track15').style.width        = `${Math.round((n15/candTotal)*100)}%`;
+      document.getElementById('track30').style.width        = `${Math.round((n30/candTotal)*100)}%`;
+      document.getElementById('track60').style.width        = `${Math.round((n60/candTotal)*100)}%`;
+    }
   }
 
-  // SLICER EVENT LISTENERS
+  
   ['slicerYear', 'slicerDepartment', 'slicerRecruiter', 'slicerStatus'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', applySlicers);
@@ -1093,7 +836,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 1. PRIORITY DONUT CHART INITIALIZATION
+ 
   const priorityCtx = document.getElementById('priorityDonutChart');
   if (priorityCtx && window.Chart) {
     priorityChartInst = new Chart(priorityCtx.getContext('2d'), {
@@ -1133,7 +876,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 2. CATEGORY HORIZONTAL BAR CHART
+ 
   const catCtx = document.getElementById('categoryBarChart');
   if (catCtx && window.Chart) {
     catChartInst = new Chart(catCtx.getContext('2d'), {
@@ -1171,7 +914,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 4. WORK TYPE DONUT CHART
+ 
   const workCtx = document.getElementById('workTypeDonutChart');
   if (workCtx && window.Chart) {
     workChartInst = new Chart(workCtx.getContext('2d'), {
@@ -1208,7 +951,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 5. OVERTIME DUAL LINE CHART
+
   const overCtx = document.getElementById('overtimeLineChart');
   if (overCtx && window.Chart) {
     overChartInst = new Chart(overCtx.getContext('2d'), {
@@ -1250,26 +993,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // INITIAL SLICER COMPUTATION
+
   applySlicers();
 
-  // JQUERY CARD CLICK DELEGATION FOR RECRUITERS, INTERVIEWERS, AND NOTICE PERIODS
+
   if (window.jQuery) {
-    // Recruiter Item Click
+  
     $(document).on('click', '.recruiter-item', function () {
       const rName = $(this).attr('data-name');
       const rJobs = activeJobs.filter(j => (j.RecruiterName || '').toLowerCase() === rName.toLowerCase());
       openDrillDownModal(`Drill-Down: ${rName} (Recruiter Manager)`, `Assigned Vacancies for ${rName}`, 'jobs', rJobs);
     });
 
-    // Interviewer Item Click
+    
     $(document).on('click', '.interviewer-item', function () {
       const iName = $(this).attr('data-name');
       const iLogs = activeInterviews.filter(d => (d.InterviewerName || '').toLowerCase() === iName.toLowerCase());
       openDrillDownModal(`Drill-Down: ${iName} (Panel Interviewer)`, `Conducted Interview Rounds & Feedback for ${iName}`, 'interviews', iLogs);
     });
 
-    // Notice Period & Availability Item Click
+   
     $(document).on('click', '.notice-period-item', function () {
       const noticeType = $(this).attr('data-notice');
       let title = 'Candidate Availability & Notice Period';
@@ -1291,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", function () {
       openDrillDownModal(`Drill-Down: ${title}`, 'Specific Candidate Availability Segment', 'candidates', sliceData);
     });
 
-    // Visual Chart Card Click Handler (Card-level & Title/Legend drill-down)
+   
     $(document).on('click', '.pbi-chart-card', function (e) {
       const chartType = $(this).attr('data-chart');
       if (chartType === 'priority') {
@@ -1305,7 +1048,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // KPI Card Click
+  
     $(document).on('click', '.pbi-kpi-card[data-drill]', function () {
       const type = $(this).attr('data-drill');
       const filter = $(this).attr('data-filter');

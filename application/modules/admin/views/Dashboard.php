@@ -1,5 +1,4 @@
 <?php
-// Fallback array definitions
 $all_jobs = isset($all_jobs) ? $all_jobs : [];
 $all_candidates = isset($all_candidates) ? $all_candidates : [];
 $departments = isset($departments) ? $departments : [];
@@ -8,18 +7,26 @@ $recruitment_stages = isset($recruitment_stages) ? $recruitment_stages : [];
 
 $ci = &get_instance();
 $employee_det = (isset($this) && isset($this->session)) ? $this->session->userdata('logged_in') : (isset($ci->session) ? $ci->session->userdata('logged_in') : []);
-$roleId = isset($employee_det['EmpRoleId']) ? $employee_det['EmpRoleId'] : 1;
-$dashboardTitle = ($roleId == 1 || $roleId == 2) ? 'Executive Recruitment Operations Dashboard' : 'Department HR Portal';
+$roleId = isset($employee_det['EmpRoleId']) ? (int)$employee_det['EmpRoleId'] : 1;
+$isHiringManager = ($roleId === 9);
+
+$dashboardTitle = $isHiringManager 
+    ? 'Hiring Manager Candidate Evaluation Portal' 
+    : (($roleId == 1 || $roleId == 2) ? 'Executive Recruitment Operations Dashboard' : 'Department HR Portal');
+
+$dashboardSubtitle = $isHiringManager 
+    ? 'Review candidate applications, interview evaluations, and hiring progress for your department.' 
+    : 'Real-time talent acquisition tracking, candidate stages, and predictive analytics.';
+
 $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Manager';
 ?>
 
 <link rel="stylesheet" href="<?= base_url('themes/bo_theme/css/dashboard-theme.css') ?>">
 
-<div id="dashboard-wrapper" class="theme-job">
+<div id="dashboard-wrapper" class="<?= $isHiringManager ? 'theme-candidate' : 'theme-job' ?>">
 <section class="content pt-3 pb-4">
   <div class="container-fluid">
 
-    <!-- ===== PRO HERO GLASSMORPHISM BANNER ===== -->
     <div id="quoteBanner">
       <div class="row align-items-center">
         <div class="col-lg-8 col-md-8 col-sm-12">
@@ -41,19 +48,19 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
       </div>
     </div>
 
-    <!-- ===== QUICK ACTION BUTTONS BAR & HEADER ===== -->
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
       <div>
         <h2 class="h4 mb-1 font-weight-bold text-dark d-flex align-items-center">
-          <i class="fas fa-chart-line text-primary mr-2 page-title-icon"></i><?= $dashboardTitle ?>
+          <i class="fas fa-user-check text-primary mr-2 page-title-icon"></i><?= $dashboardTitle ?>
         </h2>
-        <p class="text-muted small mb-0">Real-time talent acquisition tracking, resource requests, candidate stages, and predictive analytics.</p>
+        <p class="text-muted small mb-0"><?= $dashboardSubtitle ?></p>
       </div>
 
       <div class="d-flex align-items-center flex-wrap gap-2 mt-3 mt-sm-0 ml-auto">
         <a href="<?= base_url('admin/RequestedResources') ?>" class="btn btn-primary action-pill-btn shadow-sm mr-2">
           <i class="fas fa-plus-circle"></i> Request Resource
         </a>
+        <?php if (!$isHiringManager): ?>
         <div class="btn-group btn-group-toggle shadow-sm ml-2" id="dashboardToggle" role="group" aria-label="Dashboard toggle">
           <button type="button" class="btn btn-toggle-job active" data-toggle-target="job">
             <i class="fas fa-briefcase mr-1"></i> Jobs
@@ -62,12 +69,12 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
             <i class="fas fa-users mr-1"></i> Candidates
           </button>
         </div>
+        <?php endif; ?>
       </div>
     </div>
 
 
 
-    <!-- ===== ON-HOLD REMINDER PUSH NOTIFICATIONS ===== -->
     <?php if (!empty($onhold_reminders)): ?>
       <div class="mb-4">
         <?php foreach ($onhold_reminders as $rem): ?>
@@ -95,7 +102,6 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
       </div>
     <?php endif; ?>
 
-    <!-- ===== 6 DYNAMIC KPI STAT CARDS ===== -->
     <div class="row mb-4">
       <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
@@ -182,124 +188,6 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
       </div>
     </div>
 
-    <!-- ===== RESOURCE REQUESTS & HIRING WORKFLOWS CARD ===== -->
-    <div class="card dashboard-card shadow-sm mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center flex-wrap py-3">
-        <h3 class="card-title font-weight-bold mb-0 text-dark d-flex align-items-center">
-          <i class="fas fa-file-signature text-primary mr-2"></i>Resource Requests & Hiring Workflows
-        </h3>
-        <div class="d-flex align-items-center">
-          <span class="badge badge-primary px-3 py-2 font-weight-bold rounded-pill shadow-sm">
-            <i class="fas fa-database mr-1"></i> <?= count($resource_requests_list); ?> Total Requests
-          </span>
-        </div>
-      </div>
-      <div class="card-body p-0 table-responsive">
-        <table class="table table-hover table-striped mb-0 text-nowrap align-middle">
-          <thead class="bg-dark text-white">
-            <tr>
-              <th>Request Code</th>
-              <th>Vacancy Title</th>
-              <th>Department</th>
-              <th>Openings</th>
-              <th>Requested By</th>
-              <th>Requested Date</th>
-              <th>Target Onboarding</th>
-              <th>Approver</th>
-              <th>Status</th>
-              <th class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!empty($resource_requests_list)): ?>
-              <?php foreach ($resource_requests_list as $rr): ?>
-                <tr>
-                  <td class="font-weight-bold text-primary"><?= htmlspecialchars($rr['RequestCode']); ?></td>
-                  <td><strong class="text-dark"><?= htmlspecialchars($rr['JobTitle']); ?></strong></td>
-                  <td><span class="badge badge-light border text-dark"><?= htmlspecialchars($rr['Departmentname'] ? $rr['Departmentname'] : '-'); ?></span></td>
-                  <td><span class="badge badge-info px-2 py-1 font-weight-bold"><?= (int)$rr['NoofOpenings']; ?></span></td>
-                  <td><i class="fas fa-user-circle text-secondary mr-1"></i><?= htmlspecialchars($rr['RequestedByName'] ? $rr['RequestedByName'] : 'System'); ?></td>
-                  <td class="small text-muted"><?= date('d-M-Y', strtotime($rr['CreatedAt'])); ?></td>
-                  <td class="small"><?= $rr['TargetOnboardingDate'] ? date('d-M-Y', strtotime($rr['TargetOnboardingDate'])) : '-'; ?></td>
-                  <td><?= htmlspecialchars($rr['ApproverName'] ? $rr['ApproverName'] : '-'); ?></td>
-                  <td>
-                    <?php if ($rr['Status'] === 'PENDING APPROVAL'): ?>
-                      <span class="badge badge-warning px-3 py-1 rounded-pill"><i class="fas fa-clock mr-1"></i>Pending</span>
-                    <?php elseif ($rr['Status'] === 'ACCEPTED'): ?>
-                      <span class="badge badge-success px-3 py-1 rounded-pill"><i class="fas fa-check-circle mr-1"></i>Approved</span>
-                    <?php elseif ($rr['Status'] === 'REJECTED'): ?>
-                      <span class="badge badge-danger px-3 py-1 rounded-pill"><i class="fas fa-times-circle mr-1"></i>Rejected</span>
-                    <?php else: ?>
-                      <span class="badge badge-secondary px-3 py-1 rounded-pill"><?= htmlspecialchars($rr['Status']); ?></span>
-                    <?php endif; ?>
-                  </td>
-                  <td class="text-center">
-                    <button type="button" class="btn btn-outline-info btn-xs font-weight-bold rounded-pill px-3" onclick="viewDashboardRequestDetails(<?= htmlspecialchars(json_encode($rr)); ?>)">
-                      <i class="fas fa-eye mr-1"></i> View Details
-                    </button>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr>
-                <td colspan="10" class="text-center text-muted py-4">
-                  <i class="fas fa-inbox fa-2x d-block text-secondary mb-2"></i>
-                  No resource requests recorded yet.
-                </td>
-              </tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- DASHBOARD REQUEST DETAILS MODAL -->
-    <div class="modal fade" id="dashRequestModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content shadow-lg border-0" style="border-radius:16px; overflow:hidden;">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title font-weight-bold"><i class="fas fa-info-circle mr-2"></i>Resource Request Details</h5>
-            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body p-4" id="dashRequestModalContent"></div>
-          <div class="modal-footer bg-light">
-            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-    function viewDashboardRequestDetails(rr) {
-      var html = '<table class="table table-bordered table-sm align-middle">'+
-        '<tr><th style="width:30%" class="bg-light">Request Code</th><td><strong class="text-primary">' + (rr.RequestCode || '') + '</strong></td></tr>'+
-        '<tr><th class="bg-light">Job Title / Vacancy</th><td><strong class="text-dark">' + (rr.JobTitle || '') + '</strong></td></tr>'+
-        '<tr><th class="bg-light">Department</th><td>' + (rr.Departmentname || '-') + '</td></tr>'+
-        '<tr><th class="bg-light">Number of Positions</th><td>' + (rr.NoofOpenings || 1) + '</td></tr>'+
-        '<tr><th class="bg-light">Position Type</th><td>' + (rr.PositionType || 'New Position') + '</td></tr>'+
-        '<tr><th class="bg-light">Experience Required</th><td>' + (rr.ExpMin || 0) + ' - ' + (rr.ExpMax || 0) + ' Years</td></tr>'+
-        '<tr><th class="bg-light">Target Onboarding Date</th><td>' + (rr.TargetOnboardingDate || '-') + '</td></tr>'+
-        '<tr><th class="bg-light">Reason for Requirement</th><td>' + (rr.ReasonForRequirement || '-') + '</td></tr>'+
-        '<tr><th class="bg-light">Job Description</th><td><div class="p-2 bg-light rounded text-dark" style="white-space:pre-wrap; max-height:150px; overflow-y:auto;">' + (rr.JobDescription || 'N/A') + '</div></td></tr>'+
-        '<tr><th class="bg-light">Roles & Responsibilities</th><td><div class="p-2 bg-light rounded text-dark" style="white-space:pre-wrap; max-height:150px; overflow-y:auto;">' + (rr.Responsibilities || 'N/A') + '</div></td></tr>'+
-        '<tr><th class="bg-light">Requested By</th><td><strong class="text-dark">' + (rr.RequestedByName || '-') + '</strong></td></tr>'+
-        '<tr><th class="bg-light">Approver Name</th><td>' + (rr.ApproverName || '-') + '</td></tr>'+
-        '<tr><th class="bg-light">Requested Date</th><td>' + (rr.CreatedAt || '') + '</td></tr>'+
-        '<tr><th class="bg-light">Status</th><td><span class="badge badge-info px-3 py-1">' + (rr.Status || '') + '</span></td></tr>';
-
-      if (rr.ApprovalComment) {
-        html += '<tr><th class="bg-light">Approver Comment</th><td class="text-danger font-weight-bold">' + rr.ApprovalComment + '</td></tr>';
-      }
-
-      html += '</table>';
-      $('#dashRequestModalContent').html(html);
-      $('#dashRequestModal').modal('show');
-    }
-    </script>
-
-    <!-- ===== MAIN ANALYTICS SECTION ===== -->
     <div class="row analytics-row">
       <div class="col-lg-8 mb-4">
         <div class="card dashboard-card h-100 shadow-sm">
@@ -367,7 +255,6 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
         </div>
       </div>
 
-      <!-- RIGHT SIDEBAR WIDGETS -->
       <div class="col-lg-4 mb-4">
         <div class="card dashboard-card shadow-sm mb-4">
           <div class="card-header bg-light">
@@ -400,11 +287,9 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
 </section>
 </div>
 
-<!-- DYNAMIC DASHBOARD ENGINE SCRIPT -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  // ===== HIRING QUOTES =====
   const hiringQuotes = [
     { text: "Hiring is not just about filling roles \u2014 it\u2019s about shaping the future of your organization.", author: "\u2014 HR Excellence" },
     { text: "Great vision without great people is irrelevant. The right hire changes everything.", author: "\u2014 Jim Collins" },
@@ -428,11 +313,9 @@ document.addEventListener("DOMContentLoaded", function () {
     "Onboarding doesn\u2019t end on day one. A 90-day plan dramatically improves retention."
   ];
 
-  // Random HR Tip
   const tipEl = document.getElementById('hrTipText');
   if (tipEl) tipEl.textContent = hrTips[Math.floor(Math.random() * hrTips.length)];
 
-  // Rotating Quotes
   let currentQuote = 0;
   const quoteTextEl = document.getElementById('quoteText');
   const quoteAuthEl = document.getElementById('quoteAuthor');
@@ -460,7 +343,6 @@ document.addEventListener("DOMContentLoaded", function () {
   showQuote(0);
   setInterval(() => showQuote((currentQuote + 1) % hiringQuotes.length), 6000);
 
-  // Live Clock
   function updateClock() {
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
@@ -474,27 +356,27 @@ document.addEventListener("DOMContentLoaded", function () {
   updateClock();
   setInterval(updateClock, 1000);
 
-  // State variables
-  let activeToggle = 'job';
+  const isHiringManager = <?= $isHiringManager ? 'true' : 'false' ?>;
+  let activeToggle = isHiringManager ? 'candidate' : 'job';
   let selectedDept = '';
   let selectedMonth = '';
   let myChartInstance = null;
 
-  // Raw Database Data encoded as JSON arrays
   const jobsData = <?= json_encode($all_jobs) ?>;
   const candidatesData = <?= json_encode($all_candidates) ?>;
 
   function init() {
     const toggleContainer = document.getElementById('dashboardToggle');
-    const buttons = toggleContainer.querySelectorAll('button[data-toggle-target]');
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', function () {
-        const target = this.getAttribute('data-toggle-target');
-        activeToggle = (target === 'job') ? 'job' : 'candidate';
-        updateDashboard();
+    if (toggleContainer) {
+      const buttons = toggleContainer.querySelectorAll('button[data-toggle-target]');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const target = this.getAttribute('data-toggle-target');
+          activeToggle = (target === 'job') ? 'job' : 'candidate';
+          updateDashboard();
+        });
       });
-    });
+    }
 
     const deptFilterEl = document.getElementById('deptFilter');
     if (deptFilterEl) {
@@ -742,29 +624,50 @@ document.addEventListener("DOMContentLoaded", function () {
       header.innerHTML = `
         <th>S. No</th>
         <th>Candidate Name</th>
-        <th>Email</th>
-        <th>Applied Job</th>
+        <th>Email / Phone</th>
+        <th>Vacancy / Role</th>
+        <th>Interview Assignment</th>
         <th>Applied Date</th>
         <th>Status</th>
+        <th class="text-center">Action</th>
       `;
 
       if (data.length === 0) {
-        body.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x d-block text-secondary mb-2"></i>No candidates found matching selected filters.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x d-block text-secondary mb-2"></i>No candidates found matching selected filters.</td></tr>`;
         return;
       }
 
       data.forEach((cand, index) => {
         const dateStr = cand.AppliedOn ? new Date(cand.AppliedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
         let badge = getStatusBadge(cand.CurrentStatus || 'Pending');
+        let jid = cand.Jid || '';
+        let candLink = jid ? `<?= base_url('admin/Candidatelist/') ?>${jid}` : '#';
+
+        let hasInterviewRecord = (cand.InterviewId && String(cand.InterviewId) !== '' && String(cand.InterviewId) !== '0');
+        let intBadge = '';
+        if (hasInterviewRecord) {
+          let interviewerName = cand.InterviewerName ? cand.InterviewerName : 'Interviewer';
+          let schedStr = cand.ScheduledAt ? new Date(cand.ScheduledAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+          let schedText = schedStr ? ` (${schedStr})` : '';
+          intBadge = `<span class="badge badge-success px-2 py-1"><i class="fas fa-calendar-check mr-1"></i>Assigned (${interviewerName}${schedText})</span>`;
+        } else {
+          intBadge = `<span class="badge badge-secondary px-2 py-1"><i class="fas fa-user-clock mr-1"></i>Not Assigned</span>`;
+        }
 
         body.innerHTML += `
           <tr>
             <td><strong>${index + 1}</strong></td>
-            <td><strong class="text-dark">${cand.Fullname || 'N/A'}</strong></td>
-            <td class="small">${cand.Email || '-'}</td>
-            <td>${cand.JobTitle || 'N/A'}</td>
+            <td><strong class="text-dark"><i class="fas fa-user-circle text-primary mr-1"></i>${cand.Fullname || 'N/A'}</strong></td>
+            <td class="small">${cand.Email || '-'}<br><span class="text-muted">${cand.PhoneNo || ''}</span></td>
+            <td><strong>${cand.JobTitle || 'N/A'}</strong> ${cand.JobCode ? `<code class="small">(${cand.JobCode})</code>` : ''}</td>
+            <td>${intBadge}</td>
             <td class="small text-muted">${dateStr}</td>
             <td>${badge}</td>
+            <td class="text-center">
+              <a href="${candLink}" class="btn btn-outline-primary btn-xs font-weight-bold rounded-pill px-3">
+                <i class="fas fa-eye mr-1"></i> Review Candidate
+              </a>
+            </td>
           </tr>
         `;
       });

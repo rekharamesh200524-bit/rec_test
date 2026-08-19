@@ -540,7 +540,7 @@ class AiInterviewQuestionGenerator {
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $payload,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => min($this->timeout, 12),
+            CURLOPT_TIMEOUT        => $this->timeout,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_SSL_VERIFYPEER => false,
         ]);
@@ -562,7 +562,7 @@ class AiInterviewQuestionGenerator {
                 CURLOPT_POST           => true,
                 CURLOPT_POSTFIELDS     => $payload,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => min($this->timeout, 12),
+                CURLOPT_TIMEOUT        => $this->timeout,
                 CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
                 CURLOPT_SSL_VERIFYPEER => false,
             ]);
@@ -660,9 +660,16 @@ class AiInterviewQuestionGenerator {
             ? "\n\nIMPORTANT: This is REGENERATION #{$version}. Do NOT repeat or substantially paraphrase any previous questions listed above. Generate a genuinely different set covering the same Must-Have Skills."
             : '';
 
-        return "You are an expert technical recruiter and senior interview designer.\n"
+        $isTech = $this->isTechnicalRole($vacancy, $candidateCtx);
+        $roleDomain = $isTech ? "Technical/Software Engineering" : "Non-Technical / Human Resources / Management / Business Operations";
+
+        return "You are an expert recruitment and talent assessment specialist.\n"
              . "Generate a personalized interview question set for ONE specific candidate applying for ONE specific vacancy.\n"
              . "Return ONLY valid JSON — no markdown fences, no conversational text.\n\n"
+             . "=== ROLE DOMAIN ===\n"
+             . "Position: {$jobTitle}\n"
+             . "Domain Type: {$roleDomain}\n"
+             . ($isTech ? "" : "CRITICAL RULE FOR NON-TECHNICAL ROLES: DO NOT ask software engineering, coding, codebase migration, API design, or database query questions. Tailor all questions strictly to human resources, recruitment, talent management, employee relations, compliance, communication, or business operations domain appropriate for '{$jobTitle}'.\n\n")
              . "=== VACANCY ===\n"
              . "Title: {$jobTitle}\n"
              . "Experience Required: {$expMin}–{$expMax} years\n"
@@ -841,12 +848,44 @@ class AiInterviewQuestionGenerator {
         return array_values(array_unique($uncovered));
     }
 
+    private function isTechnicalRole($vacancy, $candidateCtx = []) {
+        $jobTitle    = strtolower($vacancy['JobTitle'] ?? '');
+        $roleSummary = strtolower($vacancy['RoleSummary'] ?? '');
+        $mustHave    = strtolower(is_array($vacancy['MustHaveSkills'] ?? '') ? implode(' ', $vacancy['MustHaveSkills']) : ($vacancy['MustHaveSkills'] ?? ''));
+
+        // Software / Coding / IT keywords
+        $techKeywords = [
+            'developer', 'engineer', 'programmer', 'coder', 'software', 'full stack', 'backend',
+            'frontend', 'devops', 'architect', 'data engineer', 'php', 'javascript', 'python',
+            'java', 'react', 'node', 'c++', 'sql', 'aws', 'docker', 'api', 'codebase'
+        ];
+        foreach ($techKeywords as $tk) {
+            if (strpos($jobTitle, $tk) !== false || strpos($mustHave, $tk) !== false) {
+                return true;
+            }
+        }
+
+        // Non-technical role keywords (HR, Recruiter, Finance, Sales, Admin, etc.)
+        $nonTechKeywords = [
+            'hr', 'human resource', 'recruiter', 'recruitment', 'talent acquisition',
+            'payroll', 'finance', 'accounting', 'sales', 'business development', 'marketing',
+            'administration', 'admin', 'office manager', 'customer support', 'legal', 'compliance',
+            'people', 'culture', 'operations'
+        ];
+        foreach ($nonTechKeywords as $nt) {
+            if (strpos($jobTitle, $nt) !== false || strpos($roleSummary, $nt) !== false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // =========================================================================
     // FALLBACK GENERATOR (With Candidate Resume Project Support)
     // =========================================================================
 
     private function fallbackGenerate($vacancy, $candidate, $candidateCtx, $skillGroups, $difficulty, $budget, $allPrev, $version) {
-        $questions   = [];
         $mustHave    = $skillGroups['must_have'];
         $evidenceMap = $skillGroups['evidence_map'];
         $niceHave    = $skillGroups['nice_to_have'];
@@ -855,6 +894,8 @@ class AiInterviewQuestionGenerator {
         $expYrs      = $candidateCtx['experience_years'];
         $jobs        = $candidateCtx['jobs'];
         $projects    = $candidateCtx['projects'];
+
+        $isTech = $this->isTechnicalRole($vacancy, $candidateCtx);
 
         for ($retry = 0; $retry < 5; $retry++) {
             $questions   = [];
@@ -865,7 +906,7 @@ class AiInterviewQuestionGenerator {
             // Must-Have Questions
             foreach ($mustHave as $idx => $skill) {
                 $ev = $evidenceMap[$skill] ?? 'weak';
-                $q  = $this->buildFallbackSkillQuestion($skill, $ev, $difficulty, $candidateCtx, $seed + $idx);
+                $q  = $this->buildFallbackSkillQuestion($skill, $ev, $difficulty, $candidateCtx, $seed + $idx, $isTech);
                 if (!$this->isDuplicateQuestion($q['question'], $currentPrev)) {
                     $questions[] = $q;
                     $currentPrev[] = $q['question'];
@@ -881,15 +922,23 @@ class AiInterviewQuestionGenerator {
                 foreach ($projects as $pi => $proj) {
                     if (count($questions) >= $budget['total']) break;
                     $pName = $proj['name'];
-                    $pDesc = $proj['description'] ?? 'full stack project';
-                    $pTech = implode(', ', array_slice($topSkills, 0, 3)) ?: 'your technology stack';
+                    $pDesc = $proj['description'] ?? ($isTech ? 'full stack project' : 'key initiative');
 
-                    $pTemplates = [
-                        "In your {$pName} project ({$pDesc}), how did you structure component communication and handle API requests?",
-                        "While building {$pName}, what was the most complex technical challenge you faced, and how did you resolve it?",
-                        "In {$pName}, how did you ensure data consistency and manage error handling across the application layers?",
-                        "Regarding your work on {$pName}, what performance optimization or database indexing techniques did you implement?",
-                    ];
+                    if ($isTech) {
+                        $pTemplates = [
+                            "In your {$pName} project ({$pDesc}), how did you structure component communication and handle API requests?",
+                            "While building {$pName}, what was the most complex technical challenge you faced, and how did you resolve it?",
+                            "In {$pName}, how did you ensure data consistency and manage error handling across the application layers?",
+                            "Regarding your work on {$pName}, what performance optimization or database indexing techniques did you implement?",
+                        ];
+                    } else {
+                        $pTemplates = [
+                            "In your work on {$pName} ({$pDesc}), how did you structure team communication and handle stakeholder requests?",
+                            "While managing {$pName}, what was the most complex operational or process challenge you faced, and how did you resolve it?",
+                            "In {$pName}, how did you ensure data accuracy, confidentiality, and smooth workflow execution?",
+                            "Regarding your work on {$pName}, what efficiency or quality improvement measures did you implement?",
+                        ];
+                    }
                     $pIdx  = ($seed + $pi + 50) % count($pTemplates);
                     $qText = $pTemplates[$pIdx];
 
@@ -901,7 +950,7 @@ class AiInterviewQuestionGenerator {
                             'skills'      => $topSkills,
                             'skill'       => $pName,
                             'personalized'=> true,
-                            'reason'      => "Candidate-specific fallback question based on real resume project '{$pName}'."
+                            'reason'      => "Candidate-specific fallback question based on '{$pName}'."
                         ];
                         $currentPrev[] = $qText;
                     }
@@ -916,12 +965,22 @@ class AiInterviewQuestionGenerator {
                 }
             }
             $jobCtx = !empty($jobParts) ? implode(' and ', $jobParts) : 'your recent roles';
-            $candTemplates = [
-                "You have {$expYrs} years of experience. Can you describe the most technically challenging problem you solved in {$jobCtx}?",
-                "Based on your background, walk us through how you approached a complex technical requirement and the solution you implemented.",
-                "In {$jobCtx}, how did you ensure code quality and maintainability under tight delivery timelines?",
-                "What was the most difficult performance or scalability issue you encountered in {$jobCtx}, and how did you diagnose it?",
-            ];
+
+            if ($isTech) {
+                $candTemplates = [
+                    "You have {$expYrs} years of experience. Can you describe the most technically challenging problem you solved in {$jobCtx}?",
+                    "Based on your background, walk us through how you approached a complex technical requirement and the solution you implemented.",
+                    "In {$jobCtx}, how did you ensure code quality and maintainability under tight delivery timelines?",
+                    "What was the most difficult performance or scalability issue you encountered in {$jobCtx}, and how did you diagnose it?",
+                ];
+            } else {
+                $candTemplates = [
+                    "You have {$expYrs} years of experience. Can you describe a challenging HR or operational scenario you successfully managed in {$jobCtx}?",
+                    "Based on your background, walk us through a key policy, recruitment drive, or process improvement you implemented in {$jobCtx}.",
+                    "In {$jobCtx}, how did you ensure process efficiency, compliance, and stakeholder alignment under tight deadlines?",
+                    "What was the most difficult team, conflict, or talent management issue you encountered in {$jobCtx}, and how did you resolve it?",
+                ];
+            }
             for ($i = 0; $i < $candSlots; $i++) {
                 $idx   = ($seed + $i + 100) % count($candTemplates);
                 $qText = $candTemplates[$idx];
@@ -935,12 +994,22 @@ class AiInterviewQuestionGenerator {
             // Scenario Questions
             $scenSlots = $budget['scenario'];
             $scenSkill = $mustHave[0] ?? $jobTitle;
-            $scenTemplates = [
-                "A critical service using {$scenSkill} starts failing under peak load. How would you diagnose and resolve the issue without downtime?",
-                "You discover a serious security vulnerability in a production system relying on {$scenSkill}. What steps do you take immediately?",
-                "A core database query in a {$scenSkill} application degrades under concurrent usage. How would you diagnose and fix the query pipeline?",
-                "You need to migrate a legacy {$scenSkill} codebase to a modern architecture while maintaining active feature delivery. What is your strategy?",
-            ];
+
+            if ($isTech) {
+                $scenTemplates = [
+                    "A critical service using {$scenSkill} starts failing under peak load. How would you diagnose and resolve the issue without downtime?",
+                    "You discover a serious security vulnerability in a production system relying on {$scenSkill}. What steps do you take immediately?",
+                    "A core database query in a {$scenSkill} application degrades under concurrent usage. How would you diagnose and fix the query pipeline?",
+                    "You need to migrate a legacy {$scenSkill} codebase to a modern architecture while maintaining active feature delivery. What is your strategy?",
+                ];
+            } else {
+                $scenTemplates = [
+                    "A high-priority hiring requirement or employee relations issue arises under tight deadlines involving {$scenSkill}. How do you prioritize and handle it?",
+                    "You discover a policy compliance gap or process bottleneck involving {$scenSkill}. What immediate steps do you take to resolve it?",
+                    "During an important talent acquisition or onboarding campaign using {$scenSkill}, candidate drop-off increases. How would you analyze and fix the pipeline?",
+                    "You need to restructure or modernize an existing {$scenSkill} workflow while maintaining daily operational continuity. What is your strategy?",
+                ];
+            }
             for ($i = 0; $i < $scenSlots; $i++) {
                 $idx   = ($seed + $i + 200) % count($scenTemplates);
                 $qText = $scenTemplates[$idx];
@@ -952,12 +1021,21 @@ class AiInterviewQuestionGenerator {
 
             // Behavioral Questions
             $behSlots = $budget['behavioral'];
-            $behTemplates = [
-                "Tell us about a time when requirements changed mid-sprint. How did you adapt and communicate with stakeholders?",
-                "Describe a technical disagreement you had with a peer or lead. How was it resolved and what was the outcome?",
-                "How do you prioritize your work when managing multiple critical tasks or bug fixes simultaneously?",
-                "Describe a time a feature you built caused a production issue. How did you take ownership and prevent future recurrence?",
-            ];
+            if ($isTech) {
+                $behTemplates = [
+                    "Tell us about a time when requirements changed mid-sprint. How did you adapt and communicate with stakeholders?",
+                    "Describe a technical disagreement you had with a peer or lead. How was it resolved and what was the outcome?",
+                    "How do you prioritize your work when managing multiple critical tasks or bug fixes simultaneously?",
+                    "Describe a time a feature you built caused a production issue. How did you take ownership and prevent future recurrence?",
+                ];
+            } else {
+                $behTemplates = [
+                    "Tell us about a time when hiring or organizational priorities shifted unexpectedly. How did you adapt and communicate with stakeholders?",
+                    "Describe a professional disagreement you had with a hiring manager or team member. How was it resolved and what was the outcome?",
+                    "How do you prioritize your work when managing multiple urgent recruitment, payroll, or HR requests simultaneously?",
+                    "Describe a situation where an HR process or interview drive did not yield expected results. How did you adapt and improve the process?",
+                ];
+            }
             for ($i = 0; $i < $behSlots; $i++) {
                 $idx   = ($seed + $i + 300) % count($behTemplates);
                 $qText = $behTemplates[$idx];
@@ -977,32 +1055,58 @@ class AiInterviewQuestionGenerator {
     // HELPER: BUILD FALLBACK SKILL QUESTION
     // =========================================================================
 
-    private function buildFallbackSkillQuestion($skill, $evidenceLevel, $difficulty, $candidateCtx, $seed = 0) {
+    private function buildFallbackSkillQuestion($skill, $evidenceLevel, $difficulty, $candidateCtx, $seed = 0, $isTech = true) {
         $jobs     = $candidateCtx['jobs'] ?? [];
         $projects = $candidateCtx['projects'] ?? [];
         $pName    = !empty($projects[0]['name']) ? $projects[0]['name'] : '';
 
-        if ($evidenceLevel === 'strong') {
-            $frames = [
-                "Based on your experience with {$skill}" . ($pName ? " in projects like {$pName}" : "") . ", describe a complex production problem you encountered and the solution you designed.",
-                "You have demonstrated {$skill} experience" . ($pName ? " in {$pName}" : "") . ". Walk us through an architectural decision you made that had a significant impact.",
-                "In your work with {$skill}, how did you improve system reliability, performance, or scalability?",
-                "What design trade-offs did you make when implementing a {$skill}-based solution?",
-            ];
-        } elseif ($evidenceLevel === 'weak') {
-            $frames = [
-                "You have some exposure to {$skill}. How have you used it in a project, and what were the main challenges?",
-                "Describe your practical experience with {$skill} — what you have built with it and what limitations you encountered.",
-                "How would you implement a core feature using {$skill} based on your current understanding?",
-                "What is your level of hands-on experience with {$skill}, and in which areas do you feel you need further growth?",
-            ];
+        if ($isTech) {
+            if ($evidenceLevel === 'strong') {
+                $frames = [
+                    "Based on your experience with {$skill}" . ($pName ? " in projects like {$pName}" : "") . ", describe a complex production problem you encountered and the solution you designed.",
+                    "You have demonstrated {$skill} experience" . ($pName ? " in {$pName}" : "") . ". Walk us through an architectural decision you made that had a significant impact.",
+                    "In your work with {$skill}, how did you improve system reliability, performance, or scalability?",
+                    "What design trade-offs did you make when implementing a {$skill}-based solution?",
+                ];
+            } elseif ($evidenceLevel === 'weak') {
+                $frames = [
+                    "You have some exposure to {$skill}. How have you used it in a project, and what were the main challenges?",
+                    "Describe your practical experience with {$skill} — what you have built with it and what limitations you encountered.",
+                    "How would you implement a core feature using {$skill} based on your current understanding?",
+                    "What is your level of hands-on experience with {$skill}, and in which areas do you feel you need further growth?",
+                ];
+            } else {
+                $frames = [
+                    "This role requires {$skill}. How would you approach learning and applying {$skill} to deliver a production feature?",
+                    "Can you describe your conceptual understanding of {$skill} and how you would use it professionally?",
+                    "The position requires proficiency in {$skill}. How would you design a solution using {$skill} for a typical use case in this domain?",
+                    "If given a task requiring {$skill}, what initial steps would you take to understand the requirements and deliver a solution?",
+                ];
+            }
         } else {
-            $frames = [
-                "This role requires {$skill}. How would you approach learning and applying {$skill} to deliver a production feature?",
-                "Can you describe your conceptual understanding of {$skill} and how you would use it professionally?",
-                "The position requires proficiency in {$skill}. How would you design a solution using {$skill} for a typical use case in this domain?",
-                "If given a task requiring {$skill}, what initial steps would you take to understand the requirements and deliver a solution?",
-            ];
+            // Non-Technical / HR / Operations / Management
+            if ($evidenceLevel === 'strong') {
+                $frames = [
+                    "Based on your experience with {$skill}" . ($pName ? " in initiatives like {$pName}" : "") . ", describe a complex workplace challenge you encountered and the strategy you implemented.",
+                    "You have demonstrated strong {$skill} experience" . ($pName ? " in {$pName}" : "") . ". Walk us through a key operational decision you made that had a positive organizational impact.",
+                    "In your work with {$skill}, how did you improve process efficiency, candidate experience, or team collaboration?",
+                    "What trade-offs or priorities did you balance when applying {$skill} in a high-demand recruitment or HR environment?",
+                ];
+            } elseif ($evidenceLevel === 'weak') {
+                $frames = [
+                    "You have experience with {$skill}. How have you applied it in your previous roles, and what were the main challenges?",
+                    "Describe your practical experience with {$skill} — how you utilized it and what lessons you learned.",
+                    "How would you handle a complex HR or operational scenario using {$skill} based on your experience?",
+                    "What is your level of experience with {$skill}, and in which areas do you feel you can further develop?",
+                ];
+            } else {
+                $frames = [
+                    "This position requires {$skill}. How would you apply {$skill} to manage daily responsibilities and deliver results?",
+                    "Can you describe your practical understanding of {$skill} and how you apply it in a professional HR/management setting?",
+                    "The position requires proficiency in {$skill}. How would you handle a typical workplace requirement using {$skill}?",
+                    "If given a key responsibility requiring {$skill}, what steps would you take to ensure successful execution?",
+                ];
+            }
         }
 
         $idx   = abs((int)$seed) % count($frames);

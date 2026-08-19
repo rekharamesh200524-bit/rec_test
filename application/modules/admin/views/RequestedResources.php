@@ -1,98 +1,83 @@
-<style>
-.right-form {
-    position: fixed !important;
-    top: 0 !important;
-    right: -100% !important;
-    width: 620px !important;
-    max-width: 90vw !important;
-    height: 100vh !important;
-    background: #ffffff !important;
-    box-shadow: -4px 0 20px rgba(0,0,0,0.18) !important;
-    transition: right 0.3s ease-in-out !important;
-    z-index: 1055 !important;
-    display: flex !important;
-    flex-direction: column !important;
-}
-.right-form.open {
-    right: 0 !important;
-}
-.right-form-header {
-    padding: 16px 20px !important;
-    background: #ffffff !important;
-    border-bottom: 1px solid #e9ecef !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    flex-shrink: 0 !important;
-}
-.right-form-body {
-    padding: 20px !important;
-    overflow-y: auto !important;
-    flex: 1 !important;
-    background: #ffffff !important;
-}
-/* STRICT STEPPER DISPLAY RULES */
-#requestResourcePanel .bs-stepper-content .content {
-    display: none !important;
-}
-#requestResourcePanel .bs-stepper-content .content.active {
-    display: block !important;
-}
-#requestResourcePanel .bs-stepper-header {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    background: #f8f9fa !important;
-    padding: 10px 14px !important;
-    border-radius: 8px !important;
-    border: 1px solid #e9ecef !important;
-    margin-bottom: 15px !important;
-}
-#requestResourcePanel .bs-stepper-header .step-trigger {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 4px 6px !important;
-    cursor: pointer !important;
-    text-decoration: none !important;
-}
-#requestResourcePanel .bs-stepper-header .bs-stepper-circle {
-    width: 26px !important;
-    height: 26px !important;
-    border-radius: 50% !important;
-    background: #dee2e6 !important;
-    color: #495057 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-weight: 700 !important;
-    font-size: 12px !important;
-}
-#requestResourcePanel .bs-stepper-header .step.active .bs-stepper-circle {
-    background: #007bff !important;
-    color: #ffffff !important;
-}
-#requestResourcePanel .bs-stepper-header .bs-stepper-label {
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    color: #6c757d !important;
-}
-#requestResourcePanel .bs-stepper-header .step.active .bs-stepper-label {
-    color: #007bff !important;
-    font-weight: 700 !important;
-}
-#requestResourcePanel .bs-stepper-header .line {
-    flex: 1 !important;
-    height: 2px !important;
-    background: #e9ecef !important;
-    margin: 0 6px !important;
-}
-</style>
+<?php
+$totalReqCount    = !empty($requests) ? count($requests) : 0;
+$approvedReqCount = 0;
+$rejectedReqCount = 0;
+$onholdReqCount   = 0;
 
-<section class="content">
+if (!empty($requests)) {
+    foreach ($requests as $r) {
+        $st = strtoupper(trim($r['Status'] ?? ''));
+        if ($st === 'ACCEPTED') {
+            $approvedReqCount++;
+        } elseif ($st === 'REJECTED') {
+            $rejectedReqCount++;
+        } elseif ($st === 'ON-HOLD' || $st === 'ON HOLD' || $st === 'HOLD') {
+            $onholdReqCount++;
+        }
+    }
+}
+?>
+
+<section class="content pt-2">
   <div class="container-fluid">
+
+    <div class="row mb-4">
+      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #007bff !important;">
+          <div class="card-body d-flex align-items-center p-3">
+            <div class="kpi-icon-box bg-primary text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+              <i class="fas fa-clipboard-list fa-lg"></i>
+            </div>
+            <div>
+              <h3 class="font-weight-bold mb-0 text-dark"><?= $totalReqCount ?></h3>
+              <p class="text-muted small mb-0 font-weight-bold">Total Requested</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #28a745 !important;">
+          <div class="card-body d-flex align-items-center p-3">
+            <div class="kpi-icon-box bg-success text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+              <i class="fas fa-check-circle fa-lg"></i>
+            </div>
+            <div>
+              <h3 class="font-weight-bold mb-0 text-dark"><?= $approvedReqCount ?></h3>
+              <p class="text-muted small mb-0 font-weight-bold">Approved</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #dc3545 !important;">
+          <div class="card-body d-flex align-items-center p-3">
+            <div class="kpi-icon-box bg-danger text-white rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+              <i class="fas fa-times-circle fa-lg"></i>
+            </div>
+            <div>
+              <h3 class="font-weight-bold mb-0 text-dark"><?= $rejectedReqCount ?></h3>
+              <p class="text-muted small mb-0 font-weight-bold">Rejected</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+        <div class="card shadow-sm h-100 border-0 glass-card" style="border-left: 4px solid #ffc107 !important;">
+          <div class="card-body d-flex align-items-center p-3">
+            <div class="kpi-icon-box text-dark rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background-color:#ffc107 !important; color:#000 !important;">
+              <i class="fas fa-pause-circle fa-lg"></i>
+            </div>
+            <div>
+              <h3 class="font-weight-bold mb-0 text-dark"><?= $onholdReqCount ?></h3>
+              <p class="text-muted small mb-0 font-weight-bold">On Hold</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="card card-primary card-outline">
       <div class="card-header d-flex align-items-center justify-content-between">
@@ -141,54 +126,64 @@
                       <span class="badge badge-success px-2"><i class="fas fa-check-circle mr-1"></i>Accepted</span>
                     <?php elseif ($req['Status'] === 'REJECTED'): ?>
                       <span class="badge badge-danger px-2"><i class="fas fa-times-circle mr-1"></i>Rejected</span>
+                    <?php elseif ($req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD'): ?>
+                      <span class="badge badge-warning text-dark px-2" style="background-color: #ffc107; color: #212529;"><i class="fas fa-pause-circle mr-1"></i>On Hold</span>
                     <?php else: ?>
                       <span class="badge badge-secondary px-2"><?= htmlspecialchars($req['Status']); ?></span>
                     <?php endif; ?>
                   </td>
                   <td class="text-center">
                     <div class="btn-group" role="group">
-                      <!-- View Details -->
+                 
                       <button type="button" class="btn btn-sm btn-info" title="View Details" onclick="viewRequestDetails(<?= htmlspecialchars(json_encode($req)); ?>)">
                         <i class="fas fa-eye"></i>
                       </button>
 
-                      <!-- Update / Edit Button -->
                       <?php
                       $sessionUserId = isset($employee_det['IUid']) ? (int)$employee_det['IUid'] : 0;
+                      $sessionRole = isset($employee_det['EmpRoleId']) ? (int)$employee_det['EmpRoleId'] : 0;
+                      $isHiringManager = ($sessionRole === 9);
+                      $isApproverRole  = in_array($sessionRole, [1, 3, 10, 12]);
                       $canUpdate = ($isHiringManager && (int)$req['RequestedBy'] === $sessionUserId) || in_array($sessionRole, [1, 3, 10]);
                       ?>
-                      <?php if ($canUpdate && $req['Status'] === 'PENDING APPROVAL'): ?>
+                      <?php if ($canUpdate && ($req['Status'] === 'PENDING APPROVAL' || $req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD')): ?>
                         <button type="button" class="btn btn-sm btn-primary" title="Edit Request"
                           onclick='openEditRequestModal(<?= json_encode($req, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)'>
                           <i class="fas fa-edit"></i>
                         </button>
                       <?php endif; ?>
 
-                      <!-- Role-based Action Buttons -->
-                      <?php
-                      $sessionRole = isset($employee_det['EmpRoleId']) ? (int)$employee_det['EmpRoleId'] : 0;
-                      $isHiringManager = ($sessionRole === 9);
-                      $isApproverRole  = in_array($sessionRole, [1, 3, 10, 12]); // Management, HR, RM, Approver
-                      ?>
-
                       <?php if ($req['Status'] === 'PENDING APPROVAL'): ?>
 
                         <?php if ($isHiringManager): ?>
-                          <!-- Hiring Manager: single "Submit to Vacancy" button -->
+                         
                           <button type="button" class="btn btn-sm btn-warning text-dark" title="Submit to Vacancy"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-paper-plane"></i>
                           </button>
 
                         <?php elseif ($isApproverRole): ?>
-                          <!-- Approver / Admin: Accept + Reject buttons -->
+                        
                           <button type="button" class="btn btn-sm btn-success" title="Accept Request"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-check"></i>
                           </button>
+                          <button type="button" class="btn btn-sm btn-warning text-dark" title="Hold Request"
+                            onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ON-HOLD', '<?= htmlspecialchars($req['RequestCode']); ?>')">
+                            <i class="fas fa-pause"></i>
+                          </button>
                           <button type="button" class="btn btn-sm btn-danger" title="Reject Request"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'REJECTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-times"></i>
+                          </button>
+                        <?php endif; ?>
+
+                      <?php elseif ($req['Status'] === 'ON-HOLD' || $req['Status'] === 'ON HOLD'): ?>
+
+                        <?php if ($isHiringManager || $isApproverRole): ?>
+                          <button type="button" class="btn btn-sm btn-info" title="Remove On-Hold"
+                            onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'PENDING APPROVAL', '<?= htmlspecialchars($req['RequestCode']); ?>')">
+                            <i class="fas fa-play"></i>
                           </button>
                         <?php endif; ?>
 
@@ -213,9 +208,7 @@
   </div>
 </section>
 
-<!-- ==========================================
-     SLIDING PANEL: REQUEST RESOURCE PANEL (RIGHT FORM)
-     ========================================== -->
+
 <div id="requestResourcePanel" class="right-form">
   <form action="<?= base_url('admin/saveResourceRequest'); ?>" method="post" id="resourceRequestForm" style="display:flex; flex-direction:column; height:100%;">
     <input type="hidden" name="RequestId" id="res_RequestId" value="0">
@@ -253,7 +246,7 @@
 
                 <div class="bs-stepper-content mt-3">
                   
-                  <!-- STEP 1: JOB INFO -->
+                  
                   <div id="res-job-part" class="content active" role="tabpanel" aria-labelledby="res-job-part-trigger">
                     
                     <div class="form-group">
@@ -328,7 +321,7 @@
                     <button type="button" class="btn btn-primary" onclick="resStepperNext()">Next <i class="fas fa-arrow-right ml-1"></i></button>
                   </div>
 
-                  <!-- STEP 2: EXP & DATES -->
+                  
                   <div id="res-salary-part" class="content" role="tabpanel" aria-labelledby="res-salary-part-trigger">
                     
                     <div class="form-group">
@@ -362,7 +355,7 @@
                     <button type="button" class="btn btn-primary" onclick="resStepperNext()">Next <i class="fas fa-arrow-right ml-1"></i></button>
                   </div>
 
-                  <!-- STEP 3: JD & RESPONSIBILITIES -->
+                 
                   <div id="res-desc-part" class="content" role="tabpanel" aria-labelledby="res-desc-part-trigger">
                     
                     <div class="form-group">
@@ -427,9 +420,7 @@
   </form>
 </div>
 
-<!-- ==========================================
-     VIEW DETAILS MODAL
-     ========================================== -->
+
 <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -440,7 +431,7 @@
         </button>
       </div>
       <div class="modal-body" id="detailsModalContent">
-        <!-- Dynamic JS insertion -->
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -449,9 +440,7 @@
   </div>
 </div>
 
-<!-- ==========================================
-     APPROVAL CONFIRMATION MODAL
-     ========================================== -->
+
 <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -501,7 +490,7 @@ $(document).ready(function() {
             $('#requestsTable').DataTable().columns.adjust().responsive.recalc();
         }
     });
-  // Panel Open / Close controls
+
   $('#openRequestResourcePanel').on('click', function() {
     openCreateRequestModal();
   });
@@ -510,7 +499,7 @@ $(document).ready(function() {
     $('#requestResourcePanel').removeClass('open');
   });
 
-  // Initialize Stepper
+ 
   var stepperEl = document.querySelector('#requestResourcePanel .bs-stepper');
   if (stepperEl && typeof Stepper !== 'undefined') {
     try {
@@ -518,7 +507,7 @@ $(document).ready(function() {
     } catch (e) {}
   }
 
-  // Handle direct tab header clicks
+  
   $(document).on('click', '#requestResourcePanel .bs-stepper-header .step', function(e) {
     e.preventDefault();
     var target = $(this).data('target');
@@ -645,15 +634,15 @@ function goToResStep(stepNum) {
   };
   var targetId = targets[stepNum];
 
-  // 1. Update Header Tabs
+ 
   $('#requestResourcePanel .bs-stepper-header .step').removeClass('active');
   $('#requestResourcePanel .bs-stepper-header .step[data-target="' + targetId + '"]').addClass('active');
 
-  // 2. Update Content Panels
+  
   $('#requestResourcePanel .bs-stepper-content .content').removeClass('active').hide();
   $(targetId).addClass('active').fadeIn(150);
 
-  // 3. Keep Stepper JS Object in sync
+
   if (window.resStepperObj) {
     try { window.resStepperObj.to(stepNum); } catch (e) {}
   }
@@ -717,6 +706,16 @@ function openApprovalModal(requestId, status, requestCode) {
     $('#approvalModalTitle').text('Accept Resource Request [' + requestCode + ']');
     $('#approvalTargetText').html('You are about to <span class="text-success font-weight-bold">ACCEPT</span> request <code>' + requestCode + '</code>.');
     btn.attr('class', 'btn btn-success').html('<i class="fas fa-check mr-1"></i> Confirm Acceptance');
+  } else if (status === 'ON-HOLD' || status === 'ON HOLD' || status === 'HOLD') {
+    header.attr('class', 'modal-header bg-warning text-dark');
+    $('#approvalModalTitle').text('Hold Resource Request [' + requestCode + ']');
+    $('#approvalTargetText').html('You are about to place request <code>' + requestCode + '</code> <span class="text-dark font-weight-bold">ON HOLD</span>.');
+    btn.attr('class', 'btn btn-warning text-dark').html('<i class="fas fa-pause mr-1"></i> Confirm On-Hold');
+  } else if (status === 'PENDING APPROVAL') {
+    header.attr('class', 'modal-header bg-info text-white');
+    $('#approvalModalTitle').text('Resume Resource Request [' + requestCode + ']');
+    $('#approvalTargetText').html('You are about to <span class="text-info font-weight-bold">RESUME</span> request <code>' + requestCode + '</code> to Pending Approval.');
+    btn.attr('class', 'btn btn-info').html('<i class="fas fa-play mr-1"></i> Confirm Resume');
   } else {
     header.attr('class', 'modal-header bg-danger text-white');
     $('#approvalModalTitle').text('Reject Resource Request [' + requestCode + ']');
@@ -780,7 +779,7 @@ function openEditRequestModal(req) {
   $("#panelHeaderTitle").html('<i class="fas fa-edit mr-2"></i>Edit Resource Request [' + (req.RequestCode || "") + ']');
   $("#resSubmitBtn").html('<i class="fas fa-save mr-1"></i> Update Request');
 
-  // Populate form fields
+
   $('input[name="JobTitle"]').val(req.JobTitle || "");
   $('input[name="FunctionalRole"]').val(req.FunctionalRole || "");
   $('select[name="Did"]').val(req.Did || "");
@@ -847,7 +846,7 @@ function addResChipDirect(value, inputId, chipsId, hiddenId) {
     syncHidden();
 }
 
-// Global jQuery event delegation for chip inputs to capture Enter, Comma, and Blur reliably
+
 $(document).on('keydown', '#resLocationInput, #resEducationInput, #resMustHaveSkillsInput, #resNiceToHaveSkillsInput, #resLanguageInput', function(e) {
     if (e.which === 13 || e.keyCode === 13 || e.key === 'Enter' || e.which === 188 || e.keyCode === 188 || e.key === ',') {
         e.preventDefault();
@@ -993,7 +992,7 @@ $(document).ready(function() {
     $('#btnGenerateJobContent').on('click', function(e) {
         e.preventDefault();
 
-        // Trigger blur on active inputs to sync any typed chip values
+      
         $('#resLocationInput, #resEducationInput, #resMustHaveSkillsInput, #resNiceToHaveSkillsInput, #resLanguageInput').trigger('blur');
 
         setTimeout(function() {

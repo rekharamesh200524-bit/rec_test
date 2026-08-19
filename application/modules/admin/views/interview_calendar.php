@@ -1,5 +1,4 @@
 <?php
-// Build upcoming/today summary counts
 $theme_path     = $this->config->item('theme_locations').$this->config->item('active_template');
 $today_count    = 0;
 $upcoming_count = 0;
@@ -14,25 +13,21 @@ if(!empty($Candidatelist)) {
         if(date('Y-m-d', $ts) == date('Y-m-d')) $today_count++;
         if($ts > $now_ts) $upcoming_count++;
         
-        // Include today's interviews and future ones in the upcoming list
         if ($ts >= strtotime('today')) {
             $upcoming_list[] = $iv;
         }
     }
     
-    // Sort upcoming list by ScheduledAt ascending
     usort($upcoming_list, function($a, $b) {
         return strtotime($a['ScheduledAt']) <=> strtotime($b['ScheduledAt']);
     });
 }
 ?>
-<!-- FullCalendar CSS from theme -->
 <link rel="stylesheet" href="<?= $theme_path ?>/assets/plugins/fullcalendar/main.min.css">
 
 <section class="content">
 <div class="container-fluid">
 
-<!-- Summary Cards -->
 <div class="row mb-3">
     <div class="col-md-3">
         <div class="small-box bg-info">
@@ -63,9 +58,7 @@ if(!empty($Candidatelist)) {
     </div>
 </div>
 
-<!-- Two Column Layout: Calendar & Sidebar Widget using Native Theme Cards -->
 <div class="row">
-    <!-- Left Column: Calendar -->
     <div class="col-lg-8">
         <div class="card card-warning card-outline">
             <div class="card-header">
@@ -83,7 +76,6 @@ if(!empty($Candidatelist)) {
         </div>
     </div>
 
-    <!-- Right Column: Sidebar Widget using Native Theme Card -->
     <div class="col-lg-4">
         <div class="card card-primary card-outline" style="display: flex; flex-direction: column; height: 100%;">
             <div class="card-header">
@@ -93,7 +85,6 @@ if(!empty($Candidatelist)) {
                 <?php if (!empty($upcoming_list)): ?>
                     <div class="list-group list-group-flush">
                         <?php 
-                        // Limit to top 6 items for layout consistency
                         $display_list = array_slice($upcoming_list, 0, 6);
                         foreach($display_list as $iv): 
                             $ts = strtotime($iv['ScheduledAt']);
@@ -148,7 +139,6 @@ if(!empty($Candidatelist)) {
 </div>
 </section>
 
-<!-- Interview Detail Modal -->
 <div class="modal fade" id="interviewDetailModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -170,10 +160,8 @@ if(!empty($Candidatelist)) {
     </div>
 </div>
 
-<!-- FullCalendar JS from theme -->
 <script src="<?= $theme_path ?>/assets/plugins/fullcalendar/main.min.js"></script>
 <script>
-// Expose openInterviewDetail to global scope so onclick handlers work
 function openInterviewDetail(candidateName, email, phone, jobTitle, scheduledAtStr, round, result) {
     var resultBadge = '';
     var r = (result || 'Assigned').toLowerCase();
@@ -258,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         },
 
-        // Highlight today's events
         dayCellDidMount: function(info) {
             if(info.date.toDateString() === new Date().toDateString()) {
                 info.el.style.background = 'rgba(255, 193, 7, 0.08)';
@@ -268,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calendar.render();
 
-    // Go to Interview List button
     document.getElementById('goToInterviewList').addEventListener('click', function(){
         window.location.href = base_url + 'admin/MyInterviews';
     });

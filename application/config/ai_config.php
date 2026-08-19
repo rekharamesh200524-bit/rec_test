@@ -24,8 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 $config['ai_provider']    = 'gemini';
-$config['ai_api_key']     = getenv('GEMINI_API_KEY') ?: '';   // Leave blank or set GEMINI_API_KEY environment variable
-$config['ai_model']       = 'gemini-1.5-flash';
+$config['ai_api_key']     = 'AQ.Ab8RN6KctRaK-X2Peh5QOckw1gZa51f90Xw-RjiY4C35CKysUQ';
+$config['ai_model']       = 'gemini-3.6-flash';
 $config['ai_enabled']     = true;
 $config['ai_timeout']     = 45;
 $config['ai_max_retries'] = 2;

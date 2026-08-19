@@ -17,11 +17,7 @@
           <div class="card card-success card-outline">
               <div class="card-header">
                   <div class="d-flex justify-content-between align-items-center">
-                       <h3 class="card-title mb-0"><i class="fas fa-briefcase text-primary mr-2"></i> Vacancy List</h3>
-
-                      <!-- <a class="btn btn-sm btn-warning" id="openVacancyPanel">
-                          <i class="fas fa-plus-circle"></i> Request Resource
-                      </a> -->
+                      <h3 class="card-title mb-0"><i class="fas fa-briefcase text-primary mr-2"></i> Vacancy List</h3>
                   </div>
               </div>
               <div class="">
@@ -50,7 +46,6 @@
                                   <div class="col-md-3">
                                       <div class="form-group mb-0">
                                           <label>Department</label>
-                                          <!-- <select name="department" class="form-control"> -->
                                           <select name="department" class="form-control" onchange="this.form.submit()">
                                               <option value="">All Departments</option>
                                               <?php foreach ($department as $d): ?>
@@ -67,7 +62,6 @@
                                   <div class="col-md-3">
                                       <div class="form-group mb-0">
                                           <label>Status</label>
-                                          <!-- <select name="status" class="form-control"> -->
                                           <select name="status" class="form-control" onchange="this.form.submit()">
                                               <option value="">All Status</option>
                                               <option value="Open" <?= (($this->input->post('status', TRUE) ?: $this->input->get('status', TRUE)) == 'Open') ? 'selected' : '' ?>>Open</option>
@@ -101,10 +95,10 @@
                                   <th>S.No</th>
                                   <th>Job Code</th>
                                   <th>Job Title</th>
+                                  <th>Job Role</th>
                                   <th>Department</th>
                                   <th>Employment</th>
                                   <th>Work Mode</th>
-                                  <!-- <th>Education</th> -->
                                   <th>No of Openings</th>
                                   <th>Candidates</th>
                                   <th>Job Status</th>
@@ -124,8 +118,9 @@
                                       <tr>
                                           <td><?= $i++; ?></td>
                                           <td><a href="<?php echo $this->config->item('base_url') ?>admin/Candidatelist/<?php echo $vl['Jid']; ?>"><?= $vl['JobCode'] ?></a></td>
-                                          <td><?= $vl['JobTitle'] ?></td>
-                                          <td><?= $vl['Departmentname'] ?></td>
+                                          <td><?= htmlspecialchars($vl['JobTitle'] ?? ''); ?></td>
+                                          <td><?= htmlspecialchars($vl['RoleSummary'] ?? ''); ?></td>
+                                          <td><?= htmlspecialchars($vl['Departmentname'] ?? ''); ?></td>
                                           <td><?= $vl['EmploymentType'] ?></td>
                                           <td><?= $vl['WorkMode'] ?></td>
                                           <td><?= $vl['NoofOpenings'] ?></td>
@@ -169,7 +164,6 @@
 
                                                   <?php if ($vl['JobStatus'] == 'Open') { ?>
 
-                                                      <!-- <input type="hidden" name="job_id" id="jobId"> -->
 
                                                       <!-- Put On Hold -->
                                                       <button type="button"
@@ -198,11 +192,11 @@
 
                                                       <!-- Analyze Resumes -->
                                                       <!-- <button type="button"
-                                                                    class="btn btn-sm btn-info analyzeResumeBtn"
-                                                                    data-id="<?= $vl['Jid']; ?>"
-                                                                    title="Analyze Resumes">
-                                                                <i class="fas fa-chart-line"></i>
-                                                            </button> -->
+                                                           class="btn btn-sm btn-info analyzeResumeBtn"
+                                                           data-id="<?= $vl['Jid']; ?>"
+                                                           title="Analyze Resumes">
+                                                           <i class="fas fa-chart-line"></i>
+                                                       </button> -->
 
                                                   <?php } elseif ($vl['JobStatus'] == 'On-Hold') { ?>
 
@@ -283,26 +277,60 @@
   </section>
   <!-- /.content -->
 
-  <div class="modal fade" id="uploadModal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-          <div class="modal-content">
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content" style="border-radius:12px; overflow:hidden;">
 
-              <div class="modal-header">
-                  <h5 class="modal-title">Upload Resume</h5>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <div class="modal-header bg-success text-white py-3">
+                  <h5 class="modal-title font-weight-bold">
+                      <i class="fas fa-file-upload mr-2"></i>Upload Multiple Candidate Resumes
+                  </h5>
+                  <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">&times;</button>
               </div>
 
-              <div class="modal-body">
+              <div class="modal-body p-4">
+                  <form id="bulkResumeUploadForm" enctype="multipart/form-data">
+                      <input type="hidden" id="upload_job_id" name="job_id">
+                      
+                      <!-- Drag & Drop Zone -->
+                      <div id="dropZoneArea" class="p-5 text-center rounded border-2 border-dashed bg-light mb-3" style="border: 2px dashed #28a745; cursor: pointer; transition: all 0.3s ease;">
+                          <i class="fas fa-cloud-upload-alt fa-3x text-success mb-3"></i>
+                          <h5 class="font-weight-bold text-dark mb-1">Drag & Drop Resumes Here</h5>
+                          <p class="text-muted small mb-3">Select multiple <strong>PDF</strong> or <strong>DOCX</strong> files to batch analyze with ATS Engine</p>
+                          <button type="button" class="btn btn-outline-success font-weight-bold px-4 rounded-pill" onclick="$('#bulkResumeInput').click();">
+                              <i class="fas fa-folder-open mr-2"></i>Browse Files (Multiple Allowed)
+                          </button>
+                          <input type="file" id="bulkResumeInput" name="resumes[]" multiple accept=".pdf,.docx,.doc" class="d-none">
+                      </div>
 
+                      <!-- Selected Files Preview List -->
+                      <div id="selectedFilesContainer" class="d-none mb-3">
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                              <h6 class="font-weight-bold text-dark mb-0">
+                                  <i class="fas fa-paperclip text-info mr-2"></i>Selected Files (<span id="selectedFileCount">0</span>)
+                              </h6>
+                              <button type="button" class="btn btn-xs btn-outline-danger" id="btnClearSelectedFiles">
+                                  <i class="fas fa-trash-alt mr-1"></i>Clear All
+                              </button>
+                          </div>
+                          <div id="selectedFilesList" class="p-2 bg-light border rounded" style="max-height:180px; overflow-y:auto;"></div>
+                      </div>
 
-                  <form id="resumeDropzone"
-                      class="dropzone" method="post"
-                      enctype="multipart/form-data">
-                      <input type="hidden" id="jobId">
+                      <!-- Upload Progress Bar -->
+                      <div id="uploadProgressBarContainer" class="progress mb-3 d-none" style="height: 12px; border-radius: 6px;">
+                          <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;"></div>
+                      </div>
 
+                      <!-- Status Message Alert -->
+                      <div id="uploadStatusAlert" class="alert d-none mb-3" role="alert"></div>
+
+                      <div class="d-flex justify-content-end align-items-center pt-3 border-top">
+                          <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
+                          <button type="submit" id="btnSubmitBulkResumes" class="btn btn-success font-weight-bold px-4" disabled>
+                              <i class="fas fa-cogs mr-2"></i>Upload & Analyze Resumes
+                          </button>
+                      </div>
                   </form>
-
-
               </div>
 
           </div>
@@ -588,10 +616,8 @@
               <input type="hidden" name="jid" id="edit_jid">
 
               <div class="right-form-header">
-                  <!-- <h5>Edit Vacancy</h5> -->
                   <h5>
                       Edit Vacancy
-                      <!-- <small class="text-muted ml-2" id="editJobCodeText"></small> -->
                       <small id="editJobCodeText" class="badge badge-pill badge-info ml-2"></small>
                   </h5>
                   <button type="button" class="close-btn" id="closeEditVacancyPanel">&times;</button>
@@ -808,22 +834,22 @@
                       <!-- STEP 4: CTC -->
                       <div id="edit-ctc-part" class="content">
 
-                          <!-- CTC Approver (readonly display) -->
-                          <div class="form-group">
-                              <label class="font-weight-bold"><i class="fas fa-user-check text-primary mr-1"></i> CTC Approver</label>
-                              <input type="text" id="edit_CtcApproverName" class="form-control" readonly placeholder="Not assigned" style="background:#f8f9fa;">
-                              <input type="hidden" name="CtcApproverId" id="edit_CtcApproverId">
-                              <small class="text-muted">Set via the CTC approval workflow</small>
-                          </div>
-
-                          <!-- Interviewer Panel (readonly display) -->
-                          <div class="form-group">
-                              <label class="font-weight-bold"><i class="fas fa-users text-success mr-1"></i> Interview Panel</label>
-                              <div id="edit_interviewPanelDisplay" class="border rounded p-2" style="background:#f8f9fa; min-height:50px;">
-                                  <span class="text-muted small">No interview panel assigned</span>
+                              <!-- CTC Approver (readonly display) -->
+                              <div class="form-group">
+                                  <label class="font-weight-bold"><i class="fas fa-user-check text-primary mr-1"></i> CTC Approver</label>
+                                  <input type="text" id="edit_CtcApproverName" class="form-control input-readonly-light" readonly placeholder="Not assigned">
+                                  <input type="hidden" name="CtcApproverId" id="edit_CtcApproverId">
+                                  <small class="text-muted">Set via the CTC approval workflow</small>
                               </div>
-                              <small class="text-muted">Interviewers are assigned via the Shortlisted candidates section</small>
-                          </div>
+
+                              <!-- Interviewer Panel (readonly display) -->
+                              <div class="form-group">
+                                  <label class="font-weight-bold"><i class="fas fa-users text-success mr-1"></i> Interview Panel</label>
+                                  <div id="edit_interviewPanelDisplay" class="border rounded p-2 input-readonly-light" style="min-height:50px;">
+                                      <span class="text-muted small">No interview panel assigned</span>
+                                  </div>
+                                  <small class="text-muted">Interviewers are assigned via the Shortlisted candidates section</small>
+                              </div>
 
                           <button type="button" class="btn btn-secondary mr-1" onclick="editStepper.previous()"><i class="fas fa-arrow-left mr-1"></i> Previous</button>
                           <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Update</button>
@@ -891,9 +917,9 @@
 <!-- Hold Date Modal -->
 <div class="modal fade" id="holdDateModal" tabindex="-1" role="dialog" aria-labelledby="holdDateModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" style="border-radius:12px; border:none; box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+    <div class="modal-content modal-content-rounded-lg">
 
-      <div class="modal-header" style="background: linear-gradient(135deg, #f6a623 0%, #e67e22 100%); border-radius:12px 12px 0 0;">
+      <div class="modal-header modal-header-gradient-amber">
         <h5 class="modal-title text-white font-weight-bold" id="holdDateModalLabel">
           <i class="fas fa-pause-circle mr-2"></i>Put Job On Hold
         </h5>
@@ -904,7 +930,7 @@
 
       <div class="modal-body p-4">
         <div class="text-center mb-3">
-          <div style="width:60px;height:60px;background:linear-gradient(135deg,#f6a623,#e67e22);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
+          <div class="icon-circle-amber">
             <i class="fas fa-calendar-alt text-white fa-lg"></i>
           </div>
         </div>
@@ -912,14 +938,12 @@
 
         <div class="form-group">
           <label class="font-weight-bold"><i class="fas fa-calendar-check text-warning mr-1"></i>Hold Until Date <span class="text-danger">*</span></label>
-          <input type="date" id="holdUntilDateInput" class="form-control form-control-lg"
-            style="border-radius:8px; border:2px solid #f6a623;"
-            required>
+          <input type="date" id="holdUntilDateInput" class="form-control form-control-lg border-warning rounded" required>
           <small class="text-muted">Choose a future date for the hold period.</small>
         </div>
       </div>
 
-      <div class="modal-footer justify-content-center" style="border-top:1px solid #eee;">
+      <div class="modal-footer justify-content-center border-top">
         <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">
           <i class="fas fa-times mr-1"></i>Cancel
         </button>
@@ -1894,13 +1918,145 @@ $(document).on('click', '.viewJobHistoryBtn', function () {
         }
     });
 });
+
+/* ===== Bulk ATS Resume Upload Modal Script ===== */
+$(document).on('click', '.uploadResumeBtn', function() {
+    let jid = $(this).data('id');
+    $('#upload_job_id').val(jid);
+    $('#bulkResumeInput').val('');
+    $('#selectedFilesList').empty();
+    $('#selectedFilesContainer').addClass('d-none');
+    $('#uploadStatusAlert').addClass('d-none').removeClass('alert-success alert-danger alert-info');
+    $('#uploadProgressBarContainer').addClass('d-none');
+    $('#btnSubmitBulkResumes').prop('disabled', true);
+    $('#uploadModal').modal('show');
+});
+
+$(document).on('click', '#dropZoneArea', function(e) {
+    if (e.target.id === 'bulkResumeInput') return;
+    $('#bulkResumeInput').click();
+});
+
+$(document).on('dragover dragenter', '#dropZoneArea', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).css('background-color', '#e8f5e9').css('border-color', '#1e7e34');
+});
+
+$(document).on('dragleave drop', '#dropZoneArea', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).css('background-color', '#f8f9fa').css('border-color', '#28a745');
+});
+
+$(document).on('drop', '#dropZoneArea', function(e) {
+    let files = e.originalEvent.dataTransfer.files;
+    if (files && files.length > 0) {
+        let input = document.getElementById('bulkResumeInput');
+        input.files = files;
+        updateSelectedFilesList();
+    }
+});
+
+$(document).on('change', '#bulkResumeInput', function() {
+    updateSelectedFilesList();
+});
+
+function updateSelectedFilesList() {
+    let input = document.getElementById('bulkResumeInput');
+    let files = input ? input.files : null;
+    let container = $('#selectedFilesList');
+    container.empty();
+
+    if (files && files.length > 0) {
+        $('#selectedFileCount').text(files.length);
+        $('#selectedFilesContainer').removeClass('d-none');
+        $('#btnSubmitBulkResumes').prop('disabled', false);
+
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let size = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+            let icon = file.name.endsWith('.pdf') ? 'fa-file-pdf text-danger' : 'fa-file-word text-primary';
+            container.append(`
+                <div class="d-flex justify-content-between align-items-center p-2 mb-1 bg-white rounded border">
+                    <span class="text-truncate small"><i class="fas ${icon} mr-2"></i><strong>${file.name}</strong></span>
+                    <span class="badge badge-light text-muted small ml-2">${size}</span>
+                </div>
+            `);
+        }
+    } else {
+        $('#selectedFilesContainer').addClass('d-none');
+        $('#btnSubmitBulkResumes').prop('disabled', true);
+    }
+}
+
+$(document).on('click', '#btnClearSelectedFiles', function(e) {
+    e.stopPropagation();
+    $('#bulkResumeInput').val('');
+    updateSelectedFilesList();
+});
+
+$(document).on('submit', '#bulkResumeUploadForm', function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+    let submitBtn = $('#btnSubmitBulkResumes');
+
+    submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Analyzing Resumes...');
+    $('#uploadProgressBarContainer').removeClass('d-none');
+    $('#uploadProgressBar').css('width', '60%');
+
+    $.ajax({
+        url: '<?= base_url("admin/ats/analyzeResumeModal") ?>',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        success: function(res) {
+            $('#uploadProgressBar').css('width', '100%');
+            submitBtn.prop('disabled', false).html('<i class="fas fa-cogs mr-2"></i>Upload & Analyze Resumes');
+
+            if (res.status === 'success') {
+                $('#uploadStatusAlert')
+                    .removeClass('d-none alert-danger alert-info')
+                    .addClass('alert-success')
+                    .html('<i class="fas fa-check-circle mr-2"></i>' + res.message);
+
+                toastr.success(res.message);
+                setTimeout(function() {
+                    if (res.redirect) {
+                        window.location.href = res.redirect;
+                    } else {
+                        location.reload();
+                    }
+                }, 1500);
+            } else {
+                $('#uploadStatusAlert')
+                    .removeClass('d-none alert-success alert-info')
+                    .addClass('alert-danger')
+                    .html('<i class="fas fa-exclamation-triangle mr-2"></i>' + res.message);
+                toastr.error(res.message || 'Failed to process resumes');
+            }
+        },
+        error: function() {
+            submitBtn.prop('disabled', false).html('<i class="fas fa-cogs mr-2"></i>Upload & Analyze Resumes');
+            $('#uploadProgressBarContainer').addClass('d-none');
+            $('#uploadStatusAlert')
+                .removeClass('d-none alert-success alert-info')
+                .addClass('alert-danger')
+                .html('<i class="fas fa-exclamation-triangle mr-2"></i>Server error during resume processing');
+            toastr.error('Server error during upload');
+        }
+    });
+});
   </script>
 
 <!-- Job Life-Cycle History Modal -->
 <div class="modal fade" id="jobHistoryModal" tabindex="-1" role="dialog" aria-labelledby="jobHistoryModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-    <div class="modal-content" style="border-radius:12px; border:none; box-shadow:0 8px 32px rgba(0,0,0,0.18);">
-      <div class="modal-header bg-info text-white" style="border-radius:12px 12px 0 0;">
+    <div class="modal-content modal-content-rounded-lg">
+      <div class="modal-header bg-info text-white rounded-top">
         <h5 class="modal-title font-weight-bold" id="jobHistoryModalLabel">
           <i class="fas fa-history mr-2"></i>Job Life-Cycle & Audit History
         </h5>
