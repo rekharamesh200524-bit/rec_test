@@ -19,7 +19,7 @@
               <th>Job Title / Designation</th>
               <th>Functional Role</th>
               <th>Department</th>
-              <th>Openings</th>
+              <th>Position</th>
               <th>Requested By</th>
               <th>Approver</th>
               <th>Target Onboarding</th>
@@ -36,11 +36,11 @@
                   <td><?= htmlspecialchars($req['JobTitle']); ?></td>
                   <td><?= htmlspecialchars($req['FunctionalRole'] ? $req['FunctionalRole'] : '-'); ?></td>
                   <td><?= htmlspecialchars($req['Departmentname'] ? $req['Departmentname'] : '-'); ?></td>
-                  <td><span class="badge badge-info px-2"><?= (int)$req['NoofOpenings']; ?></span></td>
+                  <td><?= (int)$req['NoofOpenings']; ?></td>
                   <td><?= htmlspecialchars($req['RequestedByName'] ? $req['RequestedByName'] : '-'); ?></td>
                   <td><?= htmlspecialchars($req['ApproverName'] ? $req['ApproverName'] : '-'); ?></td>
-                  <td><?= $req['TargetOnboardingDate'] ? date('d-M-Y', strtotime($req['TargetOnboardingDate'])) : '-'; ?></td>
-                  <td><?= date('d-M-Y', strtotime($req['CreatedAt'])); ?></td>
+                  <td><?= $req['TargetOnboardingDate'] ? date('d-m-Y', strtotime($req['TargetOnboardingDate'])) : '-'; ?></td>
+                  <td><?= date('d-m-Y', strtotime($req['CreatedAt'])); ?></td>
                   <td>
                     <?php if ($req['Status'] === 'PENDING APPROVAL'): ?>
                       <span class="badge badge-warning px-2"><i class="fas fa-clock mr-1"></i>Pending Approval</span>
@@ -79,14 +79,7 @@
 
                       <?php if ($req['Status'] === 'PENDING APPROVAL'): ?>
 
-                        <?php if ($isHiringManager): ?>
-                         
-                          <button type="button" class="btn btn-sm btn-warning text-dark" title="Submit to Vacancy"
-                            onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
-                            <i class="fas fa-paper-plane"></i>
-                          </button>
-
-                        <?php elseif ($isApproverRole): ?>
+                        <?php if ($isApproverRole): ?>
                         
                           <button type="button" class="btn btn-sm btn-success" title="Accept Request"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
@@ -161,13 +154,13 @@
                   <div id="res-job-part" class="content active" role="tabpanel" aria-labelledby="res-job-part-trigger">
                     
                     <div class="form-group">
-                      <label class="text-label font-weight-bold">Job Title / Designation <span class="text-danger">*</span></label>
-                      <input type="text" name="JobTitle" class="form-control" placeholder="e.g. Senior Software Engineer" required>
+                      <label class="text-label font-weight-bold">Job Title <span class="text-danger">*</span></label>
+                      <input type="text" name="JobTitle" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                      <label class="text-label font-weight-bold">Functional Role / Role <span class="text-danger">*</span></label>
-                      <input type="text" name="FunctionalRole" class="form-control" placeholder="e.g. Frontend Developer / Team Lead" required>
+                      <label class="text-label font-weight-bold">Role <span class="text-danger">*</span></label>
+                      <input type="text" name="FunctionalRole" class="form-control" required>
                     </div>
 
                     <div class="form-group">
@@ -183,9 +176,9 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="text-label font-weight-bold"><i class="fas fa-map-marker-alt text-danger mr-1"></i> Job Location</label>
+                      <label class="text-label font-weight-bold">Job Location</label>
                       <div class="position-relative">
-                        <input type="text" id="resLocationInput" class="form-control search-input" placeholder="Type location (e.g. Chennai, Bangalore)..." autocomplete="off">
+                        <input type="text" id="resLocationInput" class="form-control search-input" autocomplete="off">
                         <input type="hidden" name="JobLocation" id="resJobLocation">
                         <div class="dropdown-menu w-100" id="resLocationDropdown"></div>
                       </div>
@@ -193,9 +186,9 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="text-label font-weight-bold"><i class="fas fa-graduation-cap text-info mr-1"></i> Education Required</label>
+                      <label class="text-label font-weight-bold"> Education Required</label>
                       <div class="position-relative">
-                        <input type="text" id="resEducationInput" class="form-control search-input" placeholder="Type education (e.g. B.E, B.Tech, MBA)..." autocomplete="off">
+                        <input type="text" id="resEducationInput" class="form-control search-input" autocomplete="off">
                         <input type="hidden" name="EducationRequired" id="resEducationRequired">
                         <div class="dropdown-menu w-100" id="resEducationDropdown"></div>
                       </div>
@@ -226,7 +219,7 @@
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Reason for Requirement</label>
-                      <textarea name="ReasonForRequirement" class="form-control" rows="3" placeholder="State reasons for this resource requirement..."></textarea>
+                      <textarea name="ReasonForRequirement" class="form-control" rows="3"></textarea>
                     </div>
 
                     <button type="button" class="btn btn-primary" onclick="resStepperNext()">Next <i class="fas fa-arrow-right ml-1"></i></button>
@@ -239,21 +232,16 @@
                       <div class="row">
                         <div class="col-md-6">
                           <label class="text-label font-weight-bold">Min Experience (Years)</label>
-                          <input type="number" step="any" min="0" name="ExpMin" id="res_ExpMin" class="form-control" value="0" placeholder="e.g. 1.5">
+                          <input type="number" step="any" min="0" name="ExpMin" id="res_ExpMin" class="form-control" value="0">
                         </div>
                         <div class="col-md-6">
                           <label class="text-label font-weight-bold">Max Experience (Years)</label>
-                          <input type="number" step="any" min="0" name="ExpMax" id="res_ExpMax" class="form-control" value="0" placeholder="e.g. 5.5">
+                          <input type="number" step="any" min="0" name="ExpMax" id="res_ExpMax" class="form-control" value="0">
                         </div>
                       </div>
                     </div>
 
                     
-
-                    <div class="form-group">
-                      <label class="text-label font-weight-bold">Recruitment Start Date</label>
-                      <input type="date" name="RecruitmentStartDate" class="form-control">
-                    </div>
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Target Onboarding Date</label>
@@ -270,14 +258,14 @@
                   <div id="res-desc-part" class="content" role="tabpanel" aria-labelledby="res-desc-part-trigger">
                     
                     <div class="form-group">
-                      <label class="text-label font-weight-bold">Number of Positions / Openings <span class="text-danger">*</span></label>
+                      <label class="text-label font-weight-bold">Number of Positions <span class="text-danger">*</span></label>
                       <input type="number" name="NoofOpenings" class="form-control" value="1" min="1" required>
                     </div>
 
                     <div class="form-group">
-                      <label class="text-label font-weight-bold"><i class="fas fa-check-circle text-success mr-1"></i> Must-Have Skills <span class="text-danger">*</span></label>
+                      <label class="text-label font-weight-bold">Must-Have Skills <span class="text-danger">*</span></label>
                       <div class="position-relative">
-                        <input type="text" id="resMustHaveSkillsInput" class="form-control search-input" placeholder="Type mandatory skill..." autocomplete="off">
+                        <input type="text" id="resMustHaveSkillsInput" class="form-control search-input" autocomplete="off">
                         <input type="hidden" name="MustHaveSkills" id="resMustHaveSkills">
                         <div class="dropdown-menu w-100" id="resMustHaveSkillsDropdown"></div>
                       </div>
@@ -285,9 +273,9 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="text-label font-weight-bold"><i class="fas fa-star text-info mr-1"></i> Nice-to-Have Skills</label>
+                      <label class="text-label font-weight-bold">Nice-to-Have Skills</label>
                       <div class="position-relative">
-                        <input type="text" id="resNiceToHaveSkillsInput" class="form-control search-input" placeholder="Type optional skill..." autocomplete="off">
+                        <input type="text" id="resNiceToHaveSkillsInput" class="form-control search-input" autocomplete="off">
                         <input type="hidden" name="NiceToHaveSkills" id="resNiceToHaveSkills">
                         <div class="dropdown-menu w-100" id="resNiceToHaveSkillsDropdown"></div>
                       </div>
@@ -297,7 +285,7 @@
                     <div class="form-group">
                       <label class="text-label font-weight-bold"><i class="fas fa-language text-secondary mr-1"></i> Communication Languages <span class="text-danger">*</span></label>
                       <div class="position-relative">
-                        <input type="text" id="resLanguageInput" class="form-control search-input" placeholder="Type language..." autocomplete="off">
+                        <input type="text" id="resLanguageInput" class="form-control search-input" autocomplete="off">
                         <input type="hidden" name="CommunicationLang" id="resCommunicationLang">
                         <div class="dropdown-menu w-100" id="resLanguageDropdown"></div>
                       </div>
@@ -313,12 +301,12 @@
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Job Description <span class="text-danger">*</span></label>
-                      <textarea name="JobDescription" class="form-control" rows="4" placeholder="Enter job description manually..." required></textarea>
+                      <textarea name="JobDescription" class="form-control" rows="4" required></textarea>
                     </div>
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Roles & Responsibilities <span class="text-danger">*</span></label>
-                      <textarea name="Responsibilities" class="form-control" rows="4" placeholder="Enter key roles & responsibilities manually..." required></textarea>
+                      <textarea name="Responsibilities" class="form-control" rows="4" required></textarea>
                     </div>
 
                     <button type="button" class="btn btn-secondary mr-1" onclick="resStepperPrev()"><i class="fas fa-arrow-left mr-1"></i> Previous</button>
@@ -333,19 +321,19 @@
 
 
 <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title font-weight-bold" id="viewDetailsModalLabel"><i class="fas fa-info-circle mr-2"></i>Resource Request Details</h5>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:14px; overflow:hidden;">
+      <div class="modal-header text-white" style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); padding: 16px 24px;">
+        <h5 class="modal-title font-weight-bold" id="viewDetailsModalLabel"><i class="fas fa-file-alt mr-2"></i>Resource Request Details</h5>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id="detailsModalContent">
+      <div class="modal-body p-4" id="detailsModalContent" style="max-height: 78vh; overflow-y: auto;">
         
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <div class="modal-footer bg-light py-2">
+        <button type="button" class="btn btn-secondary font-weight-bold px-4 rounded-pill" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -372,7 +360,7 @@
 
           <div class="form-group">
             <label class="font-weight-bold">Approval Comments <span class="text-danger">*</span></label>
-            <textarea name="ApprovalComment" id="approvalComment" class="form-control" rows="4" placeholder="Enter required approval/rejection comments..." required></textarea>
+            <textarea name="ApprovalComment" id="approvalComment" class="form-control" rows="4" required></textarea>
           </div>
         </div>
 
@@ -391,14 +379,14 @@ var resStepperObj = null;
 $(document).ready(function() {
     if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#requestsTable')) {
         $('#requestsTable').DataTable({
-            "responsive": true,
+            "responsive": false,
             "autoWidth": false,
             "order": [[0, "asc"]]
         });
     }
     $(window).on('resize orientationchange', function() {
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#requestsTable')) {
-            $('#requestsTable').DataTable().columns.adjust().responsive.recalc();
+            $('#requestsTable').DataTable().columns.adjust();
         }
     });
 
@@ -568,36 +556,166 @@ function resStepperPrev() {
 }
 
 function viewRequestDetails(req) {
-  var html = '<table class="table table-bordered table-sm">' +
-    '<tr><th style="width:30%">Request Code</th><td><strong class="text-primary">' + (req.RequestCode || '') + '</strong></td></tr>' +
-    '<tr><th>Job Title / Designation</th><td>' + (req.JobTitle || '') + '</td></tr>' +
-    '<tr><th>Functional Role</th><td>' + (req.FunctionalRole || '-') + '</td></tr>' +
-    '<tr><th>Department</th><td>' + (req.Departmentname || '-') + '</td></tr>' +
-    '<tr><th>Job Location</th><td>' + (req.JobLocation || '-') + '</td></tr>' +
-    '<tr><th>Education Required</th><td>' + (req.EducationRequired || '-') + '</td></tr>' +
-    '<tr><th>Number of Positions</th><td>' + (req.NoofOpenings || 1) + '</td></tr>' +
-    '<tr><th>Position Type</th><td>' + (req.PositionType || 'New Position') + '</td></tr>' +
-    '<tr><th>Experience</th><td>' + (req.ExpMin || 0) + ' - ' + (req.ExpMax || 0) + ' Years</td></tr>' +
-    '<tr><th>Salary Range</th><td>' + (req.Salary || '-') + '</td></tr>' +
-    '<tr><th>Start Date</th><td>' + (req.RecruitmentStartDate || '-') + '</td></tr>' +
-    '<tr><th>Target Onboarding Date</th><td>' + (req.TargetOnboardingDate || '-') + '</td></tr>' +
-    '<tr><th>Reason for Requirement</th><td>' + (req.ReasonForRequirement || '-') + '</td></tr>' +
-    '<tr><th>Must-Have Skills</th><td>' + (req.MustHaveSkills || '-') + '</td></tr>' +
-    '<tr><th>Nice-to-Have Skills</th><td>' + (req.NiceToHaveSkills || '-') + '</td></tr>' +
-    '<tr><th>Communication Languages</th><td>' + (req.CommunicationLang || '-') + '</td></tr>' +
-    '<tr><th>Job Description</th><td><pre style="white-space:pre-wrap; font-family:inherit;">' + (req.JobDescription || '') + '</pre></td></tr>' +
-    '<tr><th>Roles & Responsibilities</th><td><pre style="white-space:pre-wrap; font-family:inherit;">' + (req.Responsibilities || '') + '</pre></td></tr>' +
-    '<tr><th>Requested By</th><td>' + (req.RequestedByName || '-') + '</td></tr>' +
-    '<tr><th>Approver</th><td>' + (req.ApproverName || '-') + '</td></tr>' +
-    '<tr><th>Request Date</th><td>' + (req.CreatedAt || '') + '</td></tr>' +
-    '<tr><th>Status</th><td><strong>' + (req.Status || '') + '</strong></td></tr>';
+  var statusClass = 'badge-warning';
+  var statusIcon = 'fa-clock';
+  var statusText = req.Status || 'PENDING APPROVAL';
 
-  if (req.ApprovalComment) {
-    html += '<tr><th>Approver Comment</th><td class="text-danger">' + req.ApprovalComment + '</td></tr>';
-    html += '<tr><th>Actioned At</th><td>' + (req.ActionedAt || '') + '</td></tr>';
+  if (statusText === 'ACCEPTED' || statusText === 'APPROVED') {
+    statusClass = 'badge-success';
+    statusIcon = 'fa-check-circle';
+  } else if (statusText === 'REJECTED') {
+    statusClass = 'badge-danger';
+    statusIcon = 'fa-times-circle';
   }
 
-  html += '</table>';
+  function makeChips(str, colorClass) {
+    if (!str || str.trim() === '-' || str.trim() === '') return '<span class="text-muted small">None specified</span>';
+    var arr = str.split(',');
+    return arr.map(function(s) {
+      return '<span class="badge badge-pill ' + colorClass + ' mr-1 mb-1 px-3 py-1 font-weight-normal" style="font-size:12px;">' + s.trim() + '</span>';
+    }).join(' ');
+  }
+
+  var mustSkills = makeChips(req.MustHaveSkills, 'badge-success');
+  var niceSkills = makeChips(req.NiceToHaveSkills, 'badge-info');
+  var languages  = makeChips(req.CommunicationLang, 'badge-primary');
+
+  function formatProjectDate(dInput) {
+    if (!dInput || dInput === '0000-00-00' || dInput === '0000-00-00 00:00:00') return '-';
+    let d = new Date(dInput);
+    if (isNaN(d.getTime())) return dInput;
+    let day = String(d.getDate()).padStart(2, '0');
+    let month = String(d.getMonth() + 1).padStart(2, '0');
+    let year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  var targetDateStr = req.TargetOnboardingDate ? formatProjectDate(req.TargetOnboardingDate) : '-';
+  var reqDateStr = req.CreatedAt ? formatProjectDate(req.CreatedAt) : '-';
+
+  var html = `
+    <div class="card border-0 shadow-none mb-0">
+      <!-- Top Overview Header Banner -->
+      <div class="p-3 mb-3 rounded-lg" style="background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%); border-left: 5px solid #0d9488;">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <span class="badge badge-secondary px-2 py-1 small font-weight-bold mb-1"><i class="fas fa-hashtag mr-1"></i>${req.RequestCode || 'REQ'}</span>
+            <h4 class="mb-0 font-weight-bold text-dark">${req.JobTitle || 'N/A'}</h4>
+            <div class="text-muted small mt-1">
+              <span class="mr-3"><i class="fas fa-building text-secondary mr-1"></i>${req.Departmentname || 'N/A'}</span>
+              <span class="mr-3"><i class="fas fa-map-marker-alt text-danger mr-1"></i>${req.JobLocation || 'N/A'}</span>
+              <span><i class="fas fa-briefcase text-info mr-1"></i>${req.PositionType || 'New Position'}</span>
+            </div>
+          </div>
+          <div class="col-md-4 text-md-right mt-2 mt-md-0">
+            <span class="badge ${statusClass} px-3 py-2 font-weight-bold" style="font-size:13px; border-radius:20px;">
+              <i class="fas ${statusIcon} mr-1"></i>${statusText}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="row text-center mb-3">
+        <div class="col-6 col-md-3 mb-2">
+          <div class="p-2 border rounded bg-white shadow-sm">
+            <small class="text-muted font-weight-bold d-block text-uppercase" style="font-size:10px;">Positions</small>
+            <span class="font-weight-bold text-dark h6 mb-0">${req.NoofOpenings || 1}</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-2">
+          <div class="p-2 border rounded bg-white shadow-sm">
+            <small class="text-muted font-weight-bold d-block text-uppercase" style="font-size:10px;">Experience</small>
+            <span class="font-weight-bold text-dark h6 mb-0">${req.ExpMin || 0} - ${req.ExpMax || 0} Yrs</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-2">
+          <div class="p-2 border rounded bg-white shadow-sm">
+            <small class="text-muted font-weight-bold d-block text-uppercase" style="font-size:10px;">Target Onboarding</small>
+            <span class="font-weight-bold text-teal h6 mb-0">${targetDateStr}</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-2">
+          <div class="p-2 border rounded bg-white shadow-sm">
+            <small class="text-muted font-weight-bold d-block text-uppercase" style="font-size:10px;">Request Date</small>
+            <span class="font-weight-bold text-dark h6 mb-0">${reqDateStr}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Info Cards -->
+      <div class="row">
+        <!-- Requirements & Stakeholders -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100 border-light shadow-sm">
+            <div class="card-header bg-light py-2">
+              <h6 class="mb-0 font-weight-bold text-secondary small"><i class="fas fa-list-ul mr-1 text-teal"></i>Requirements & Stakeholders</h6>
+            </div>
+            <div class="card-body p-3">
+              <table class="table table-sm table-borderless mb-0 small">
+                <tr><th class="text-muted pl-0" style="width:42%">Functional Role:</th><td class="font-weight-bold text-dark">${req.FunctionalRole || '-'}</td></tr>
+                <tr><th class="text-muted pl-0">Education Required:</th><td class="text-dark">${req.EducationRequired || '-'}</td></tr>
+                <tr><th class="text-muted pl-0">Salary Range:</th><td class="text-dark">${req.Salary || '-'}</td></tr>
+                <tr><th class="text-muted pl-0">Reason for Request:</th><td class="text-dark">${req.ReasonForRequirement || '-'}</td></tr>
+                <tr class="border-top"><th class="text-muted pl-0 pt-2">Requested By:</th><td class="font-weight-bold text-dark pt-2">${req.RequestedByName || '-'}</td></tr>
+                <tr><th class="text-muted pl-0">Approver:</th><td class="font-weight-bold text-dark">${req.ApproverName || '-'}</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills & Languages -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100 border-light shadow-sm">
+            <div class="card-header bg-light py-2">
+              <h6 class="mb-0 font-weight-bold text-secondary small"><i class="fas fa-tags mr-1 text-teal"></i>Skills & Languages</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="mb-3">
+                <small class="text-muted font-weight-bold d-block mb-1">Must-Have Skills:</small>
+                <div>${mustSkills}</div>
+              </div>
+              <div class="mb-3">
+                <small class="text-muted font-weight-bold d-block mb-1">Nice-to-Have Skills:</small>
+                <div>${niceSkills}</div>
+              </div>
+              <div>
+                <small class="text-muted font-weight-bold d-block mb-1">Communication Languages:</small>
+                <div>${languages}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Description -->
+      ${req.JobDescription ? `
+      <div class="card border-light shadow-sm mb-3">
+        <div class="card-header bg-light py-2">
+          <h6 class="mb-0 font-weight-bold text-secondary small"><i class="fas fa-align-left mr-1 text-teal"></i>Job Description</h6>
+        </div>
+        <div class="card-body p-3 small text-dark" style="white-space:pre-wrap; line-height:1.6; background-color:#fafafa; border-radius: 0 0 8px 8px;">${req.JobDescription}</div>
+      </div>` : ''}
+
+      <!-- Roles & Responsibilities -->
+      ${req.Responsibilities ? `
+      <div class="card border-light shadow-sm mb-3">
+        <div class="card-header bg-light py-2">
+          <h6 class="mb-0 font-weight-bold text-secondary small"><i class="fas fa-tasks mr-1 text-teal"></i>Roles & Responsibilities</h6>
+        </div>
+        <div class="card-body p-3 small text-dark" style="white-space:pre-wrap; line-height:1.6; background-color:#fafafa; border-radius: 0 0 8px 8px;">${req.Responsibilities}</div>
+      </div>` : ''}
+
+      <!-- Approver Remark (if any) -->
+      ${req.ApprovalComment ? `
+      <div class="alert alert-warning border-0 shadow-sm p-3 mb-0" style="border-left: 5px solid #f59e0b !important; border-radius: 8px;">
+        <h6 class="font-weight-bold mb-1 small text-dark"><i class="fas fa-comment-alt text-warning mr-1"></i>Approver Remark:</h6>
+        <p class="mb-1 small text-dark">${req.ApprovalComment}</p>
+        ${req.ActionedAt ? `<small class="text-muted"><i class="far fa-clock mr-1"></i>Actioned on: ${req.ActionedAt}</small>` : ''}
+      </div>` : ''}
+    </div>
+  `;
+
   $('#detailsModalContent').html(html);
   $('#viewDetailsModal').modal('show');
 }

@@ -226,3 +226,13 @@ INNER JOIN `JobApplications` `ja` ON `ja`.`Jid` = `jl`.`Jid`
 INNER JOIN `candidateinterviews` `ci` ON `ci`.`ApplicationId` = `ja`.`ApplicationId`
 WHERE `ci`.`InterviewerId` = '16'
 ORDER BY `jl`.`PostedOn` DESC
+ERROR - 2026-08-19 15:01:06 --> Severity: Error --> Maximum execution time of 30 seconds exceeded D:\xampp\htdocs\REC\system\libraries\Session\drivers\Session_files_driver.php 180
+ERROR - 2026-08-19 15:01:06 --> Severity: Warning --> Unknown: Cannot call session save handler in a recursive manner Unknown 0
+ERROR - 2026-08-19 15:01:06 --> Severity: Warning --> Unknown: Failed to write session data using user defined save handler. (session.save_path: C:\Users\reka\AppData\Local\Temp) Unknown 0
+ERROR - 2026-08-19 18:31:55 --> [AiInterviewQuestionGenerator] AI failed: cURL error: Operation timed out after 45007 milliseconds with 0 bytes received — using fallback.
+ERROR - 2026-08-19 15:01:55 --> Severity: Error --> Maximum execution time of 30 seconds exceeded D:\xampp\htdocs\REC\system\libraries\Session\drivers\Session_files_driver.php 180
+ERROR - 2026-08-19 15:01:55 --> Severity: Warning --> Unknown: Cannot call session save handler in a recursive manner Unknown 0
+ERROR - 2026-08-19 15:01:55 --> Severity: Warning --> Unknown: Failed to write session data using user defined save handler. (session.save_path: C:\Users\reka\AppData\Local\Temp) Unknown 0
+ERROR - 2026-08-19 15:01:55 --> Severity: Error --> Maximum execution time of 30 seconds exceeded D:\xampp\htdocs\REC\system\libraries\Session\drivers\Session_files_driver.php 180
+ERROR - 2026-08-19 15:01:55 --> Severity: Warning --> Unknown: Cannot call session save handler in a recursive manner Unknown 0
+ERROR - 2026-08-19 15:01:55 --> Severity: Warning --> Unknown: Failed to write session data using user defined save handler. (session.save_path: C:\Users\reka\AppData\Local\Temp) Unknown 0

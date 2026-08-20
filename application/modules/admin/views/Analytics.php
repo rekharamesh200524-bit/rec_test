@@ -466,23 +466,33 @@ document.addEventListener("DOMContentLoaded", function () {
         <th>Job Title</th>
         <th>Code</th>
         <th>Department</th>
-        <th>Openings</th>
+        <th>Position</th>
         <th>Assigned Recruiter</th>
         <th>Posted Date</th>
         <th>Status</th>
       `;
+      function formatProjectDate(dInput) {
+        if (!dInput || dInput === '0000-00-00' || dInput === '0000-00-00 00:00:00') return 'N/A';
+        let d = new Date(dInput);
+        if (isNaN(d.getTime())) return dInput;
+        let day = String(d.getDate()).padStart(2, '0');
+        let month = String(d.getMonth() + 1).padStart(2, '0');
+        let year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+      }
+
       if (!dataArray.length) {
         body.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No matching vacancy records found for this slice.</td></tr>`;
       } else {
         dataArray.forEach((j, idx) => {
-          const dStr = j.PostedOn ? new Date(j.PostedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+          const dStr = j.PostedOn ? formatProjectDate(j.PostedOn) : 'N/A';
           body.innerHTML += `
             <tr>
               <td>${idx + 1}</td>
               <td><strong class="text-dark">${j.JobTitle || 'N/A'}</strong></td>
               <td><code>${j.JobCode || '-'}</code></td>
               <td><span class="badge badge-light border">${j.Departmentname || 'General'}</span></td>
-              <td><span class="badge badge-info px-2">${j.NoofOpenings || 1}</span></td>
+              <td>${j.NoofOpenings || 1}</td>
               <td><strong class="text-primary">${j.RecruiterName || 'Unassigned'}</strong></td>
               <td class="text-muted small">${dStr}</td>
               <td><span class="badge badge-success px-2 py-1">${j.JobStatus || 'Draft'}</span></td>
@@ -506,7 +516,7 @@ document.addEventListener("DOMContentLoaded", function () {
         body.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No matching candidate records found for this slice.</td></tr>`;
       } else {
         dataArray.forEach((c, idx) => {
-          const dStr = c.AppliedOn ? new Date(c.AppliedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+          const dStr = c.AppliedOn ? formatProjectDate(c.AppliedOn) : 'N/A';
           body.innerHTML += `
             <tr>
               <td>${idx + 1}</td>
@@ -537,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
         body.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No conducted interviews logged for this interviewer.</td></tr>`;
       } else {
         dataArray.forEach((i, idx) => {
-          const dStr = i.ScheduledAt ? new Date(i.ScheduledAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
+          const dStr = i.ScheduledAt ? formatProjectDate(i.ScheduledAt) : 'N/A';
           body.innerHTML += `
             <tr>
               <td>${idx + 1}</td>
@@ -556,11 +566,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (window.jQuery && $.fn.DataTable) {
       $('#pbiDrillTable').DataTable({
-        "responsive": true,
+        "responsive": false,
         "lengthChange": false,
         "autoWidth": false,
         "pageLength": 10,
-        "buttons": ["csv", "excel", "pdf", "print"]
+        "buttons": ["copy", "csv", "excel"]
       }).buttons().container().appendTo('#pbiDrillExportContainer');
     }
 

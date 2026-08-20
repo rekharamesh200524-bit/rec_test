@@ -1587,3 +1587,31 @@
 .badge-resume-pill {
   font-size: 11.5px !important;
 }
+
+/* Global Scrollable Tables & Removal of DataTables Responsive + Icon */
+.table-responsive {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+}
+
+.table-responsive > .table {
+  width: 100% !important;
+  margin-bottom: 0;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before,
+table.dataTable > tbody > tr > td.dtr-control::before,
+table.dataTable > tbody > tr > th.dtr-control::before,
+.dtr-control,
+td.dtr-control::before {
+  display: none !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+  padding-left: 0.75rem !important;
+}
+

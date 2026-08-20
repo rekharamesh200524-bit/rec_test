@@ -77,7 +77,7 @@ Assigned Interview
                 </div>
                 <div class="interview-summary-item">
                     <span class="label">Interview Date:</span>
-                    <span class="value"><?= date('l, d F Y - h:i A', $interview_ts) ?></span>
+                    <span class="value"><?= date('d-m-Y - h:i A', $interview_ts) ?></span>
                 </div>
                 <div class="interview-summary-item mt-1">
                     <span class="label">Interview Mode:</span>
@@ -144,6 +144,7 @@ Assigned Interview
 
 </div>
 
+<div class="card-body table-responsive p-0">
 <table id="example1" class="table table-bordered table-striped align-middle mb-0 table-full-width">
 
 <thead class="bg-success text-white">
@@ -175,30 +176,30 @@ Assigned Interview
 <tr <?= $trClass ?>>
 <td class="text-center font-weight-bold"><?= $i++; ?></td>
 <td>
-  <a href="<?= base_url('admin/viewResume/'.$cl['CandidateId']); ?>" target="_blank" class="badge badge-pill badge-primary px-2 py-1 font-weight-bold badge-resume-pill">
+  <a href="<?= base_url('admin/viewResume/'.$cl['CandidateId']); ?>" target="_blank" class="text-dark font-weight-bold">
     <?= $cl['CandidateCode']; ?>
   </a>
 </td>
 
 <td>
-  <a href="javascript:void(0);" class="viewCandidateDetails text-primary font-weight-bold" data-id="<?= $cl['CandidateId']; ?>">
+  <a href="javascript:void(0);" class="viewCandidateDetails text-dark font-weight-bold" data-id="<?= $cl['CandidateId']; ?>">
     <?= htmlspecialchars($cl['Fullname']); ?>
   </a>
 </td>
 
 <td>
-  <div class="font-weight-bold text-dark mb-0"><i class="fas fa-briefcase text-primary mr-1"></i><strong>Job Title:</strong> <?= !empty($cl['JobTitle']) ? htmlspecialchars($cl['JobTitle']) : 'N/A'; ?></div>
+  <div class="font-weight-bold text-dark mb-0"><?= !empty($cl['JobTitle']) ? htmlspecialchars($cl['JobTitle']) : 'N/A'; ?></div>
   <?php if (!empty($cl['Role'])): ?>
-    <div class="small text-muted"><i class="fas fa-user-tag text-info mr-1"></i><strong>Role:</strong> <?= htmlspecialchars($cl['Role']); ?></div>
+    <div class="small text-muted"><?= htmlspecialchars($cl['Role']); ?></div>
   <?php endif; ?>
 </td>
 
 <td>
-  <span class="text-dark font-weight-bold"><i class="fas fa-phone text-muted mr-1"></i><?= htmlspecialchars($cl['PhoneNo']); ?></span>
+  <span class="text-dark font-weight-bold"><?= htmlspecialchars($cl['PhoneNo']); ?></span>
 </td>
 
 <td>
-  <span class="text-muted small"><i class="fas fa-envelope text-primary mr-1"></i><?= htmlspecialchars($cl['Email']); ?></span>
+  <span class="text-muted small"><?= htmlspecialchars($cl['Email']); ?></span>
 </td>
 
 <td class="text-center">
@@ -218,14 +219,14 @@ Assigned Interview
     $meetLink = !empty($cl['MeetLink']) ? trim($cl['MeetLink']) : '';
     if (strtolower($mode) === 'online'):
     ?>
-        <span class="badge badge-primary"><i class="fas fa-video mr-1"></i>Online</span>
+        <span class="badge badge-success px-2 py-1"><i class="fas fa-video mr-1"></i>Online</span>
         <?php if (!empty($meetLink) && !$isRescheduledRow): ?>
-            <a href="<?= htmlspecialchars($meetLink) ?>" target="_blank" class="btn btn-xs btn-outline-primary ml-1" title="Join Video Meeting"><i class="fas fa-video mr-1"></i>Join</a>
+            <a href="<?= htmlspecialchars($meetLink) ?>" target="_blank" class="btn btn-xs btn-outline-success ml-1" title="Join Video Meeting"><i class="fas fa-video mr-1"></i>Join</a>
         <?php endif; ?>
     <?php elseif (strtolower($mode) === 'offline'): ?>
-        <span class="badge badge-secondary"><i class="fas fa-building mr-1"></i>Offline</span>
+        <span class="badge badge-primary px-2 py-1"><i class="fas fa-building mr-1"></i>Offline</span>
     <?php else: ?>
-        <span class="badge badge-light"><?= !empty($mode) ? htmlspecialchars($mode) : 'N/A' ?></span>
+        <span class="badge badge-light px-2 py-1"><?= !empty($mode) ? htmlspecialchars($mode) : 'N/A' ?></span>
     <?php endif; ?>
 </td>
 
@@ -234,7 +235,7 @@ Assigned Interview
     $scheduledAt = $cl['ScheduledAt'] ?? '';
     if (!empty($scheduledAt) && $scheduledAt !== '0000-00-00 00:00:00') {
         $ts = strtotime($scheduledAt);
-        $dateFormatted = ($ts && $ts > 0) ? date('d M Y, h:i A', $ts) : '-';
+        $dateFormatted = ($ts && $ts > 0) ? date('d-m-Y, h:i A', $ts) : '-';
         if ($isRescheduledRow) {
             echo '<del class="text-muted">' . $dateFormatted . '</del> <span class="badge badge-warning text-dark ml-1"><i class="fas fa-history mr-1"></i>Rescheduled</span>';
         } else {
@@ -263,7 +264,7 @@ Assigned Interview
 </td>
 
 <td>
-    <span class="small text-muted"><?= !empty($cl['AppliedOn']) ? date('d M Y, h:i A', strtotime($cl['AppliedOn'])) : '-'; ?></span>
+    <span class="small text-muted"><?= !empty($cl['AppliedOn']) ? date('d-m-Y, h:i A', strtotime($cl['AppliedOn'])) : '-'; ?></span>
 </td>
 
 <td class="text-center text-nowrap">
@@ -274,8 +275,8 @@ Assigned Interview
       <button type="button" class="btn btn-xs btn-warning btn-candidate-360" data-id="<?= $cl['CandidateId']; ?>" title="Candidate 360° Profile">
         <i class="fas fa-user-circle"></i>
       </button>
-      <button type="button" class="btn btn-xs btn-primary openAiQuestionsModal" data-interview="<?= (int)($cl['InterviewId'] ?? 0); ?>" data-candidate="<?= htmlspecialchars($cl['Fullname'] ?? ''); ?>" data-job="<?= htmlspecialchars($cl['JobTitle'] ?? ''); ?>" data-role="<?= htmlspecialchars($cl['Role'] ?? ''); ?>" data-score="<?= htmlspecialchars($cl['ProfileMatchPer'] ?? 'N/A'); ?>" title="AI Personalized Interview Questions">
-        <i class="fas fa-brain"></i>
+      <!-- <button type="button" class="btn btn-xs btn-primary openAiQuestionsModal" data-interview="<?= (int)($cl['InterviewId'] ?? 0); ?>" data-candidate="<?= htmlspecialchars($cl['Fullname'] ?? ''); ?>" data-job="<?= htmlspecialchars($cl['JobTitle'] ?? ''); ?>" data-role="<?= htmlspecialchars($cl['Role'] ?? ''); ?>" data-score="<?= htmlspecialchars($cl['ProfileMatchPer'] ?? 'N/A'); ?>" title="AI Personalized Interview Questions">
+        <i class="fas fa-brain"></i> -->
       </button>
       <?php if(($resultLower == '' || $resultLower == 'assigned' || $resultLower == 'on hold') && !$isRescheduledRow): ?>
         <button type="button" class="btn btn-xs btn-warning openInterviewUpdate" data-interview="<?= $cl['InterviewId']; ?>" title="Update Interview Status">
@@ -290,6 +291,7 @@ Assigned Interview
 
 </tbody>
 </table>
+</div>
 
 
 
@@ -457,7 +459,7 @@ function initInterviewDataTable() {
     }
     if ($.fn.DataTable) {
         interviewTable = $('#example1').DataTable({
-            responsive: true,
+            responsive: false,
             autoWidth: false,
             columnDefs: [
                 { orderable: false, targets: 0 }
@@ -474,7 +476,7 @@ $(document).ready(function () {
 
     $(window).on('resize orientationchange', function () {
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().columns.adjust().responsive.recalc();
+            $('#example1').DataTable().columns.adjust();
         }
     });
 

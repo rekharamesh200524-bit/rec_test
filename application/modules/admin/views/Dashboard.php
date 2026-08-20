@@ -27,50 +27,54 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
 <section class="content pt-3 pb-4">
   <div class="container-fluid">
 
-    <div id="quoteBanner">
-      <div class="row align-items-center">
-        <div class="col-lg-8 col-md-8 col-sm-12">
-          <div class="status-badge-live">
-            <span class="pulse-dot"></span> System Operational &bull; Recruitment Portal Live
-          </div>
-          <span class="quote-icon">&ldquo;</span>
-          <p class="quote-text" id="quoteText">Loading recruitment inspiration...</p>
-          <p class="quote-author" id="quoteAuthor"></p>
-          <div class="quote-dots" id="quoteDots"></div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mt-3 mt-md-0">
-          <div class="banner-greeting">
-            <div class="greeting-time" id="liveClock">--:--:--</div>
-            <div class="greeting-name">&#128075; Welcome back, <?= htmlspecialchars($emp_name) ?></div>
-            <div class="greeting-date" id="liveDate"></div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-      <div>
-        <h2 class="h4 mb-1 font-weight-bold text-dark d-flex align-items-center">
-          <i class="fas fa-user-check text-primary mr-2 page-title-icon"></i><?= $dashboardTitle ?>
-        </h2>
-        <p class="text-muted small mb-0"><?= $dashboardSubtitle ?></p>
-      </div>
 
-      <div class="d-flex align-items-center flex-wrap gap-2 mt-3 mt-sm-0 ml-auto">
-        <a href="<?= base_url('admin/RequestedResources') ?>" class="btn btn-primary action-pill-btn shadow-sm mr-2">
-          <i class="fas fa-plus-circle"></i> Request Resource
-        </a>
-        <?php if (!$isHiringManager): ?>
-        <div class="btn-group btn-group-toggle shadow-sm ml-2" id="dashboardToggle" role="group" aria-label="Dashboard toggle">
-          <button type="button" class="btn btn-toggle-job active" data-toggle-target="job">
-            <i class="fas fa-briefcase mr-1"></i> Jobs
-          </button>
-          <button type="button" class="btn btn-toggle-candidate" data-toggle-target="candidate">
-            <i class="fas fa-users mr-1"></i> Candidates
-          </button>
-        </div>
-        <?php endif; ?>
+<style>
+.dash-switch-container {
+    background: #e9ecef;
+    border-radius: 30px;
+    padding: 4px;
+    display: inline-flex;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+}
+.dash-switch-btn {
+    border: none;
+    background: transparent;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 22px;
+    border-radius: 25px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    outline: none !important;
+}
+.dash-switch-btn.active[data-toggle-target="job"] {
+    background: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(79, 70, 229, 0.35);
+}
+.dash-switch-btn.active[data-toggle-target="candidate"] {
+    background: #0d9488;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(13, 148, 136, 0.35);
+}
+.dash-switch-btn:hover:not(.active) {
+    color: #1e293b;
+}
+</style>
+
+    <div class="d-flex justify-content-end align-items-center flex-wrap mb-4">
+      <?php if (!$isHiringManager): ?>
+      <div class="dash-switch-container shadow-sm ml-auto" id="dashboardToggle">
+        <button type="button" class="dash-switch-btn btn-toggle-job active" data-toggle-target="job">
+          <i class="fas fa-briefcase mr-1"></i> Jobs
+        </button>
+        <button type="button" class="dash-switch-btn btn-toggle-candidate" data-toggle-target="candidate">
+          <i class="fas fa-users mr-1"></i> Candidates
+        </button>
       </div>
+      <?php endif; ?>
     </div>
 
 
@@ -85,7 +89,7 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
                   <i class="fas fa-bell text-warning mr-2 animate-pulse"></i> Vacancy Hold Expiry Notification
                 </h6>
                 <p class="mb-0 text-dark small">
-                  The vacancy <strong><?= htmlspecialchars($rem['JobTitle']) ?></strong> (<code><?= htmlspecialchars($rem['JobCode']) ?></code>) hold period ended on <strong><?= date('d M Y', strtotime($rem['HoldUntilDate'])) ?></strong>. Please review and resume recruitment.
+                  The vacancy <strong><?= htmlspecialchars($rem['JobTitle']) ?></strong> (<code><?= htmlspecialchars($rem['JobCode']) ?></code>) hold period ended on <strong><?= date('d-m-Y', strtotime($rem['HoldUntilDate'])) ?></strong>. Please review and resume recruitment.
                 </p>
               </div>
               <div class="mt-2 mt-sm-0">
@@ -102,8 +106,16 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
       </div>
     <?php endif; ?>
 
+<style>
+.kpi-bg-approved {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+</style>
+
     <div class="row mb-4">
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
+      <!-- Card 1: Total Jobs -->
+      <div class="col-xl col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
           <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-total">
             <span class="kpi-icon-box text-white mr-2">
@@ -111,13 +123,14 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
             </span>
             <div class="info-box-content">
               <h3 class="mb-0 kpi-value" id="kpi-total">0</h3>
-              <p class="mb-0 kpi-label" id="label-total">Total</p>
+              <p class="mb-0 kpi-label" id="label-total">Total Jobs</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
+      <!-- Card 2: Open Jobs -->
+      <div class="col-xl col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
           <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-open">
             <span class="kpi-icon-box text-white mr-2">
@@ -125,27 +138,14 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
             </span>
             <div class="info-box-content">
               <h3 class="mb-0 kpi-value" id="kpi-open">0</h3>
-              <p class="mb-0 kpi-label" id="label-open">Open</p>
+              <p class="mb-0 kpi-label" id="label-open">Open Jobs</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
-        <div class="card kpi-card shadow-sm h-100 border-0">
-          <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-pending">
-            <span class="kpi-icon-box text-white mr-2">
-              <i class="fas fa-file-invoice"></i>
-            </span>
-            <div class="info-box-content">
-              <h3 class="mb-0 kpi-value" id="kpi-pending"><?= (int)($pending_resource_requests ?? 0); ?></h3>
-              <p class="mb-0 kpi-label" id="label-pending">Pending Requests</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
+      <!-- Card 3: Hold Jobs -->
+      <div class="col-xl col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
           <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-hold">
             <span class="kpi-icon-box text-white mr-2">
@@ -153,35 +153,37 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
             </span>
             <div class="info-box-content">
               <h3 class="mb-0 kpi-value" id="kpi-hold">0</h3>
-              <p class="mb-0 kpi-label" id="label-hold">Hold</p>
+              <p class="mb-0 kpi-label" id="label-hold">Hold Jobs</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
+      <!-- Card 4: Dropped -->
+      <div class="col-xl col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
           <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-rejected">
             <span class="kpi-icon-box text-white mr-2">
               <i class="fas fa-times-circle"></i>
             </span>
             <div class="info-box-content">
-              <h3 class="mb-0 kpi-value" id="kpi-rejected">0</h3>
-              <p class="mb-0 kpi-label" id="label-rejected">Cancelled</p>
+              <h3 class="mb-0 kpi-value" id="kpi-dropped">0</h3>
+              <p class="mb-0 kpi-label" id="label-dropped">Dropped</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 mb-3">
+      <!-- Card 5: Closed -->
+      <div class="col-xl col-lg-4 col-md-4 col-sm-6 mb-3">
         <div class="card kpi-card shadow-sm h-100 border-0">
           <div class="card-body d-flex align-items-center kpi-card-body kpi-bg-closed">
             <span class="kpi-icon-box text-white mr-2">
-              <i class="fas fa-check-circle"></i>
+              <i class="fas fa-archive"></i>
             </span>
             <div class="info-box-content">
               <h3 class="mb-0 kpi-value" id="kpi-closed">0</h3>
-              <p class="mb-0 kpi-label" id="label-closed">Hired</p>
+              <p class="mb-0 kpi-label" id="label-closed">Closed</p>
             </div>
           </div>
         </div>
@@ -271,15 +273,7 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
           </div>
         </div>
 
-        <div class="card shadow-sm hr-tip-card border-0">
-          <div class="card-body p-3">
-            <div class="d-flex align-items-center mb-2">
-              <span class="hr-tip-icon">&#128161;</span>
-              <span class="hr-tip-title">HR Tip of the Day</span>
-            </div>
-            <p class="mb-0 hr-tip-text" id="hrTipText">Loading tip...</p>
-          </div>
-        </div>
+
       </div>
     </div>
 
@@ -290,71 +284,7 @@ $emp_name = isset($employee_det['EmpName']) ? $employee_det['EmpName'] : 'HR Man
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  const hiringQuotes = [
-    { text: "Hiring is not just about filling roles \u2014 it\u2019s about shaping the future of your organization.", author: "\u2014 HR Excellence" },
-    { text: "Great vision without great people is irrelevant. The right hire changes everything.", author: "\u2014 Jim Collins" },
-    { text: "Every great business is built by exceptional people. Hire character, train skill.", author: "\u2014 Peter Schutz" },
-    { text: "Culture eats strategy for breakfast. Hire for culture fit, and your team will thrive.", author: "\u2014 Peter Drucker" },
-    { text: "The secret of my success is that we have gone to exceptional lengths to hire the best people in the world.", author: "\u2014 Steve Jobs" },
-    { text: "You need to have a collaborative hiring process. Hire thoughtfully, not urgently.", author: "\u2014 Laszlo Bock, Google" },
-    { text: "Your employees are your company\u2019s real competitive advantage. Hire wisely.", author: "\u2014 Anne Mulcahy" },
-    { text: "Talent wins games, but teamwork and intelligence win championships. Hire both.", author: "\u2014 Michael Jordan" },
-    { text: "A company\u2019s most valuable asset is not its people \u2014 it\u2019s the hiring process that attracts them.", author: "\u2014 Talent Insight" }
-  ];
-  const hrTips = [
-    "Always send a personalised rejection email \u2014 candidates remember how you made them feel.",
-    "Structured interviews reduce bias by 40%. Use the same questions for every candidate.",
-    "Follow up within 48 hours of an interview. Speed signals respect and company culture.",
-    "Job descriptions with inclusive language attract 42% more diverse applicants.",
-    "Employee referrals produce the highest quality hires. Invest in your referral programme.",
-    "Video interviews save 60% of scheduling time. Embrace async screening for early stages.",
-    "Use ATS data to identify your best-performing sourcing channels every quarter.",
-    "Set clear hiring SLAs: target 30 days from JD approval to offer letter.",
-    "Onboarding doesn\u2019t end on day one. A 90-day plan dramatically improves retention."
-  ];
 
-  const tipEl = document.getElementById('hrTipText');
-  if (tipEl) tipEl.textContent = hrTips[Math.floor(Math.random() * hrTips.length)];
-
-  let currentQuote = 0;
-  const quoteTextEl = document.getElementById('quoteText');
-  const quoteAuthEl = document.getElementById('quoteAuthor');
-  const quoteDotsEl = document.getElementById('quoteDots');
-
-  function buildDots() {
-    if (!quoteDotsEl) return;
-    quoteDotsEl.innerHTML = '';
-    hiringQuotes.forEach((_, i) => {
-      const dot = document.createElement('span');
-      dot.className = 'quote-dot' + (i === 0 ? ' active' : '');
-      dot.onclick = () => showQuote(i);
-      quoteDotsEl.appendChild(dot);
-    });
-  }
-  function showQuote(idx) {
-    currentQuote = idx;
-    if (quoteTextEl) {
-      quoteTextEl.textContent = hiringQuotes[idx].text;
-    }
-    if (quoteAuthEl) quoteAuthEl.textContent = hiringQuotes[idx].author;
-    document.querySelectorAll('.quote-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-  }
-  buildDots();
-  showQuote(0);
-  setInterval(() => showQuote((currentQuote + 1) % hiringQuotes.length), 6000);
-
-  function updateClock() {
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    const clockEl = document.getElementById('liveClock');
-    if (clockEl) clockEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateEl = document.getElementById('liveDate');
-    if (dateEl) dateEl.textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 
   const isHiringManager = <?= $isHiringManager ? 'true' : 'false' ?>;
   let activeToggle = isHiringManager ? 'candidate' : 'job';
@@ -432,28 +362,28 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalCount = filteredData.length;
     let openCount = 0;
     let holdCount = 0;
-    let rejectedCount = 0;
+    let droppedCount = 0;
     let closedCount = 0;
 
     if (activeToggle === 'job') {
       summaryTitle.innerHTML = '<i class="fas fa-briefcase text-primary mr-2"></i>Jobs Summary';
-      chartTitle.innerHTML = '<i class="fas fa-chart-pie text-primary mr-2"></i>Job Status Distribution';
+      chartTitle.innerHTML = '<i class="fas fa-chart-pie text-primary mr-2"></i>Job Status';
 
       document.getElementById('label-total').innerText = 'Total Jobs';
-      document.getElementById('label-open').innerText = 'Open Jobs';
-      document.getElementById('label-hold').innerText = 'Hold Jobs';
-      document.getElementById('label-rejected').innerText = 'Cancelled';
+      document.getElementById('label-open').innerText = 'Open';
+      document.getElementById('label-hold').innerText = 'Hold';
+      document.getElementById('label-dropped').innerText = 'Dropped';
       document.getElementById('label-closed').innerText = 'Closed';
 
       filteredData.forEach(job => {
         const status = (job.JobStatus || '').toLowerCase();
-        if (status === 'open' || status === 're-open') {
+        if (status === 'open' || status === 're-open' || status === 'active') {
           openCount++;
-        } else if (status === 'on-hold') {
+        } else if (status === 'on-hold' || status === 'hold') {
           holdCount++;
-        } else if (status === 'not required') {
-          rejectedCount++;
-        } else if (status === 'closed' || status === 'dropped') {
+        } else if (status === 'not required' || status === 'dropped' || status === 'cancelled') {
+          droppedCount++;
+        } else if (status === 'closed') {
           closedCount++;
         } else {
           openCount++;
@@ -466,14 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('label-total').innerText = 'Total Applicants';
       document.getElementById('label-open').innerText = 'Active Applicants';
       document.getElementById('label-hold').innerText = 'On Hold';
-      document.getElementById('label-rejected').innerText = 'Rejected';
+      document.getElementById('label-dropped').innerText = 'Rejected';
       document.getElementById('label-closed').innerText = 'Hired';
 
       filteredData.forEach(cand => {
         const status = (cand.CurrentStatus || '').toLowerCase();
-        if (status.includes('rejected')) {
-          rejectedCount++;
-        } else if (status.includes('accepted') || status.includes('boarding') || status.includes('hired')) {
+        if (status.includes('rejected') || status.includes('drop')) {
+          droppedCount++;
+        } else if (status.includes('hired') || status.includes('closed') || status.includes('select')) {
           closedCount++;
         } else if (status.includes('hold') || status.includes('pending')) {
           holdCount++;
@@ -486,11 +416,11 @@ document.addEventListener("DOMContentLoaded", function () {
     animateCounter('kpi-total', totalCount);
     animateCounter('kpi-open', openCount);
     animateCounter('kpi-hold', holdCount);
-    animateCounter('kpi-rejected', rejectedCount);
+    animateCounter('kpi-dropped', droppedCount);
     animateCounter('kpi-closed', closedCount);
 
     renderTable(filteredData);
-    renderChart(openCount, holdCount, rejectedCount, closedCount);
+    renderChart(openCount, holdCount, droppedCount, closedCount);
     refreshToggleButtons();
   }
 
@@ -538,7 +468,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let lower = s.toLowerCase();
     let displayText = s;
 
-    if (lower === 'open' || lower === 're-open' || lower === 'active') {
+    if (lower === 'hr') {
+      displayText = 'Level 1';
+    } else if (lower === 'open' || lower === 're-open' || lower === 'active') {
       displayText = 'Active';
     } else {
       displayText = s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
@@ -562,6 +494,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return `<span class="badge status-badge-custom" style="background-color: ${bgColor}; color: ${textColor};">${displayText}</span>`;
+  }
+
+  function formatProjectDate(dInput) {
+    if (!dInput || dInput === '0000-00-00' || dInput === '0000-00-00 00:00:00') return 'N/A';
+    let d = new Date(dInput);
+    if (isNaN(d.getTime())) return dInput;
+    let day = String(d.getDate()).padStart(2, '0');
+    let month = String(d.getMonth() + 1).padStart(2, '0');
+    let year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 
   function renderTable(data) {
@@ -594,7 +536,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <th>S. No</th>
         <th>Job Title</th>
         <th>Department</th>
-        <th>Openings</th>
+        <th>Position</th>
         <th>Posted Date</th>
         <th>Status</th>
       `;
@@ -605,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       data.forEach((job, index) => {
-        const dateStr = job.PostedOn ? new Date(job.PostedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+        const dateStr = job.PostedOn ? formatProjectDate(job.PostedOn) : 'N/A';
         let badge = getStatusBadge(job.JobStatus || 'Draft');
 
         body.innerHTML += `
@@ -613,7 +555,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td><strong>${index + 1}</strong></td>
             <td><strong class="text-dark">${job.JobTitle || 'N/A'}</strong></td>
             <td><span class="badge badge-light border">${job.Departmentname || '-'}</span></td>
-            <td><span class="badge badge-info px-2 py-1">${job.NoofOpenings || 1}</span></td>
+            <td>${job.NoofOpenings || 1}</td>
             <td class="small text-muted">${dateStr}</td>
             <td>${badge}</td>
           </tr>
@@ -638,7 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       data.forEach((cand, index) => {
-        const dateStr = cand.AppliedOn ? new Date(cand.AppliedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+        const dateStr = cand.AppliedOn ? formatProjectDate(cand.AppliedOn) : 'N/A';
         let badge = getStatusBadge(cand.CurrentStatus || 'Pending');
         let jid = cand.Jid || '';
         let candLink = jid ? `<?= base_url('admin/Candidatelist/') ?>${jid}` : '#';
@@ -647,7 +589,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let intBadge = '';
         if (hasInterviewRecord) {
           let interviewerName = cand.InterviewerName ? cand.InterviewerName : 'Interviewer';
-          let schedStr = cand.ScheduledAt ? new Date(cand.ScheduledAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+          let schedStr = cand.ScheduledAt ? formatProjectDate(cand.ScheduledAt) : '';
           let schedText = schedStr ? ` (${schedStr})` : '';
           intBadge = `<span class="badge badge-success px-2 py-1"><i class="fas fa-calendar-check mr-1"></i>Assigned (${interviewerName}${schedText})</span>`;
         } else {
@@ -677,16 +619,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (window.jQuery && $.fn.DataTable) {
       $('#summaryTable').DataTable({
-        "responsive": true,
+        "responsive": false,
         "lengthChange": false,
         "autoWidth": false,
         "pageLength": 10,
-        "buttons": ["csv", "excel", "pdf", "print"]
+        "buttons": ["copy", "csv", "excel"]
       }).buttons().container().appendTo('#summaryTable_wrapper .col-md-6:eq(0)');
     }
   }
 
-  function renderChart(open, hold, rejected, closed) {
+  function renderChart(open, hold, dropped, closed) {
     const canvas = document.getElementById('dynamicDistributionChart');
     const pipelineEl = document.getElementById('candidatePipeline');
     const detailsContainer = document.getElementById('chartDetails');
@@ -696,21 +638,16 @@ document.addEventListener("DOMContentLoaded", function () {
       myChartInstance.destroy();
     }
 
-    const total = open + hold + rejected + closed;
+    const total = open + hold + dropped + closed;
     detailsContainer.innerHTML = '';
 
     if (activeToggle === 'job') {
       canvas.style.display = 'block';
       pipelineEl.style.display = 'none';
 
-      const labels = ['Open Jobs', 'On Hold', 'Cancelled', 'Closed'];
-      const dataValues = [open, hold, rejected, closed];
-      const bgColors = ['#10b981', '#f59e0b', '#ef4444', '#64748b'];
-
-      if (total === 0) {
-        detailsContainer.innerHTML = '<div class="text-center text-muted py-3">No distribution data available.</div>';
-        return;
-      }
+      const labels     = ['Open', 'Hold', 'Dropped', 'Closed'];
+      const dataValues = [open, hold, dropped, closed];
+      const bgColors   = ['#3b82f6', '#f59e0b', '#ef4444', '#06b6d4'];
 
       labels.forEach((label, idx) => {
         const val = dataValues[idx];
@@ -723,7 +660,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <span><i class="fas fa-circle mr-2" style="color: ${color}; font-size:10px;"></i>${label}</span>
               <span>${val} <small class="text-muted font-weight-normal">(${percentage}%)</small></span>
             </div>
-            <div class="progress dist-progress">
+            <div class="progress dist-progress" style="height:6px;">
               <div class="progress-bar dist-progress-bar" style="width: ${percentage}%; background-color: ${color};"></div>
             </div>
           </div>
@@ -731,13 +668,16 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       if (window.Chart) {
+        const chartData   = (total === 0) ? [1] : dataValues;
+        const chartColors = (total === 0) ? ['#e2e8f0'] : bgColors;
+
         myChartInstance = new Chart(canvas.getContext('2d'), {
           type: 'doughnut',
           data: {
-            labels: labels,
+            labels: (total === 0) ? ['No Data'] : labels,
             datasets: [{
-              data: dataValues,
-              backgroundColor: bgColors,
+              data: chartData,
+              backgroundColor: chartColors,
               borderWidth: 0
             }]
           },
@@ -755,16 +695,17 @@ document.addEventListener("DOMContentLoaded", function () {
       canvas.style.display = 'none';
       pipelineEl.style.display = 'block';
 
-      const activePercent = total > 0 ? ((open / total) * 100).toFixed(0) : 0;
-      const holdPercent = total > 0 ? ((hold / total) * 100).toFixed(0) : 0;
-      const hiredPercent = total > 0 ? ((closed / total) * 100).toFixed(0) : 0;
+      const totalCand = open + hold + dropped + closed;
+      const activePercent = totalCand > 0 ? ((open / totalCand) * 100).toFixed(0) : 0;
+      const holdPercent = totalCand > 0 ? ((hold / totalCand) * 100).toFixed(0) : 0;
+      const hiredPercent = totalCand > 0 ? ((closed / totalCand) * 100).toFixed(0) : 0;
 
       pipelineEl.innerHTML = `
         <div class="pipeline-funnel p-2">
           <div class="pipeline-step mb-3">
             <div class="d-flex justify-content-between font-weight-bold mb-1 small">
               <span><i class="fas fa-inbox text-teal mr-2"></i>1. Total Applications</span>
-              <span class="badge badge-secondary px-2">${total}</span>
+              <span class="badge badge-secondary px-2">${totalCand}</span>
             </div>
             <div class="progress dist-progress"><div class="progress-bar" style="width: 100%; background-color: #0d9488;"></div></div>
           </div>
@@ -796,7 +737,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="alert alert-light border-0 mb-0" style="background-color: rgba(13, 148, 136, 0.05); border-radius:12px;">
           <h6 class="font-weight-bold text-teal mb-1 small"><i class="fas fa-bullseye mr-1"></i>Hiring Conversion</h6>
           <p class="mb-0 text-muted small">
-            Out of <strong>${total}</strong> applicants, <strong>${closed}</strong> candidates have been hired (Conversion: <strong>${total > 0 ? ((closed/total)*100).toFixed(1) : 0}%</strong>).
+            Out of <strong>${totalCand}</strong> applicants, <strong>${closed}</strong> candidates have been hired (Conversion: <strong>${totalCand > 0 ? ((closed/totalCand)*100).toFixed(1) : 0}%</strong>).
           </p>
         </div>
       `;

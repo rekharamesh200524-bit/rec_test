@@ -22030,3 +22030,531 @@ Wrong domain: The candidate's resume indicates a Finance & Accounting background
 2026-08-19 15:59:45 - UPDATE_RES_REQ: {"post":{"RequestId":"30","RequestCode":"RR-2026-0005","Status":"ACCEPTED","ApprovalComment":"Sir Approved "},"_POST":{"RequestId":"30","RequestCode":"RR-2026-0005","Status":"ACCEPTED","ApprovalComment":"Sir Approved "},"rawReqId":"30","requestId":30,"status":"ACCEPTED","comment":"Sir Approved","session":{"IUid":"17","EmpCode":"EMP-RM01","EmpName":"Shiji","EmpEmail":"reka@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"10","DepDid":"1","UStatus":"1"}}
 2026-08-19 16:45:08 - ENTRY_updateResourceRequestStatus
 2026-08-19 16:45:08 - UPDATE_RES_REQ: {"post":{"RequestId":"32","RequestCode":"RR-2026-0001","Status":"ACCEPTED","ApprovalComment":"dddd"},"_POST":{"RequestId":"32","RequestCode":"RR-2026-0001","Status":"ACCEPTED","ApprovalComment":"dddd"},"rawReqId":"32","requestId":32,"status":"ACCEPTED","comment":"dddd","session":{"IUid":"16","EmpCode":"EMP-HM01","EmpName":"Prasannakumari","EmpEmail":"prasannakumari@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"9","DepDid":"1","UStatus":"1"}}
+2026-08-19 17:15:01 - ENTRY_updateResourceRequestStatus
+2026-08-19 17:15:02 - UPDATE_RES_REQ: {"post":{"RequestId":"33","RequestCode":"RR-2026-0002","Status":"ACCEPTED","ApprovalComment":"ok"},"_POST":{"RequestId":"33","RequestCode":"RR-2026-0002","Status":"ACCEPTED","ApprovalComment":"ok"},"rawReqId":"33","requestId":33,"status":"ACCEPTED","comment":"ok","session":{"IUid":"16","EmpCode":"EMP-HM01","EmpName":"Prasannakumari","EmpEmail":"prasannakumari@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"9","DepDid":"1","UStatus":"1"}}
+
+==============================
+2026-08-19 18:03:30 | START
+Array
+(
+    [resumePath] => D:\xampp\htdocs\REC\atscheck/modal/CAND36_20260819180330514.pdf
+    [vacancyId] => 36
+    [jobTitle] => UI/UX Developer
+)
+
+==============================
+2026-08-19 18:03:31 | PDF_EXTRACT_SUCCESS
++	
+ 	
+Keerthana	 Anburaj	 	
+Salesforce	 Administrator	 / Developer	 – 3+ Years	 of Experience	 	
+ 
+2/452	-1, Sivan	 kovil	 street,	 Maruthampatinam,	 Thiruvarur,	 Tamilnadu	 – 610001 	
+Email: 	keerthanaanburaj4@gmail.com	 	
+Mobile	 No:	 9360018354	 	
+ 
+EDUCATION:	 	
+ 
+Bachelor	 of Computer	 Application	 from	 E.G.S.	 Pillay	 Arts	 and	 Science	 College,	 Nagapattinam. 	
+Percentage: 85%	 	
+ 
+ 
+ 
+SUMMARY	 	
+ 
+Salesforce	 Administrator	 / Developer with	 over 3	+ years	 of experience	 in customizing, and	 deploying	 	
+Salesforce	 solutions	 across	 Sales	 Cloud,	 Service	 Cloud,	 and	 Experience	 Cloud	 environments.	 Skilled 	
+in Apex, Basic Lightning Web Components (LWC), and Flow to create efficient, user	-friendly 	
+applications.	 	
+Experienced in data management, and building 	reports and dashboards. Known for a proactive 	
+approach to problem	-solving and a commitment to continuous learning, with a track record of 	
+successfully	 collaborating	 with	 cross	-functional	 teams	 to
+==============================
+2026-08-19 18:03:31 | RAW_RESUME_TEXT
++	
+ 	
+keerthana	 anburaj	 	
+salesforce	 administrator	 / developer	 – 3+ years	 of experience	 	
+ 
+2/452	-1, sivan	 kovil	 street,	 maruthampatinam,	 thiruvarur,	 tamilnadu	 – 610001 	
+email: 	keerthanaanburaj4@gmail.com	 	
+mobile	 no:	 9360018354	 	
+ 
+education:	 	
+ 
+bachelor	 of computer	 application	 from	 e.g.s.	 pillay	 arts	 and	 science	 college,	 nagapattinam. 	
+percentage: 85%	 	
+ 
+ 
+ 
+summary	 	
+ 
+salesforce	 administrator	 / developer with	 over 3	+ years	 of experience	 in customizing, and	 deploying	 	
+salesforce	 solutions	 across	 sales	 cloud,	 service	 cloud,	 and	 experience	 cloud	 environments.	 skilled 	
+in apex, basic lightning web components (lwc), and flow to create efficient, user	-friendly 	
+applications.	 	
+experienced in data management, and building 	reports and dashboards. known for a proactive 	
+approach to problem	-solving and a commitment to continuous learning, with a track record of 	
+successfully	 collaborating	 with	 cross	-functional	 teams	 to meet	 business	 goals	 and	 optimize	 salesforce 	
+functionality.	 	
+ 
+highlights	 	
+ 	
+● 	over	 3 years	 of experience	 in salesforce	 development,	 specializing	 in sales	 cloud,	 service 	
+cloud, and experience cloud.	 	
+● 	experienced	 in workflows, process builder, approval	 process, flows, triggers, apex classes, 	
+and basic lightning web 	components.	 	
+● 	skilled	 in working	 under	 pressure	 and	 adapting	 to new	 situations	 and	 challenges	 to best 	
+enhance the organizational brand.	 	
+● 	complex problem	-solver with analytical and driven mindset. dedicated to achieving 	
+demanding	 development	 objectives	 accordi	ng	 to tight	 schedules	 while	 producing	 impeccable 	
+code.	 	
+● 	technical	 expertise	 in software	 development	 lifecycle	 stages	 like	 requirements	 gathering, 	
+analysis, design, development, deployment and documentation.	 	
+● 	good	 knowledge	 of soql	 and	 sosl	 query	 languages.	 good	 knowledge	 of email	 services. 	
+experienced in using g
+==============================
+2026-08-19 18:03:31 | EXPERIENCE_DETAILS
+Array
+(
+    [jobs] => Array
+        (
+            [0] => Array
+                (
+                    [from] => april	 2022
+                    [to] => present
+                    [years] => 4
+                    [months] => 5
+                    [role] => Salesforce Developer / Associate Software Analyst
+                    [company] => Vcollab	 Etiquette
+                )
+
+        )
+
+    [total] => 4 Years 5 Months
+)
+
+==============================
+2026-08-19 18:03:31 | Email
+keerthanaanburaj4@gmail.com
+==============================
+2026-08-19 18:03:31 | Name
+Keerthana Anburaj
+==============================
+2026-08-19 18:03:31 | Mobile
+9360018354
+==============================
+2026-08-19 18:03:31 | ExperienceYears
+3
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_ANALYSIS
+Array
+(
+    [matchedSkillsCount] => 1
+    [requiredSkillsCount] => 5
+    [candidateExp] => 3
+    [minExpRequired] => 1
+    [eduMatch] => 1
+    [domainStatus] => MATCHED
+    [candidateDomain] => Software & IT
+    [jobDomain] => Software & IT
+)
+
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION
+Potential Match
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_REASON
+The candidate has a relevant background for UI/UX Developer, but specific requirements need verification during screening. Skill(s) like Html, Css, Figma were not clearly identified in the resume text. Recruiter review and phone screening are recommended.
+==============================
+2026-08-19 18:03:31 | START
+Array
+(
+    [resumePath] => D:\xampp\htdocs\REC\atscheck/modal/CAND36_20260819180331838.docx
+    [vacancyId] => 36
+    [jobTitle] => UI/UX Developer
+)
+
+==============================
+2026-08-19 18:03:31 | RAW_RESUME_TEXT
+﻿vijay k
+it &amp; network support engineer (l1)
+phone: 7867070840 | email: vijaykumaresan92@gmail.com
+952500141605
+professional summary
+dedicated it support &amp; l1 network engineer with hands-on experience in desktop support, hardware troubleshooting, network basics, o365, vpn support, and it asset management. strong ability to resolve user issues efficiently and ensure smooth it operations.
+952500258445
+key skills
+technical skills
+networking fundamentals
+ccna course completed  
+
+tcp/ip, osi model, ip addressing &amp; subnetting, vlan config, routing protocol, nat, dhcp, dns, stp and wan connectivity.
+
+network devices &amp; installation
+
+switch &amp; router installation and mounting, patch panel &amp; rack management, structured cabling, access point mounting &amp; configuration, network hardware troubleshooting.
+
+configuration &amp; management
+
+cisco routers &amp; switches, vlan configuration, inter vlan routing, wireless access point setup and vpn configuration.
+
+network switch acl
+
+access control lists (acls), vpn setup, basic intrusion prevention techniques.
+
+monitoring &amp; troubleshooting
+
+it support
+
+switch movement, it asset maintenance and tracking, o365, laptop &amp; desktop configuration &amp; troubleshooting, printer setup (hp&amp; zebra barcode printer), &amp; application installation.
+
+soft skills
+
+strong problem-solving and analytical abilities.
+
+hands-on experience in device installation &amp; network cabling.
+
+ability to learn quickly and adapt to new technologies, team collaboration and support coordination.
+professional experience it support
+engineer(l1)
+
+sentinel technology pvt ltd(client: tata electronics products &amp; solutions), hosur dec 2024 – present
+cctv hardware engineer 
+
+networking
+
+952500186690
+
+ipqc – in process quality control
+bangalore datacom pvt ltd(client: tata electronics pvt. ltd.), hosur jul 2023 – nov 2024
+id card printing 
+
+data maintained 
+
+access control help desk
+952500182880
+
+education
+ b.a economics
+sacred h
+==============================
+2026-08-19 18:03:31 | EXPERIENCE_DETAILS
+Array
+(
+    [jobs] => Array
+        (
+            [0] => Array
+                (
+                    [from] => dec 2024
+                    [to] => present
+                    [years] => 1
+                    [months] => 8
+                    [role] => Engineer(l1)
+                    [company] => Sentinel Technology Pvt Ltd(client: Tata Electroni
+                )
+
+            [1] => Array
+                (
+                    [from] => jul 2023
+                    [to] => nov 2024
+                    [years] => 1
+                    [months] => 4
+                    [role] => Ipqc - In Process Quality Control
+                    [company] => Bangalore Datacom Pvt Ltd(client: Tata Electronics
+                )
+
+        )
+
+    [total] => 3 Years 0 Months
+)
+
+==============================
+2026-08-19 18:03:31 | Email
+vijaykumaresan92@gmail.com
+==============================
+2026-08-19 18:03:31 | Name
+Vijay K
+==============================
+2026-08-19 18:03:31 | Mobile
+7867070840
+==============================
+2026-08-19 18:03:31 | ExperienceYears
+3
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_ANALYSIS
+Array
+(
+    [matchedSkillsCount] => 0
+    [requiredSkillsCount] => 5
+    [candidateExp] => 3
+    [minExpRequired] => 1
+    [eduMatch] => 1
+    [domainStatus] => UNCLEAR
+    [candidateDomain] => Education
+    [jobDomain] => Software & IT
+)
+
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION
+Potential Match
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_REASON
+The candidate has a relevant background for UI/UX Developer, but specific requirements need verification during screening. Skill(s) like Html, Css, Ui Development were not clearly identified in the resume text. Recruiter review and phone screening are recommended.
+==============================
+2026-08-19 18:03:31 | START
+Array
+(
+    [resumePath] => D:\xampp\htdocs\REC\atscheck/modal/CAND36_20260819180331274.pdf
+    [vacancyId] => 36
+    [jobTitle] => UI/UX Developer
+)
+
+==============================
+2026-08-19 18:03:31 | PDF_EXTRACT_SUCCESS
+AGILAN	 B                                                                     	  	
+Chennai, India | +91 	915	066	8484	 | agilanagi071@gmail.com	 | @linkedin: 	https://www.linkedin.com/in/agilan	-b 	
+ 
+PROFESSIONAL SUMMARY	 	 	
+Highly motivated and detail	-oriented Accounts Payable Analyst with 	2 years of proven experience in managing 	
+AP  operations  within  deadline	-driven  environments.  Demonstrated  expertise  in  invoice  processing,  vendor 	
+reconciliation, and resolving discrepancies in compliance with internal controls and financial policies. Skilled	 in 	
+leveraging ERP systems 	Streamline workflows, ensure data accuracy, and support month	-end closing activities. 	
+Adept at collaborating with cross	-functional teams to enhance process effic	iency and maintain strong vendor 	
+relationships.  Committed  to  continuous  improvement,  accuracy,  and  delivering  high	-quality  financial  support 	
+aligned with organizational goals.	 	
+ 
+CORE SKILLS	 	 	
+Accounting & Finance:	
+==============================
+2026-08-19 18:03:31 | RAW_RESUME_TEXT
+agilan	 b                                                                     	  	
+chennai, india | +91 	915	066	8484	 | agilanagi071@gmail.com	 | @linkedin: 	https://www.linkedin.com/in/agilan	-b 	
+ 
+professional summary	 	 	
+highly motivated and detail	-oriented accounts payable analyst with 	2 years of proven experience in managing 	
+ap  operations  within  deadline	-driven  environments.  demonstrated  expertise  in  invoice  processing,  vendor 	
+reconciliation, and resolving discrepancies in compliance with internal controls and financial policies. skilled	 in 	
+leveraging erp systems 	streamline workflows, ensure data accuracy, and support month	-end closing activities. 	
+adept at collaborating with cross	-functional teams to enhance process effic	iency and maintain strong vendor 	
+relationships.  committed  to  continuous  improvement,  accuracy,  and  delivering  high	-quality  financial  support 	
+aligned with organizational goals.	 	
+ 
+core skills	 	 	
+accounting & finance:	 accounts payable, procure	-to	-pay (p2p), vendor reconciliation, invoice processing, 	
+month	-end closing, audit & compliance	 	
+erp & tools: 	as400 	& 	oracle	  	
+productivity tools: 	microsoft office suite (word, powerpoint, outlook, visio, onenote)	 	
+ 
+professional experience	 	 	
+projects & developments	 	
+process executive 	– cognizant technology solutions                                                                                   	april 2024 	– present	   	
+          	 	
+– reviewed and processed vendor invoices, ensuring compliance with policies and accuracy of details.	 	
+– resolved vendor queries and requests via email/tickets within the agreed sla.	 	
+– performed 3	-way matching (invoice, purchase order, and goods receipt) in basware,	 	
+– maintained and managed over 1,000 utility accounts, including gas, electricity, and water services	 	
+– we will make utility payments on a daily basis, ensuring they are settled within the due dates 
+specified on the in
+==============================
+2026-08-19 18:03:31 | EXPERIENCE_DETAILS
+Array
+(
+    [jobs] => Array
+        (
+            [0] => Array
+                (
+                    [from] => april 2024
+                    [to] => present
+                    [years] => 2
+                    [months] => 5
+                    [role] => Process Executive
+                    [company] => Cognizant Technology Solutions
+                )
+
+        )
+
+    [total] => 2 Years 5 Months
+)
+
+==============================
+2026-08-19 18:03:31 | Email
+agilanagi071@gmail.com
+==============================
+2026-08-19 18:03:31 | Name
+Agilan B
+==============================
+2026-08-19 18:03:31 | Mobile
+9150668484
+==============================
+2026-08-19 18:03:31 | ExperienceYears
+2.4
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_ANALYSIS
+Array
+(
+    [matchedSkillsCount] => 1
+    [requiredSkillsCount] => 5
+    [candidateExp] => 2.4
+    [minExpRequired] => 1
+    [eduMatch] => 
+    [domainStatus] => WRONG_DOMAIN
+    [candidateDomain] => Finance & Accounting
+    [jobDomain] => Software & IT
+)
+
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION
+Not Suitable
+==============================
+2026-08-19 18:03:31 | RECOMMENDATION_REASON
+Wrong domain: The candidate's resume indicates a Finance & Accounting background, while this vacancy belongs to Software & IT. The candidate's professional domain does not align with the requirements of this position.2026-08-20 12:35:58 - ENTRY_updateResourceRequestStatus
+2026-08-20 12:35:58 - UPDATE_RES_REQ: {"post":{"RequestId":"34","RequestCode":"RR-2026-0003","Status":"ACCEPTED","ApprovalComment":"yes approved"},"_POST":{"RequestId":"34","RequestCode":"RR-2026-0003","Status":"ACCEPTED","ApprovalComment":"yes approved"},"rawReqId":"34","requestId":34,"status":"ACCEPTED","comment":"yes approved","session":{"IUid":"17","EmpCode":"EMP-RM01","EmpName":"Shiji","EmpEmail":"reka@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"10","DepDid":"1","UStatus":"1"}}
+2026-08-20 12:55:29 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: mohamedfazil@inetcsc.com, prasannakumari@inetcsc.com, reka@inetcsc.com
+2026-08-20 13:03:14 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: mohamedfazil@inetcsc.com, prasannakumari@inetcsc.com, reka@inetcsc.com
+2026-08-20 14:15:14 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: mohamedfazil@inetcsc.com, prasannakumari@inetcsc.com, reka@inetcsc.com
+2026-08-20 14:27:29 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: mohamedfazil@inetcsc.com, prasanna@inetcsc.com, reka@inetcsc.com
+2026-08-20 17:58:01 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: prasanna@inetcsc.com, reka@inetcsc.com, mohamedfazil@inetcsc.com
+2026-08-20 18:03:37 - ENTRY_updateResourceRequestStatus
+2026-08-20 18:03:37 - UPDATE_RES_REQ: {"post":{"RequestId":"39","RequestCode":"RR-2026-0008","Status":"REJECTED","ApprovalComment":"kk"},"_POST":{"RequestId":"39","RequestCode":"RR-2026-0008","Status":"REJECTED","ApprovalComment":"kk"},"rawReqId":"39","requestId":39,"status":"REJECTED","comment":"kk","session":{"IUid":"17","EmpCode":"EMP-RM01","EmpName":"Shiji","EmpEmail":"reka@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"10","DepDid":"1","UStatus":"1"}}
+2026-08-20 18:04:37 - ENTRY_updateResourceRequestStatus
+2026-08-20 18:04:37 - UPDATE_RES_REQ: {"post":{"RequestId":"40","RequestCode":"RR-2026-0009","Status":"ACCEPTED","ApprovalComment":"lk"},"_POST":{"RequestId":"40","RequestCode":"RR-2026-0009","Status":"ACCEPTED","ApprovalComment":"lk"},"rawReqId":"40","requestId":40,"status":"ACCEPTED","comment":"lk","session":{"IUid":"17","EmpCode":"EMP-RM01","EmpName":"Shiji","EmpEmail":"reka@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"10","DepDid":"1","UStatus":"1"}}
+2026-08-20 18:24:25 - Resource Request Email Sent: SUCCESS | To: rekharamesh200524@gmail.com | CC: prasanna@inetcsc.com, reka@inetcsc.com, mohamedfazil@inetcsc.com
+2026-08-20 18:25:04 - ENTRY_updateResourceRequestStatus
+2026-08-20 18:25:04 - UPDATE_RES_REQ: {"post":{"RequestId":"41","RequestCode":"RR-2026-0010","Status":"ACCEPTED","ApprovalComment":"ddd"},"_POST":{"RequestId":"41","RequestCode":"RR-2026-0010","Status":"ACCEPTED","ApprovalComment":"ddd"},"rawReqId":"41","requestId":41,"status":"ACCEPTED","comment":"ddd","session":{"IUid":"17","EmpCode":"EMP-RM01","EmpName":"Shiji","EmpEmail":"reka@inetcsc.com","EmpPhone":null,"EmpDOB":null,"EmpGender":null,"EmpRoleId":"10","DepDid":"1","UStatus":"1"}}
+
+==============================
+2026-08-20 18:27:14 | START
+Array
+(
+    [resumePath] => D:\xampp\htdocs\REC\atscheck/modal/CAND39_20260820182714523.docx
+    [vacancyId] => 39
+    [jobTitle] => ll
+)
+
+==============================
+2026-08-20 18:27:14 | RAW_RESUME_TEXT
+﻿vijay k
+it &amp; network support engineer (l1)
+phone: 7867070840 | email: vijaykumaresan92@gmail.com
+952500141605
+professional summary
+dedicated it support &amp; l1 network engineer with hands-on experience in desktop support, hardware troubleshooting, network basics, o365, vpn support, and it asset management. strong ability to resolve user issues efficiently and ensure smooth it operations.
+952500258445
+key skills
+technical skills
+networking fundamentals
+ccna course completed  
+
+tcp/ip, osi model, ip addressing &amp; subnetting, vlan config, routing protocol, nat, dhcp, dns, stp and wan connectivity.
+
+network devices &amp; installation
+
+switch &amp; router installation and mounting, patch panel &amp; rack management, structured cabling, access point mounting &amp; configuration, network hardware troubleshooting.
+
+configuration &amp; management
+
+cisco routers &amp; switches, vlan configuration, inter vlan routing, wireless access point setup and vpn configuration.
+
+network switch acl
+
+access control lists (acls), vpn setup, basic intrusion prevention techniques.
+
+monitoring &amp; troubleshooting
+
+it support
+
+switch movement, it asset maintenance and tracking, o365, laptop &amp; desktop configuration &amp; troubleshooting, printer setup (hp&amp; zebra barcode printer), &amp; application installation.
+
+soft skills
+
+strong problem-solving and analytical abilities.
+
+hands-on experience in device installation &amp; network cabling.
+
+ability to learn quickly and adapt to new technologies, team collaboration and support coordination.
+professional experience it support
+engineer(l1)
+
+sentinel technology pvt ltd(client: tata electronics products &amp; solutions), hosur dec 2024 – present
+cctv hardware engineer 
+
+networking
+
+952500186690
+
+ipqc – in process quality control
+bangalore datacom pvt ltd(client: tata electronics pvt. ltd.), hosur jul 2023 – nov 2024
+id card printing 
+
+data maintained 
+
+access control help desk
+952500182880
+
+education
+ b.a economics
+sacred h
+==============================
+2026-08-20 18:27:14 | EXPERIENCE_DETAILS
+Array
+(
+    [jobs] => Array
+        (
+            [0] => Array
+                (
+                    [from] => dec 2024
+                    [to] => present
+                    [years] => 1
+                    [months] => 8
+                    [role] => Engineer(l1)
+                    [company] => Sentinel Technology Pvt Ltd(client: Tata Electroni
+                )
+
+            [1] => Array
+                (
+                    [from] => jul 2023
+                    [to] => nov 2024
+                    [years] => 1
+                    [months] => 4
+                    [role] => Ipqc - In Process Quality Control
+                    [company] => Bangalore Datacom Pvt Ltd(client: Tata Electronics
+                )
+
+        )
+
+    [total] => 3 Years 0 Months
+)
+
+==============================
+2026-08-20 18:27:14 | Email
+vijaykumaresan92@gmail.com
+==============================
+2026-08-20 18:27:14 | Name
+Vijay K
+==============================
+2026-08-20 18:27:14 | Mobile
+7867070840
+==============================
+2026-08-20 18:27:14 | ExperienceYears
+3
+==============================
+2026-08-20 18:27:14 | RECOMMENDATION_ANALYSIS
+Array
+(
+    [matchedSkillsCount] => 0
+    [requiredSkillsCount] => 0
+    [candidateExp] => 3
+    [minExpRequired] => 0
+    [eduMatch] => 
+    [domainStatus] => UNCLEAR
+    [candidateDomain] => Education
+    [jobDomain] => Other / General
+)
+
+==============================
+2026-08-20 18:27:14 | RECOMMENDATION
+Potential Match
+==============================
+2026-08-20 18:27:14 | RECOMMENDATION_REASON
+The candidate has a relevant background for ll, but specific requirements need verification during screening. Recruiter review and phone screening are recommended.

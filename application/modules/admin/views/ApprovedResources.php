@@ -8,123 +8,272 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
 
 
 
+<style>
+.tab-switch-container {
+    background: #e9ecef;
+    border-radius: 30px;
+    padding: 4px;
+    display: inline-flex;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+}
+.tab-switch-btn {
+    border: none;
+    background: transparent;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 22px;
+    border-radius: 25px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    outline: none !important;
+}
+.tab-switch-btn.active {
+    background: #28a745;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(40, 167, 69, 0.35);
+}
+.tab-switch-btn:hover:not(.active) {
+    color: #1e7e34;
+}
+</style>
+
 <section class="content">
   <div class="container-fluid">
     
-
-
-    <div class="card card-success card-outline shadow-sm">
-      <div class="card-header bg-white">
-        <h3 class="card-title font-weight-bold text-success mb-0"><i class="fas fa-list mr-2"></i>Approved Resource Requests Waiting for Recruiter Assignment</h3>
+    <!-- Right-aligned modern toggle switch -->
+    <div class="d-flex justify-content-end align-items-center mb-3">
+      <div class="tab-switch-container shadow-sm">
+        <button type="button" class="tab-switch-btn active" id="btnTogglePendingAssign">
+          <i class="fas fa-user-check mr-1"></i> Pending Assigned Recruiter
+        </button>
+        <button type="button" class="tab-switch-btn" id="btnTogglePendingRequest">
+          <i class="fas fa-clock mr-1"></i> Pending Requests
+        </button>
       </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table id="approvedTable" class="table table-bordered table-striped align-middle">
-            <thead class="bg-success text-white">
-              <tr>
-                <th style="width: 50px;">S.No</th>
-                <th>Request Code</th>
-                <th>Job Title</th>
-                <th>Department</th>
-                <th style="width: 80px;">Openings</th>
-                <th>Target Onboarding Date</th>
-                <th>Requested By</th>
-                <th>CTC Approver</th>
-                <th>Assigned Manager</th>
-                <th>Status</th>
-                <th style="width: 210px;">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if (!empty($approved_resources)): ?>
-                <?php $i = 1; foreach ($approved_resources as $row): ?>
-                  <?php
-                  $salaryVal = !empty($row['EffectiveSalary']) ? trim($row['EffectiveSalary']) : (!empty($row['Salary']) ? trim($row['Salary']) : '');
-                  $locVal    = !empty($row['EffectiveLocation']) ? trim($row['EffectiveLocation']) : (!empty($row['JobLocation']) ? trim($row['JobLocation']) : '');
-                  $eduVal    = !empty($row['EffectiveEducation']) ? trim($row['EffectiveEducation']) : (!empty($row['EducationRequired']) ? trim($row['EducationRequired']) : '');
-                  $ctcVal    = !empty($row['EffectiveCtcApproverId']) ? (int)$row['EffectiveCtcApproverId'] : (!empty($row['CtcApproverId']) ? (int)$row['CtcApproverId'] : 0);
+    </div>
 
-                  $isAllFieldsFilled = !empty($row['JobTitle']) &&
-                                       (!empty($row['Did']) || !empty($row['Departmentname'])) &&
-                                       !empty($locVal) &&
-                                       !empty($eduVal) &&
-                                       (!empty($row['MustHaveSkills']) || !empty($row['Skills'])) &&
-                                       !empty($row['CommunicationLang']) &&
-                                       !empty($row['JobDescription']) &&
-                                       !empty($row['Responsibilities']) &&
-                                       !empty($salaryVal) &&
-                                       $ctcVal > 0;
-                  ?>
-                  <tr>
-                    <td><?= $i++; ?></td>
-                    <td><span class="badge badge-pill badge-primary"><?= htmlspecialchars($row['RequestCode']); ?></span></td>
-                    <td class="font-weight-bold"><?= htmlspecialchars($row['JobTitle']); ?></td>
-                    <td><?= htmlspecialchars($row['Departmentname'] ? $row['Departmentname'] : '-'); ?></td>
-                    <td class="text-center"><span class="badge badge-info"><?= (int)$row['NoofOpenings']; ?></span></td>
-                    <td><?= !empty($row['TargetOnboardingDate']) ? date('M d, Y', strtotime($row['TargetOnboardingDate'])) : '-'; ?></td>
-                    <td><?= htmlspecialchars($row['RequestedByName'] ? $row['RequestedByName'] : 'Hiring Manager'); ?></td>
-                    <td><?= htmlspecialchars($row['CtcApproverName'] ? $row['CtcApproverName'] : '-'); ?></td>
-                    <td>
-                      <?php if (!empty($row['AssignedRecruiterManagerName'])): ?>
-                        <span class="badge badge-pill badge-outline-success font-weight-bold"><i class="fas fa-user-check mr-1"></i><?= htmlspecialchars($row['AssignedRecruiterManagerName']); ?></span>
-                      <?php else: ?>
-                        <span class="badge badge-pill badge-warning text-dark"><i class="fas fa-clock mr-1"></i>Unassigned</span>
-                      <?php endif; ?>
-                    </td>
-                    <td>
-                      <?php if ($row['Status'] === 'ASSIGNED'): ?>
-                        <span class="badge badge-success">ASSIGNED</span>
-                      <?php else: ?>
-                        <span class="badge badge-info">APPROVED</span>
-                      <?php endif; ?>
-                    </td>
-                    <td>
-                      <div class="btn-group" role="group">
-                       
-                        <button type="button" 
-                                class="btn btn-sm btn-primary editJobBtn" 
-                                title="Edit Job" 
-                                data-id="<?= (int)$row['ConvertedJid']; ?>" 
-                                data-req='<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>'>
-                          <i class="fas fa-edit"></i>
-                        </button>
+    <!-- Section 1: Pending Assigned Recruiter -->
+    <div id="pendingAssignSection">
+      <div class="card card-success card-outline shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
+          <h3 class="card-title font-weight-bold text-success mb-0">
+            <i class="fas fa-list mr-2"></i>Approved Resource Requests Waiting for Recruiter Assignment
+          </h3>
+          <div class="card-tools d-flex align-items-center mt-2 mt-sm-0">
+            <label class="mb-0 mr-2 font-weight-bold text-muted small"><i class="fas fa-filter mr-1"></i>Status Filter:</label>
+            <div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons" id="assignFilterGroup">
+              <label class="btn btn-sm btn-outline-secondary active mb-0">
+                <input type="radio" name="assign_filter" value="ALL" checked> All
+              </label>
+              <label class="btn btn-sm btn-outline-success mb-0">
+                <input type="radio" name="assign_filter" value="ASSIGNED"> Assigned
+              </label>
+              <label class="btn btn-sm btn-outline-warning mb-0">
+                <input type="radio" name="assign_filter" value="UNASSIGNED"> Unassigned
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="approvedTable" class="table table-bordered table-striped align-middle">
+              <thead class="bg-success text-white">
+                <tr>
+                  <th style="width: 50px;">S.No</th>
+                  <th>Request Code</th>
+                  <th>Job Title</th>
+                  <th>Department</th>
+                  <th style="width: 80px;">Position</th>
+                  <th>Target Onboarding Date</th>
+                  <th>Requested By</th>
+                  <th>CTC Approver</th>
+                  <th>Assigned Manager</th>
+                  <th>Status</th>
+                  <th style="width: 210px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!empty($approved_resources)): ?>
+                  <?php $i = 1; foreach ($approved_resources as $row): ?>
+                    <?php
+                    $salaryVal = !empty($row['EffectiveSalary']) ? trim($row['EffectiveSalary']) : (!empty($row['Salary']) ? trim($row['Salary']) : '');
+                    $locVal    = !empty($row['EffectiveLocation']) ? trim($row['EffectiveLocation']) : (!empty($row['JobLocation']) ? trim($row['JobLocation']) : '');
+                    $eduVal    = !empty($row['EffectiveEducation']) ? trim($row['EffectiveEducation']) : (!empty($row['EducationRequired']) ? trim($row['EducationRequired']) : '');
+                    $ctcVal    = !empty($row['EffectiveCtcApproverId']) ? (int)$row['EffectiveCtcApproverId'] : (!empty($row['CtcApproverId']) ? (int)$row['CtcApproverId'] : 0);
 
-                       
-                        <button type="button" 
-                                class="btn btn-sm btn-secondary btn-view-details" 
-                                title="View Details" 
-                                data-req='<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>'>
-                          <i class="fas fa-eye"></i>
-                        </button>
-
-                        <?php if (!empty($row['AssignedRecruiterManagerId']) || $row['Status'] === 'ASSIGNED'): ?>
-                          <button type="button" 
-                                  class="btn btn-sm btn-warning btn-assign" 
-                                  title="Reassign Recruiter" 
-                                  data-id="<?= $row['RequestId']; ?>" 
-                                  data-code="<?= htmlspecialchars($row['RequestCode']); ?>" 
-                                  data-title="<?= htmlspecialchars($row['JobTitle']); ?>" 
-                                  data-assigned="<?= (int)$row['AssignedRecruiterManagerId']; ?>">
-                            <i class="fas fa-user-edit"></i>
-                          </button>
-                        <?php elseif ($isAllFieldsFilled): ?>
-                          <button type="button" 
-                                  class="btn btn-sm btn-success btn-assign" 
-                                  title="Assign Recruiter" 
-                                  data-id="<?= $row['RequestId']; ?>" 
-                                  data-code="<?= htmlspecialchars($row['RequestCode']); ?>" 
-                                  data-title="<?= htmlspecialchars($row['JobTitle']); ?>" 
-                                  data-assigned="<?= (int)$row['AssignedRecruiterManagerId']; ?>">
-                            <i class="fas fa-user-plus"></i>
-                          </button>
+                    $isAllFieldsFilled = !empty($row['JobTitle']) &&
+                                         (!empty($row['Did']) || !empty($row['Departmentname'])) &&
+                                         !empty($locVal) &&
+                                         !empty($eduVal) &&
+                                         (!empty($row['MustHaveSkills']) || !empty($row['Skills'])) &&
+                                         !empty($row['CommunicationLang']) &&
+                                         !empty($row['JobDescription']) &&
+                                         !empty($row['Responsibilities']) &&
+                                         !empty($salaryVal) &&
+                                         $ctcVal > 0;
+                    ?>
+                    <tr>
+                      <td><?= $i++; ?></td>
+                      <td><span class="badge badge-pill badge-primary"><?= htmlspecialchars($row['RequestCode']); ?></span></td>
+                      <td class="font-weight-bold"><?= htmlspecialchars($row['JobTitle']); ?></td>
+                      <td><?= htmlspecialchars($row['Departmentname'] ? $row['Departmentname'] : '-'); ?></td>
+                      <td class="text-center"><?= (int)$row['NoofOpenings']; ?></td>
+                      <td><?= !empty($row['TargetOnboardingDate']) ? date('d-m-Y', strtotime($row['TargetOnboardingDate'])) : '-'; ?></td>
+                      <td><?= htmlspecialchars($row['RequestedByName'] ? $row['RequestedByName'] : 'Hiring Manager'); ?></td>
+                      <td><?= htmlspecialchars($row['CtcApproverName'] ? $row['CtcApproverName'] : '-'); ?></td>
+                      <td>
+                        <?php if (!empty($row['AssignedRecruiterManagerName'])): ?>
+                          <span class="badge badge-pill badge-outline-success font-weight-bold"><i class="fas fa-user-check mr-1"></i><?= htmlspecialchars($row['AssignedRecruiterManagerName']); ?></span>
+                        <?php else: ?>
+                          <span class="badge badge-pill badge-warning text-dark"><i class="fas fa-clock mr-1"></i>Unassigned</span>
                         <?php endif; ?>
-                      </div>
-                    </td>
+                      </td>
+                      <td>
+                        <?php if ($row['Status'] === 'ASSIGNED'): ?>
+                          <span class="badge badge-success">ASSIGNED</span>
+                        <?php else: ?>
+                          <span class="badge badge-info">APPROVED</span>
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                         
+                          <!-- <button type="button" 
+                                  class="btn btn-sm btn-primary editJobBtn" 
+                                  title="Edit Job" 
+                                  data-id="<?= (int)$row['ConvertedJid']; ?>" 
+                                  data-req='<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>'>
+                            <i class="fas fa-edit"></i>
+                          </button> -->
+
+                         
+                          <button type="button" 
+                                  class="btn btn-sm btn-secondary btn-view-details" 
+                                  title="View Details" 
+                                  data-req='<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>'>
+                            <i class="fas fa-eye"></i>
+                          </button>
+
+                          <?php if (!empty($row['AssignedRecruiterManagerId']) || $row['Status'] === 'ASSIGNED'): ?>
+                            <button type="button" 
+                                    class="btn btn-sm btn-warning btn-assign" 
+                                    title="Reassign Recruiter" 
+                                    data-id="<?= $row['RequestId']; ?>" 
+                                    data-code="<?= htmlspecialchars($row['RequestCode']); ?>" 
+                                    data-title="<?= htmlspecialchars($row['JobTitle']); ?>" 
+                                    data-assigned="<?= (int)$row['AssignedRecruiterManagerId']; ?>">
+                              <i class="fas fa-user-edit"></i>
+                            </button>
+                          <?php else: ?>
+                            <button type="button" 
+                                    class="btn btn-sm btn-warning btn-assign text-dark" 
+                                    title="Assign Recruiter" 
+                                    data-id="<?= $row['RequestId']; ?>" 
+                                    data-code="<?= htmlspecialchars($row['RequestCode']); ?>" 
+                                    data-title="<?= htmlspecialchars($row['JobTitle']); ?>" 
+                                    data-assigned="<?= (int)$row['AssignedRecruiterManagerId']; ?>">
+                              <i class="fas fa-user-plus"></i>
+                            </button>
+                          <?php endif; ?>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <tr>
+                    <td colspan="11" class="text-center text-muted font-weight-bold py-4">No approved resource requests waiting for assignment.</td>
                   </tr>
-                <?php endforeach; ?>
-              <?php endif; ?>
-            </tbody>
-          </table>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Pending Requests -->
+    <div id="pendingRequestSection" style="display: none;">
+      <div class="card card-warning card-outline shadow-sm">
+        <div class="card-header bg-white">
+          <h3 class="card-title font-weight-bold text-warning mb-0"><i class="fas fa-clock mr-2"></i>Pending Resource Requests</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="pendingRequestsTable" class="table table-bordered table-striped align-middle">
+              <thead class="bg-warning text-dark">
+                <tr>
+                  <th style="width: 50px;">S.No</th>
+                  <th>Request Code</th>
+                  <th>Job Title</th>
+                  <th>Functional Role</th>
+                  <th>Department</th>
+                  <th style="width: 80px;">Position</th>
+                  <th>Requested By</th>
+                  <th>Approver</th>
+                  <th>Target Onboarding Date</th>
+                  <th>Request Date</th>
+                  <th>Status</th>
+                  <th style="width: 150px;" class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!empty($pending_resources)): ?>
+                  <?php $j = 1; foreach ($pending_resources as $pReq): ?>
+                    <tr>
+                      <td><?= $j++; ?></td>
+                      <td><span class="badge badge-pill badge-primary"><?= htmlspecialchars($pReq['RequestCode']); ?></span></td>
+                      <td class="font-weight-bold"><?= htmlspecialchars($pReq['JobTitle']); ?></td>
+                      <td><?= htmlspecialchars($pReq['FunctionalRole'] ? $pReq['FunctionalRole'] : '-'); ?></td>
+                      <td><?= htmlspecialchars($pReq['Departmentname'] ? $pReq['Departmentname'] : '-'); ?></td>
+                      <td class="text-center"><?= (int)$pReq['NoofOpenings']; ?></td>
+                      <td><?= htmlspecialchars($pReq['RequestedByName'] ? $pReq['RequestedByName'] : '-'); ?></td>
+                      <td><?= htmlspecialchars($pReq['ApproverName'] ? $pReq['ApproverName'] : '-'); ?></td>
+                      <td><?= !empty($pReq['TargetOnboardingDate']) ? date('d-m-Y', strtotime($pReq['TargetOnboardingDate'])) : '-'; ?></td>
+                      <td><?= !empty($pReq['CreatedAt']) ? date('d-m-Y', strtotime($pReq['CreatedAt'])) : '-'; ?></td>
+                      <td>
+                        <?php if ($pReq['Status'] === 'PENDING APPROVAL' || $pReq['Status'] === 'PENDING'): ?>
+                          <span class="badge badge-warning text-dark"><i class="fas fa-clock mr-1"></i>PENDING APPROVAL</span>
+                        <?php elseif ($pReq['Status'] === 'ACCEPTED'): ?>
+                          <span class="badge badge-success"><i class="fas fa-check-circle mr-1"></i>ACCEPTED</span>
+                        <?php elseif ($pReq['Status'] === 'REJECTED'): ?>
+                          <span class="badge badge-danger"><i class="fas fa-times-circle mr-1"></i>REJECTED</span>
+                        <?php else: ?>
+                          <span class="badge badge-secondary"><?= htmlspecialchars($pReq['Status']); ?></span>
+                        <?php endif; ?>
+                      </td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-sm btn-secondary btn-view-details" title="View Details" data-req='<?= htmlspecialchars(json_encode($pReq), ENT_QUOTES, 'UTF-8'); ?>'>
+                            <i class="fas fa-eye"></i>
+                          </button>
+
+                          <?php if ($pReq['Status'] === 'PENDING APPROVAL' || $pReq['Status'] === 'PENDING'): ?>
+                            <button type="button" class="btn btn-sm btn-success btn-open-approval" title="Accept / Approve Request"
+                              data-id="<?= !empty($pReq['RequestId']) ? $pReq['RequestId'] : htmlspecialchars($pReq['RequestCode']); ?>"
+                              data-code="<?= htmlspecialchars($pReq['RequestCode']); ?>"
+                              data-status="ACCEPTED">
+                              <i class="fas fa-check"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger btn-open-approval" title="Reject Request"
+                              data-id="<?= !empty($pReq['RequestId']) ? $pReq['RequestId'] : htmlspecialchars($pReq['RequestCode']); ?>"
+                              data-code="<?= htmlspecialchars($pReq['RequestCode']); ?>"
+                              data-status="REJECTED">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          <?php endif; ?>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <tr>
+                    <td colspan="12" class="text-center text-muted font-weight-bold py-4">No pending resource requests found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -167,6 +316,40 @@ $theme_path = $this->config->item('theme_locations') . $this->config->item('acti
         <div class="modal-footer bg-light">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-primary font-weight-bold" id="btnConfirmAssign"><i class="fas fa-save mr-1"></i> Save Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Decision Approval / Rejection Modal -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header" id="approvalModalHeader">
+        <h5 class="modal-title font-weight-bold" id="approvalModalTitle">Decision Confirmation</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="approvalForm" onsubmit="submitApproval(event)">
+        <input type="hidden" name="RequestId" id="approvalRequestId">
+        <input type="hidden" name="RequestCode" id="approvalRequestCode">
+        <input type="hidden" name="Status" id="approvalStatus">
+
+        <div class="modal-body">
+          <p id="approvalTargetText" class="font-weight-bold mb-3"></p>
+
+          <div class="form-group">
+            <label class="font-weight-bold">Approval Comments <span class="text-danger">*</span></label>
+            <textarea name="ApprovalComment" id="approvalComment" class="form-control" rows="4" placeholder="Enter reason or comments for this decision..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success font-weight-bold" id="approvalSubmitBtn"><i class="fas fa-check mr-1"></i> Confirm Decision</button>
         </div>
       </form>
     </div>
@@ -555,7 +738,7 @@ $(document).ready(function() {
             $('#approvedTable').DataTable().destroy();
         }
         $('#approvedTable').DataTable({
-            "responsive": true,
+            "responsive": false,
             "autoWidth": false,
             "order": [[0, "asc"]]
         });
@@ -563,7 +746,7 @@ $(document).ready(function() {
 
     $(window).on('resize orientationchange', function() {
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#approvedTable')) {
-            $('#approvedTable').DataTable().columns.adjust().responsive.recalc();
+            $('#approvedTable').DataTable().columns.adjust();
         }
     });
 
@@ -936,9 +1119,15 @@ $(document).on('click', '.remove-level-btn', function() {
    
     $(document).on('click', '.btn-view-details', function() {
         let d = $(this).data('req');
+        if (!d) return;
         if (typeof d === 'string') {
-            d = JSON.parse(d);
+            try {
+                d = JSON.parse(d);
+            } catch (e) {
+                console.error("Invalid JSON string in view details", e);
+            }
         }
+        if (!d || typeof d !== 'object') return;
 
         let html = `
             <div class="container-fluid">
@@ -948,12 +1137,13 @@ $(document).on('click', '.remove-level-btn', function() {
                         <p><b>Job Title:</b> ${d.JobTitle || '-'}</p>
                         <p><b>Functional Role / Role:</b> ${d.FunctionalRole || d.RoleSummary || '-'}</p>
                         <p><b>Department:</b> ${d.Departmentname || '-'}</p>
-                        <p><b>Openings:</b> ${d.NoofOpenings || '1'}</p>
+                        <p><b>Position:</b> ${d.NoofOpenings || '1'}</p>
                         <p><b>Position Type:</b> ${d.PositionType || '-'}</p>
                         <p><b>Experience:</b> ${d.ExpMin || 0} - ${d.ExpMax || 0} Years</p>
+                        <p><b>Education Required:</b> ${d.EducationRequired || '-'}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><b>Salary Range:</b> ${d.Salary || reqData.Salary || 'N/A'}</p>
+                        <p><b>Salary Range:</b> ${d.Salary || 'N/A'}</p>
                         <p><b>Target Onboarding:</b> ${d.TargetOnboardingDate || '-'}</p>
                         <p><b>Requested By:</b> ${d.RequestedByName || 'Hiring Manager'}</p>
                         <p><b>Approver:</b> ${d.ApproverName || '-'}</p>
@@ -980,5 +1170,142 @@ $(document).on('click', '.remove-level-btn', function() {
         $('#detailsModalBody').html(html);
         $('#approvedDetailsModal').modal('show');
     });
+
+    // Custom DataTables Filter for Assigned / Unassigned / All
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        if (!settings.nTable || settings.nTable.id !== 'approvedTable') {
+            return true;
+        }
+        var selectedFilter = $('input[name="assign_filter"]:checked').val();
+        if (!selectedFilter || selectedFilter === 'ALL') {
+            return true;
+        }
+        var assignedCellText = data[8] || ''; // Assigned Manager column (index 8)
+        var statusCellText   = data[9] || ''; // Status column (index 9)
+
+        var isAssigned = (statusCellText.indexOf('ASSIGNED') !== -1 || (assignedCellText.indexOf('Unassigned') === -1 && assignedCellText.trim() !== '' && assignedCellText.trim() !== '-'));
+
+        if (selectedFilter === 'ASSIGNED') {
+            return isAssigned;
+        } else if (selectedFilter === 'UNASSIGNED') {
+            return !isAssigned;
+        }
+        return true;
+    });
+
+    $(document).on('change', 'input[name="assign_filter"]', function() {
+        if ($.fn.DataTable.isDataTable('#approvedTable')) {
+            $('#approvedTable').DataTable().draw();
+        }
+    });
+
+    $(document).on('click', '#btnTogglePendingAssign', function() {
+        $(this).addClass('active');
+        $('#btnTogglePendingRequest').removeClass('active');
+        $('#pendingAssignSection').fadeIn(150);
+        $('#pendingRequestSection').hide();
+        sessionStorage.removeItem('approvedRes_tab');
+    });
+
+    $(document).on('click', '#btnTogglePendingRequest', function() {
+        $(this).addClass('active');
+        $('#btnTogglePendingAssign').removeClass('active');
+        $('#pendingRequestSection').fadeIn(150);
+        $('#pendingAssignSection').hide();
+        sessionStorage.setItem('approvedRes_tab', 'pendingRequest');
+    });
+
+    $(document).on('click', '.btn-open-approval', function(e) {
+        e.preventDefault();
+        let requestId   = $(this).data('id');
+        let requestCode = $(this).data('code');
+        let status      = $(this).data('status');
+        openApprovalModal(requestId, status, requestCode);
+    });
+
+    // Restore tab after page reload
+    var savedTab = sessionStorage.getItem('approvedRes_tab');
+    if (savedTab === 'pendingAssign') {
+        $('#btnTogglePendingAssign').addClass('active');
+        $('#btnTogglePendingRequest').removeClass('active');
+        $('#pendingAssignSection').show();
+        $('#pendingRequestSection').hide();
+        sessionStorage.removeItem('approvedRes_tab');
+    }
 });
+
+function showAlert(msg, type) {
+    if (typeof toastr !== 'undefined') {
+        if (type === 'success') toastr.success(msg);
+        else if (type === 'danger' || type === 'error') toastr.error(msg);
+        else if (type === 'warning') toastr.warning(msg);
+        else toastr.info(msg);
+    } else {
+        alert(msg);
+    }
+}
+
+function openApprovalModal(requestId, status, requestCode) {
+  var finalReqId = (requestId !== null && requestId !== undefined && requestId !== '') ? requestId : (requestCode || '');
+  $('#approvalRequestId').val(finalReqId);
+  $('#approvalRequestCode').val(requestCode || '');
+  $('#approvalStatus').val(status || 'ACCEPTED');
+  $('#approvalComment').val('');
+
+  var header = $('#approvalModalHeader');
+  var btn = $('#approvalSubmitBtn');
+
+  if (status === 'ACCEPTED') {
+    header.attr('class', 'modal-header bg-success text-white');
+    $('#approvalModalTitle').html('<i class="fas fa-check-circle mr-2"></i>Accept Resource Request [' + requestCode + ']');
+    $('#approvalTargetText').html('You are about to <span class="text-success font-weight-bold">ACCEPT</span> request <code>' + requestCode + '</code>.');
+    btn.attr('class', 'btn btn-success font-weight-bold').html('<i class="fas fa-check mr-1"></i> Confirm Acceptance');
+  } else {
+    header.attr('class', 'modal-header bg-danger text-white');
+    $('#approvalModalTitle').html('<i class="fas fa-times-circle mr-2"></i>Reject Resource Request [' + requestCode + ']');
+    $('#approvalTargetText').html('You are about to <span class="text-danger font-weight-bold">REJECT</span> request <code>' + requestCode + '</code>.');
+    btn.attr('class', 'btn btn-danger font-weight-bold').html('<i class="fas fa-times mr-1"></i> Confirm Rejection');
+  }
+
+  $('#approvalModal').modal('show');
+}
+
+function submitApproval(e) {
+  e.preventDefault();
+  var comment = $('#approvalComment').val().trim();
+  if (!comment) {
+    showAlert('Approval Comments are mandatory.', 'warning');
+    return;
+  }
+
+  $('#approvalSubmitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Processing...');
+
+  $.ajax({
+    url: '<?= base_url("admin/updateResourceRequestStatus"); ?>',
+    type: 'POST',
+    data: $('#approvalForm').serialize(),
+    dataType: 'json',
+    success: function(res) {
+      $('#approvalSubmitBtn').prop('disabled', false);
+      if (res.status === 'success') {
+        $('#approvalModal').modal('hide');
+        // After approval/rejection, switch to Pending Assigned Recruiter tab on reload
+        sessionStorage.setItem('approvedRes_tab', 'pendingAssign');
+        toastr.success(res.message || 'Status updated successfully.');
+        setTimeout(function() { location.reload(); }, 1200);
+      } else {
+        showAlert(res.message || 'Error updating status', 'danger');
+      }
+    },
+    error: function(xhr) {
+      $('#approvalSubmitBtn').prop('disabled', false).html('<i class="fas fa-check mr-1"></i> Confirm Decision');
+      var msg = 'Network or server error.';
+      try {
+        var errRes = JSON.parse(xhr.responseText);
+        if (errRes.message) msg = errRes.message;
+      } catch (e) {}
+      showAlert(msg, 'danger');
+    }
+  });
+}
 </script>

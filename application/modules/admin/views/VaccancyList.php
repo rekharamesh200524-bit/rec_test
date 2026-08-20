@@ -32,12 +32,12 @@
                                   <!-- Date Range -->
                                   <div class="col-md-3">
                                       <div class="form-group mb-0">
-                                          <label>Posted Date Range</label>
+                                          <label>Posted Date</label>
                                           <input type="text"
                                               name="dateRange"
                                               id="dateRange"
                                               class="form-control"
-                                              placeholder="Select date range"
+                                              placeholder="Select date"
                                               value="<?= htmlspecialchars($this->input->post('dateRange', TRUE) ?: $this->input->get('dateRange', TRUE)) ?>">
                                       </div>
                                   </div>
@@ -73,12 +73,12 @@
                                   </div>
 
                                   <!-- Reset Button -->
-                                  <div class="col-md-3">
-                                      <a href="<?= base_url('admin/vacancies') ?>"
-                                          class="btn btn-outline-secondary btn-block">
-                                          <i class="fas fa-undo"></i> Reset
-                                      </a>
-                                  </div>
+                                   <div class="col-md-2 d-flex align-items-end mb-1">
+                                       <a href="<?= base_url('admin/vacancies') ?>"
+                                           class="btn btn-outline-secondary btn-sm font-weight-bold">
+                                           <i class="fas fa-undo mr-1"></i> Reset
+                                       </a>
+                                   </div>
 
                               </div>
 
@@ -88,10 +88,10 @@
                   </form>
 
                   <!-- /.card-header -->
-                  <div class="card-body">
+                  <div class="card-body table-responsive">
                       <table id="example1" class="table table-bordered table-striped">
                           <thead class="bg-success">
-                              <tr>
+                              <tr class="text-nowrap">
                                   <th>S.No</th>
                                   <th>Job Code</th>
                                   <th>Job Title</th>
@@ -99,11 +99,11 @@
                                   <th>Department</th>
                                   <th>Employment</th>
                                   <th>Work Mode</th>
-                                  <th>No of Openings</th>
-                                  <th>Candidates</th>
-                                  <th>Job Status</th>
+                                  <th class="text-center">Position</th>
+                                  <th class="text-center">Candidates</th>
+                                  <th class="text-center">Job Status</th>
                                   <th>Posted On</th>
-                                  <th>Action</th>
+                                  <th class="text-center">Action</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -115,7 +115,7 @@
                                     $i = 1;
                                     foreach ($vaclist as $vl) {
                                 ?>
-                                      <tr>
+                                      <tr class="text-nowrap">
                                           <td><?= $i++; ?></td>
                                           <td><a href="<?php echo $this->config->item('base_url') ?>admin/Candidatelist/<?php echo $vl['Jid']; ?>"><?= $vl['JobCode'] ?></a></td>
                                           <td><?= htmlspecialchars($vl['JobTitle'] ?? ''); ?></td>
@@ -123,19 +123,25 @@
                                           <td><?= htmlspecialchars($vl['Departmentname'] ?? ''); ?></td>
                                           <td><?= $vl['EmploymentType'] ?></td>
                                           <td><?= $vl['WorkMode'] ?></td>
-                                          <td><?= $vl['NoofOpenings'] ?></td>
+                                          <td class="text-center"><?= $vl['NoofOpenings'] ?></td>
                                           <td class="text-center">
                                               <?php $cnt = isset($vl['CandidateCount']) ? (int)$vl['CandidateCount'] : 0; ?>
                                               <span class="badge badge-pill <?= $cnt > 0 ? 'badge-info' : 'badge-secondary'; ?>">
                                                   <i class="fas fa-users mr-1"></i><?= $cnt; ?>
                                               </span>
                                           </td>
-                                          <td>
-                                              <span class="badge badge-pill <?= ($vl['JobStatus'] == 'Closed' || $vl['JobStatus'] == 'Dropped') ? 'badge-danger' : ($vl['JobStatus'] == 'Open' ? 'badge-success' : ($vl['JobStatus'] == 'On-Hold' ? 'badge-warning' : 'badge-secondary')) ?>">
-                                                  <?= ($vl['JobStatus'] == 'Closed' || $vl['JobStatus'] == 'Dropped') ? 'Dropped' : htmlspecialchars($vl['JobStatus']); ?>
-                                              </span>
-                                          </td>
-                                          <td><?= $vl['PostedOn'] ?></td>
+                                          <td class="text-center">
+                                               <span class="badge badge-pill <?= ($vl['JobStatus'] == 'Closed' || $vl['JobStatus'] == 'Dropped') ? 'badge-danger' : ($vl['JobStatus'] == 'Open' ? 'badge-success' : ($vl['JobStatus'] == 'On-Hold' ? 'badge-warning' : 'badge-secondary')) ?>">
+                                                   <?= ($vl['JobStatus'] == 'Closed' || $vl['JobStatus'] == 'Dropped') ? 'Dropped' : htmlspecialchars($vl['JobStatus']); ?>
+                                               </span>
+                                               <button type="button"
+                                                   class="btn btn-xs btn-outline-info viewJobHistoryBtn ml-1"
+                                                   title="View Job Life-Cycle History"
+                                                   data-id="<?= $vl['Jid']; ?>">
+                                                   <i class="fas fa-history"></i>
+                                               </button>
+                                           </td>
+                                          <td><?= !empty($vl['PostedOn']) ? date('d-m-Y', strtotime($vl['PostedOn'])) : '-'; ?></td>
                                           <td class="text-center">
 
                                               <div class="btn-group" role="group">
@@ -155,15 +161,7 @@
                                                       <i class="fas fa-eye"></i>
                                                   </button>
 
-                                                  <button type="button"
-                                                      class="btn btn-sm btn-info viewJobHistoryBtn"
-                                                      title="View Job Life-Cycle History"
-                                                      data-id="<?= $vl['Jid']; ?>">
-                                                      <i class="fas fa-history"></i>
-                                                  </button>
-
                                                   <?php if ($vl['JobStatus'] == 'Open') { ?>
-
 
                                                       <!-- Put On Hold -->
                                                       <button type="button"
@@ -182,6 +180,7 @@
                                                           title="Drop Job">
                                                           <i class="fas fa-times-circle"></i>
                                                       </button>
+
                                                       <!-- Upload Resumes -->
                                                       <button type="button"
                                                           class="btn btn-sm btn-success uploadResumeBtn"
@@ -189,14 +188,6 @@
                                                           title="Upload Resumes">
                                                           <i class="fas fa-upload"></i>
                                                       </button>
-
-                                                      <!-- Analyze Resumes -->
-                                                      <!-- <button type="button"
-                                                           class="btn btn-sm btn-info analyzeResumeBtn"
-                                                           data-id="<?= $vl['Jid']; ?>"
-                                                           title="Analyze Resumes">
-                                                           <i class="fas fa-chart-line"></i>
-                                                       </button> -->
 
                                                   <?php } elseif ($vl['JobStatus'] == 'On-Hold') { ?>
 
@@ -230,12 +221,12 @@
 
                                                       <!-- Drop Job -->
                                                       <button type="button"
-                                                            class="btn btn-sm btn-danger jobStatusBtn"
-                                                            data-id="<?= $vl['Jid']; ?>"
-                                                            data-status="Dropped"
-                                                            title="Drop Job">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </button>
+                                                          class="btn btn-sm btn-danger jobStatusBtn"
+                                                          data-id="<?= $vl['Jid']; ?>"
+                                                          data-status="Dropped"
+                                                          title="Drop Job">
+                                                          <i class="fas fa-times-circle"></i>
+                                                      </button>
 
                                                   <?php } elseif ($vl['JobStatus'] == 'Draft') { ?>
 
@@ -712,20 +703,6 @@
 
                       <!-- STEP 2 -->
                       <div id="edit-information-part" class="content">
-                          <!-- Salary -->
-                          <div class="form-group">
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <label>Min Salary (LPA)*</label>
-                                      <input type="text" name="salaryMin" id="edit_salaryMin" class="form-control" placeholder="Min Salary (LPA)">
-                                  </div>
-
-                                  <div class="col-md-6">
-                                      <label>Max Salary (LPA)*</label>
-                                      <input type="text" name="salaryMax" id="edit_salaryMax" class="form-control" placeholder="Max Salary (LPA)">
-                                  </div>
-                              </div>
-                          </div>
                           <!-- Experience -->
                           <div class="form-group">
                               <div class="row">
@@ -776,7 +753,7 @@
                           </div>
 
                           <button type="button" class="btn btn-primary" onclick="editStepper.previous()">Previous</button>
-                          <button type="button" class="btn btn-primary" onclick="editStepper.next()">Next</button>
+                          <button type="button" class="btn btn-primary" onclick="editStepper.next()">Next <i class="fas fa-arrow-right ml-1"></i></button>
                       </div>
 
                       <!-- STEP 3 -->
@@ -832,23 +809,66 @@
                       </div>
 
                       <!-- STEP 4: CTC -->
-                      <div id="edit-ctc-part" class="content">
+                       <div id="edit-ctc-part" class="content">
 
-                              <!-- CTC Approver (readonly display) -->
+                              <!-- Salary / CTC (LPA) -->
                               <div class="form-group">
-                                  <label class="font-weight-bold"><i class="fas fa-user-check text-primary mr-1"></i> CTC Approver</label>
-                                  <input type="text" id="edit_CtcApproverName" class="form-control input-readonly-light" readonly placeholder="Not assigned">
-                                  <input type="hidden" name="CtcApproverId" id="edit_CtcApproverId">
-                                  <small class="text-muted">Set via the CTC approval workflow</small>
+                                  <label class="font-weight-bold"><i class="fas fa-money-bill-wave text-success mr-1"></i> Salary / CTC (LPA)</label>
+                                  <input type="text" name="salary" id="edit_salary" class="form-control" placeholder="e.g. 5 - 10 LPA">
                               </div>
 
-                              <!-- Interviewer Panel (readonly display) -->
+                              <!-- CTC Approver (editable dropdown) -->
                               <div class="form-group">
-                                  <label class="font-weight-bold"><i class="fas fa-users text-success mr-1"></i> Interview Panel</label>
-                                  <div id="edit_interviewPanelDisplay" class="border rounded p-2 input-readonly-light" style="min-height:50px;">
-                                      <span class="text-muted small">No interview panel assigned</span>
+                                  <label class="font-weight-bold"><i class="fas fa-user-check text-primary mr-1"></i> CTC Approver</label>
+                                  <select name="CtcApproverId" id="edit_CtcApproverId" class="form-control">
+                                      <option value="">Select CTC Approver</option>
+                                      <?php if (!empty($ctc_approvers)): ?>
+                                          <?php foreach ($ctc_approvers as $ca): ?>
+                                              <option value="<?= $ca['IUid']; ?>"><?= htmlspecialchars($ca['EmpName']); ?> (<?= htmlspecialchars($ca['RoleName'] ? $ca['RoleName'] : 'Employee'); ?>)</option>
+                                          <?php endforeach; ?>
+                                      <?php endif; ?>
+                                  </select>
+                              </div>
+
+                              <!-- Interviewer Panel (editable levels) -->
+                              <div class="form-group border-top pt-3 mt-3">
+                                  <div class="d-flex align-items-center justify-content-between mb-2">
+                                      <label class="font-weight-bold text-primary mb-0">
+                                          <i class="fas fa-users-cog mr-1"></i> Interview Panel Levels
+                                      </label>
+                                      <button type="button" class="btn btn-xs btn-outline-success font-weight-bold" id="addEditInterviewLevelBtn">
+                                          <i class="fas fa-plus mr-1"></i> Add Level
+                                      </button>
                                   </div>
-                                  <small class="text-muted">Interviewers are assigned via the Shortlisted candidates section</small>
+                                  <small class="form-text text-muted mb-3">Level 1 & Level 2 are mandatory. Up to 4 levels maximum.</small>
+
+                                  <div id="editInterviewPanelContainer">
+                                      <div class="form-group mb-2" data-level="1">
+                                          <label class="font-weight-bold">Level 1 Interviewer <span class="text-danger">*</span></label>
+                                          <select name="interviewPanel[1]" id="edit_interviewPanel_1" class="form-control interview-panel-select">
+                                              <option value="">Select Level 1 Interviewer</option>
+                                              <?php if (!empty($ctc_approvers)): ?>
+                                                  <?php foreach ($ctc_approvers as $u): ?>
+                                                      <option value="<?= $u['IUid']; ?>"><?= htmlspecialchars($u['EmpName']); ?><?= !empty($u['RoleName']) ? ' (' . htmlspecialchars($u['RoleName']) . ')' : ''; ?></option>
+                                                  <?php endforeach; ?>
+                                              <?php endif; ?>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-2" data-level="2">
+                                          <label class="font-weight-bold">Level 2 Interviewer <span class="text-danger">*</span></label>
+                                          <select name="interviewPanel[2]" id="edit_interviewPanel_2" class="form-control interview-panel-select">
+                                              <option value="">Select Level 2 Interviewer</option>
+                                              <?php if (!empty($ctc_approvers)): ?>
+                                                  <?php foreach ($ctc_approvers as $u): ?>
+                                                      <option value="<?= $u['IUid']; ?>"><?= htmlspecialchars($u['EmpName']); ?><?= !empty($u['RoleName']) ? ' (' . htmlspecialchars($u['RoleName']) . ')' : ''; ?></option>
+                                                  <?php endforeach; ?>
+                                              <?php endif; ?>
+                                          </select>
+                                      </div>
+
+                                      <div id="editDynamicLevelsContainer"></div>
+                                  </div>
                               </div>
 
                           <button type="button" class="btn btn-secondary mr-1" onclick="editStepper.previous()"><i class="fas fa-arrow-left mr-1"></i> Previous</button>
@@ -1284,23 +1304,29 @@
               preloadChips(d.NiceToHaveSkills, 'edit_niceToHaveSkillsChips', 'edit_niceToHaveSkills');
               preloadChips(d.CommunicationLang, 'edit_languageChips', 'edit_comLanguage');
 
-              // Populate readonly CTC Approver
-              $('#edit_CtcApproverName').val(d.CtcApproverName || '');
-              $('#edit_CtcApproverId').val(d.CtcApproverId || '');
+              // Populate Salary & CTC Approver
+              $('#edit_salary').val(d.Salary ?? '');
+              $('#edit_CtcApproverId').val(d.CtcApproverId || d.EffectiveCtcApproverId || '');
 
-              // Populate readonly Interview Panel display
+              // Reset & Populate Interview Panel dropdowns
+              $('#editDynamicLevelsContainer').empty();
+              $('#edit_interviewPanel_1').val('');
+              $('#edit_interviewPanel_2').val('');
+              updateEditAddLevelBtnState();
+
               const panels = d.interviewPanels || [];
-              if (panels.length > 0) {
-                  let panelHtml = '';
+              if (Array.isArray(panels) && panels.length > 0) {
                   panels.forEach(function(p) {
-                      panelHtml += `<div class="d-flex align-items-center mb-1">
-                          <span class="badge badge-pill badge-primary mr-2">Level ${p.LevelOrder}</span>
-                          <span><i class="fas fa-user-tie mr-1 text-secondary"></i>${p.InterviewerName || 'Unknown'}</span>
-                      </div>`;
+                      var lvl = parseInt(p.LevelOrder);
+                      var uid = p.InterviewerId;
+                      if (lvl === 1) {
+                          $('#edit_interviewPanel_1').val(uid);
+                      } else if (lvl === 2) {
+                          $('#edit_interviewPanel_2').val(uid);
+                      } else if (lvl === 3 || lvl === 4) {
+                          addEditDynamicLevel(lvl, uid);
+                      }
                   });
-                  $('#edit_interviewPanelDisplay').html(panelHtml);
-              } else {
-                  $('#edit_interviewPanelDisplay').html('<span class="text-muted small"><i class="fas fa-info-circle mr-1"></i>No interview panel assigned yet</span>');
               }
 
               $('#editVacancyPanel').addClass('open');
@@ -1308,6 +1334,62 @@
 
           });
       });
+
+var editUsersOptionsHtml = `<option value="">Select Interviewer</option><?php 
+if (!empty($ctc_approvers)) {
+    foreach ($ctc_approvers as $u) {
+        echo '<option value="' . $u['IUid'] . '">' . htmlspecialchars($u['EmpName']) . (!empty($u['RoleName']) ? ' (' . htmlspecialchars($u['RoleName']) . ')' : '') . '</option>';
+    }
+}
+?>`;
+
+function getEditCurrentLevelCount() {
+    return $('#editInterviewPanelContainer .form-group[data-level]').length;
+}
+
+function updateEditAddLevelBtnState() {
+    if (getEditCurrentLevelCount() >= 4) {
+        $('#addEditInterviewLevelBtn').hide();
+    } else {
+        $('#addEditInterviewLevelBtn').show();
+    }
+}
+
+function addEditDynamicLevel(levelNum, selectedVal) {
+    if ($('#edit-dynamic-level-' + levelNum).length) return;
+    var html = `
+        <div class="form-group mb-2 dynamic-level-row" id="edit-dynamic-level-${levelNum}" data-level="${levelNum}">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+                <label class="font-weight-bold mb-0">Level ${levelNum} Interviewer</label>
+                <button type="button" class="btn btn-xs btn-outline-danger remove-edit-level-btn" data-target="edit-dynamic-level-${levelNum}">
+                    <i class="fas fa-minus mr-1"></i> Remove
+                </button>
+            </div>
+            <select name="interviewPanel[${levelNum}]" id="edit_interviewPanel_${levelNum}" class="form-control interview-panel-select">
+                ${editUsersOptionsHtml}
+            </select>
+        </div>
+    `;
+    $('#editDynamicLevelsContainer').append(html);
+    if (selectedVal) {
+        $('#edit_interviewPanel_' + levelNum).val(selectedVal);
+    }
+    updateEditAddLevelBtnState();
+}
+
+$(document).on('click', '#addEditInterviewLevelBtn', function() {
+    var count = getEditCurrentLevelCount();
+    if (count < 4) {
+        var nextLevel = count + 1;
+        addEditDynamicLevel(nextLevel);
+    }
+});
+
+$(document).on('click', '.remove-edit-level-btn', function() {
+    var targetId = $(this).data('target');
+    $('#' + targetId).remove();
+    updateEditAddLevelBtnState();
+});
 
    let selectedJobId = '';
 let selectedStatus = '';
@@ -1451,8 +1533,13 @@ ${d.JobStatus === 'Open' || d.JobStatus === 'Re-Open' ? 'badge-success' :
   'badge-primary'}">
 ${(d.JobStatus === 'Closed' || d.JobStatus === 'Dropped') ? 'Dropped' : d.JobStatus}
 </span>
-</p></div><div class="col-md-6"><p><b>Posted By:</b> ${d.PostedByName}</p><p><b>Posted On:</b> ${d.PostedOn}</p><p><b>Expiry Date:</b> ${d.ExpiryDate}</p><p><b>Work Mode:</b> ${d.WorkMode}</p><p><b>Employment:</b> ${d.EmploymentType}</p><p><b>Language:</b> ${d.CommunicationLang}</p></div></div></div></div>`;
-              html += `<div class="card card-info collapsed-card"><div class="card-header bg-info"><h3 class="card-title">Salary & Experience</h3><div class="card-tools"><button class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body"><div class="row"><div class="col-md-6"><p><b>Experience Required:</b> ${d.ExpMin ?? 0} - ${d.ExpMax ?? 0} Years</p></div><div class="col-md-6"><p><b>Salary:</b> ${d.SalMin ?? 0} - ${d.SalMax ?? 0} LPA</p></div></div></div></div>`;
+</p></div><div class="col-md-6"><p><b>Posted By:</b> ${d.PostedByName}</p><p><b>Posted On:</b> ${d.PostedOn}</p><p><b>Work Mode:</b> ${d.WorkMode}</p><p><b>Employment:</b> ${d.EmploymentType}</p><p><b>Language:</b> ${d.CommunicationLang}</p></div></div></div></div>`;
+              let salaryDisplay = (d.Salary && d.Salary.trim() !== '' && d.Salary !== '0 - 0 LPA') ? d.Salary : ((d.SalMin || d.SalMax) ? (d.SalMin + ' - ' + d.SalMax + ' LPA') : '-');
+              let expMinDisplay = (d.ExpMin !== undefined && d.ExpMin !== null && d.ExpMin !== '') ? (parseFloat(d.ExpMin) % 1 === 0 ? parseInt(d.ExpMin) : parseFloat(d.ExpMin)) : 0;
+              let expMaxDisplay = (d.ExpMax !== undefined && d.ExpMax !== null && d.ExpMax !== '') ? (parseFloat(d.ExpMax) % 1 === 0 ? parseInt(d.ExpMax) : parseFloat(d.ExpMax)) : 0;
+              let expDisplay = `${expMinDisplay} - ${expMaxDisplay} Years`;
+
+              html += `<div class="card card-info collapsed-card"><div class="card-header bg-info"><h3 class="card-title">Salary & Experience</h3><div class="card-tools"><button class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body"><div class="row"><div class="col-md-6"><p><b>Experience Required:</b> ${expDisplay}</p></div><div class="col-md-6"><p><b>Salary:</b> ${salaryDisplay}</p></div></div></div></div>`;
               html += `<div class="card card-secondary collapsed-card"><div class="card-header bg-secondary"><h3 class="card-title">Location & Education</h3><div class="card-tools"><button class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body"><p><b>Job Location:</b> ${d.JobLocation}</p><p><b>Education Required:</b> ${d.EducationRequired}</p></div></div>`;
               html += `<div class="card card-warning collapsed-card"><div class="card-header bg-warning"><h3 class="card-title">Skills</h3><div class="card-tools"><button class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body"><p><b>Must-Have Skills:</b> ${d.MustHaveSkills || d.Skills || '-'}</p><p><b>Nice-to-Have Skills:</b> ${d.NiceToHaveSkills || '-'}</p></div></div>`;
               html += `<div class="card card-dark collapsed-card"><div class="card-header bg-dark"><h3 class="card-title">Roles & Responsibilities</h3><div class="card-tools"><button class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button></div></div><div class="card-body">${d.Responsibilities}</div></div>`;

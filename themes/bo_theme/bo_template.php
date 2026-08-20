@@ -84,10 +84,14 @@
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-     
+    <ul class="navbar-nav ml-auto align-items-center">
+      <!-- Welcome User -->
+      <li class="nav-item d-flex align-items-center mr-3">
+        <span class="text-white font-weight-bold" style="font-size: 13.5px; line-height: 1;">
+          <i class="fas fa-user-circle text-info mr-1"></i> Welcome <?= htmlspecialchars(!empty($employee_det['EmpName']) ? $employee_det['EmpName'] : 'User'); ?>
+        </span>
+      </li>
 
-      
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#" id="notifDropdownToggle">
@@ -111,16 +115,12 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button" title="Settings">
+          <i class="fas fa-cog"></i>
         </a>
       </li>
 
-      <li class="nav-item">
-  <a href="<?= base_url('admin/logout'); ?>" class="nav-link text-danger">
-    <i class="fas fa-sign-out-alt"></i> Logout
-  </a>
- </li>
+
     <!--added by reka -->
     </ul>
   </nav>
@@ -128,15 +128,15 @@
 
 
 <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4" style="display: flex !important; flex-direction: column !important; position: fixed !important; top: 0 !important; bottom: 0 !important; left: 0 !important; height: 100vh !important; z-index: 1038 !important;">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link">
-      <img src="<?=$theme_path?>/assets/dist/img/favicon.png" alt="AdminLTE Logo"  style="opacity: .8">
+    <a href="#" class="brand-link" style="flex: 0 0 auto;">
+      <img src="<?=$theme_path?>/assets/dist/img/favicon.png" alt="AdminLTE Logo" style="opacity: .8">
       <span class="brand-text font-weight-thick">HRMS</span>
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" style="flex: 1 1 auto !important; overflow-y: auto !important; height: auto !important;">
       <!-- Sidebar user panel (optional) -->
      <!--  <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
@@ -309,10 +309,29 @@
                 </ul>
                 <?php endif; ?>
              
-       </nav>
+        </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
+
+    <!-- Sidebar Bottom Footer (Pinned to absolute bottom of dark sidebar) -->
+    <div class="sidebar-bottom-footer p-2" style="flex: 0 0 auto; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.08);">
+      <!-- Logout -->
+      <div class="mb-2">
+        <a href="<?= base_url('admin/logout'); ?>" class="btn btn-sm btn-block" style="background:rgba(220,53,69,0.2); border:1px solid rgba(220,53,69,0.4); color:#ff6b6b; font-weight:600; letter-spacing:.3px;">
+          <i class="fas fa-power-off mr-1"></i> Logout
+        </a>
+      </div>
+
+      <!-- Tip of the Day -->
+      <div class="p-2 rounded" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);">
+        <div class="d-flex align-items-center mb-1">
+          <span style="font-size:13px; margin-right:6px;">&#128161;</span>
+          <span style="color:#ffd166; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;">Tip of the Day</span>
+        </div>
+        <p id="sidebarHrTip" style="color:rgba(255,255,255,0.75); font-size:10.5px; margin:0; line-height:1.45;">Loading...</p>
+      </div>
+    </div>
   </aside>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -405,9 +424,9 @@
   <!-- /.control-sidebar -->
 
   <!-- Main Footer -->
+  <!-- Main Footer -->
   <footer class="main-footer">
-    Copyright   <script> document.write(new Date().getFullYear());
-                </script> Designed &amp; Developed by <a href="https://www.i-net.in/" target="_blank">I-NET Secure Labs Pvt. Ltd</a>
+    Copyright <script>document.write(new Date().getFullYear());</script> Designed &amp; Developed by <a href="https://www.i-net.in/" target="_blank">I-NET Secure Labs Pvt. Ltd</a>
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.0
     </div>
@@ -624,6 +643,26 @@ function showAlert(message, type, title) {
 
     $('#globalAlertModal').modal('show');
 }
+
+// Sidebar HR Tip of the Day
+(function() {
+  var tips = [
+    "Always send a personalised rejection email — candidates remember how you made them feel.",
+    "Structured interviews reduce bias by 40%. Use the same questions for every candidate.",
+    "Follow up within 48 hours of an interview. Speed signals respect and company culture.",
+    "Job descriptions with inclusive language attract 42% more diverse applicants.",
+    "Employee referrals produce the highest quality hires. Invest in your referral programme.",
+    "Video interviews save 60% of scheduling time. Embrace async screening for early stages.",
+    "Use ATS data to identify your best-performing sourcing channels every quarter.",
+    "Set clear hiring SLAs: target 30 days from JD approval to offer letter.",
+    "Onboarding doesn't end on day one. A 90-day plan dramatically improves retention."
+  ];
+  var tip = tips[Math.floor(Math.random() * tips.length)];
+  var sidebar = document.getElementById('sidebarHrTip');
+  var footer  = document.getElementById('footerHrTip');
+  if (sidebar) sidebar.textContent = tip;
+  if (footer)  footer.textContent  = tip;
+})();
 </script>
 
 </html>

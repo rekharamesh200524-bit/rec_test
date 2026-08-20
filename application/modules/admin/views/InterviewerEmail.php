@@ -2,7 +2,7 @@
 if (empty($candidatelist)) { return; }
 $actLower = strtolower(isset($action) ? $action : '');
 $isReschedule = ($actLower === 'reschedule');
-$interviewDateFormatted = !empty($interviewDate) ? date('d M Y', strtotime($interviewDate)) : 'TBD';
+$interviewDateFormatted = !empty($interviewDate) ? date('d-m-Y', strtotime($interviewDate)) : 'TBD';
 $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($interviewDate)) : '';
 ?>
 <!DOCTYPE html>

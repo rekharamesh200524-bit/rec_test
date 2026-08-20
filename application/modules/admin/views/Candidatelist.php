@@ -25,9 +25,9 @@
          
           <div class="d-flex align-items-center flex-wrap gap-2 my-1">
             
-            <button type="button" id="btnToggleCompareMode" class="btn btn-outline-primary btn-sm font-weight-bold px-3 py-2 shadow-sm">
+            <!-- <button type="button" id="btnToggleCompareMode" class="btn btn-outline-primary btn-sm font-weight-bold px-3 py-2 shadow-sm">
               <i class="fas fa-balance-scale mr-1"></i> Compare Candidates
-            </button>
+            </button> -->
 
           
             <div id="compareActiveBar" class="d-none align-items-center flex-wrap gap-2">
@@ -61,9 +61,6 @@
               <a class="nav-link filterPill rounded-pill" data-status="Selected">Selected</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link filterPill rounded-pill" data-status="In Progress">In Progress</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link filterPill rounded-pill" data-status="On Hold">On Hold</a>
             </li>
             <li class="nav-item">
@@ -73,7 +70,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-0">
+      <div class="card-body pt-0 table-responsive">
         <table id="example1" class="table table-bordered table-striped align-middle mb-0 table-full-width">
           <thead class="bg-success text-white">
             <tr>
@@ -240,7 +237,24 @@
         <i class="fas fa-search"></i> View Analysis
     </button>
 </td>
-                                    <td><?= htmlspecialchars($cl['CurrentStatus'] ?? ''); ?></td>
+<td class="align-middle">
+    <div>
+        <?php 
+        $stVal = trim($cl['CurrentStatus'] ?? ''); 
+        $stDisp = (strtoupper($stVal) === 'HR') ? 'Level 1' : $stVal;
+        ?>
+        <span class="font-weight-bold text-dark d-block"><?= htmlspecialchars($stDisp); ?></span>
+        <?php if (!empty($cl['ResumePath'])): ?>
+            <a href="<?= (strpos($cl['ResumePath'], 'http') === 0) ? htmlspecialchars($cl['ResumePath']) : base_url(htmlspecialchars($cl['ResumePath'])); ?>"
+               download
+               target="_blank"
+               class="btn btn-xs btn-outline-primary shadow-sm font-weight-bold mt-1 d-inline-block"
+               title="Download Candidate Resume">
+                <i class="fas fa-download mr-1"></i>Resume
+            </a>
+        <?php endif; ?>
+    </div>
+</td>
                                     <td><?= $cl['AppliedOn'] ?></td>  
 <td class="text-center text-nowrap">
 <div class="d-inline-flex align-items-center justify-content-center" style="gap: 4px;">
@@ -1100,18 +1114,13 @@ $('#increaseLevel').on('click',function(e){
 function autoSelectInterviewerForLevel() {
     if (!window.currentCandidateJobPanels || window.currentCandidateJobPanels.length === 0) return;
 
-    let selectedOption = $('#interviewLevel option:selected');
-    let selectedText = selectedOption.text();
-    let levelNum = 1;
+    let val = $('#interviewLevel').val();
+    let selectedText = $('#interviewLevel option:selected').text();
+    let levelNum = parseInt(val) || 1;
 
     let match = selectedText.match(/level\s*(\d+)/i);
     if (match && match[1]) {
         levelNum = parseInt(match[1]);
-    } else {
-        let selectedIdx = $('#interviewLevel')[0].selectedIndex;
-        if (selectedIdx > 0) {
-            levelNum = selectedIdx;
-        }
     }
 
     let panel = window.currentCandidateJobPanels.find(p => parseInt(p.LevelOrder) === levelNum);
@@ -1121,25 +1130,26 @@ function autoSelectInterviewerForLevel() {
 }
 
 function loadInterviewLevels(){
-
- $.post('<?= base_url("admin/getInterviewLevels") ?>',{},function(res){
-
-   let data = JSON.parse(res);
    let ddl = $('#interviewLevel');
-
    ddl.html('<option value="">Select Level</option>');
 
-   data.forEach(function(r){
-     ddl.append(`<option value="${r.StageId}">${r.StageName}</option>`);
-   });
+   if (window.currentCandidateJobPanels && window.currentCandidateJobPanels.length > 0) {
+       window.currentCandidateJobPanels.forEach(function(p) {
+           let lvlOrder = p.LevelOrder || 1;
+           ddl.append(`<option value="${lvlOrder}">Level ${lvlOrder}</option>`);
+       });
+   } else {
+       ddl.append('<option value="1">Level 1</option>');
+       ddl.append('<option value="2">Level 2</option>');
+       ddl.append('<option value="3">Level 3</option>');
+       ddl.append('<option value="4">Level 4</option>');
+   }
 
    if (ddl.find('option').length > 1) {
        ddl.prop('selectedIndex', 1);
    }
 
    autoSelectInterviewerForLevel();
-
- });
 }
 
 $(document).on('change', '#interviewLevel', function() {
@@ -2296,7 +2306,7 @@ window.initCandidateDataTable = function() {
     }
     if ($.fn.DataTable) {
         $('#example1').DataTable({
-            "responsive": true,
+            "responsive": false,
             "autoWidth": false,
             "columnDefs": [
                 { "orderable": false, "targets": [8] }
@@ -2316,7 +2326,7 @@ $(document).ready(function() {
 
         $(window).on('resize orientationchange', function() {
             if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-                $('#example1').DataTable().columns.adjust().responsive.recalc();
+                $('#example1').DataTable().columns.adjust();
             }
         });
     }, 100);
@@ -2430,7 +2440,7 @@ $(document).ready(function() {
         $('#btnToggleCompareMode').addClass('d-none');
         $('#compareActiveBar').removeClass('d-none').addClass('d-flex');
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().columns.adjust().responsive.recalc();
+            $('#example1').DataTable().columns.adjust();
         }
     });
 
@@ -2444,7 +2454,7 @@ $(document).ready(function() {
         $('#compareActiveBar').removeClass('d-flex').addClass('d-none');
         $('#btnToggleCompareMode').removeClass('d-none');
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().columns.adjust().responsive.recalc();
+            $('#example1').DataTable().columns.adjust();
         }
     });
 

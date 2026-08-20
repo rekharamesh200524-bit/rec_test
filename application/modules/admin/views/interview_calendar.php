@@ -64,10 +64,10 @@ if(!empty($Candidatelist)) {
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-calendar-alt mr-2"></i>Interview Calendar</h3>
                 <div class="card-tools">
-                    <span class="badge mr-1" style="background:#007bff; padding:5px 10px;">Assigned</span>
-                    <span class="badge mr-1" style="background:#28a745; padding:5px 10px;">Selected</span>
-                    <span class="badge mr-1" style="background:#fd7e14; padding:5px 10px;">On Hold</span>
-                    <span class="badge"      style="background:#dc3545; padding:5px 10px;">Rejected</span>
+                    <span class="badge badge-pill text-white font-weight-bold mr-1 px-3 py-1 shadow-sm" style="background-color:#007bff; font-size:12px;">Assigned</span>
+                    <span class="badge badge-pill text-white font-weight-bold mr-1 px-3 py-1 shadow-sm" style="background-color:#28a745; font-size:12px;">Selected</span>
+                    <span class="badge badge-pill text-white font-weight-bold mr-1 px-3 py-1 shadow-sm" style="background-color:#fd7e14; font-size:12px;">On Hold</span>
+                    <span class="badge badge-pill text-white font-weight-bold px-3 py-1 shadow-sm"      style="background-color:#dc3545; font-size:12px;">Rejected</span>
                 </div>
             </div>
             <div class="card-body">
@@ -90,7 +90,7 @@ if(!empty($Candidatelist)) {
                             $ts = strtotime($iv['ScheduledAt']);
                             $is_today = (date('Y-m-d', $ts) == date('Y-m-d'));
                             $time_str = date('h:i A', $ts);
-                            $date_str = $is_today ? 'Today' : date('d M, Y', $ts);
+                            $date_str = $is_today ? 'Today' : date('d-m-Y', $ts);
                             $result = strtolower(trim($iv['Result'] ?? ''));
                             
                             $badge_class = 'badge-primary';
@@ -197,11 +197,7 @@ function openInterviewDetail(candidateName, email, phone, jobTitle, scheduledAtS
         '<tr><th>Scheduled At</th><td>' + timeStr               + '</td></tr>' +
         '<tr><th>Interview Round</th><td>' + (round   || 1)  + '</td></tr>' +
         '<tr><th>Result</th><td>'       + resultBadge           + '</td></tr>' +
-        '</table>' +
-        '<div class="mt-3 text-right">' +
-        '<a href="<?= base_url('admin/MyInterviews'); ?>" class="btn btn-sm btn-success font-weight-bold">' +
-        '<i class="fas fa-brain mr-1"></i> View AI Personalized Questions' +
-        '</a></div>';
+        '</table>';
 
     document.getElementById('interviewDetailBody').innerHTML = html;
     $('#interviewDetailModal').modal('show');

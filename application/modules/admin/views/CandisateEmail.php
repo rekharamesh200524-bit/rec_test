@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 $action = strtolower(isset($action) ? $action : '');
 $mode   = strtolower(isset($interviewMode) ? $interviewMode : '');
 $isReschedule = ($action === 'reschedule');
@@ -11,7 +11,7 @@ if(!empty($candidatelist)) {
 ?>
 
 <?php
-$interviewDateFormatted = !empty($interviewDate) ? date('d M Y', strtotime($interviewDate)) : 'TBD';
+$interviewDateFormatted = !empty($interviewDate) ? date('d-m-Y', strtotime($interviewDate)) : 'TBD';
 $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($interviewDate)) : '';
 ?>
 <!DOCTYPE html>

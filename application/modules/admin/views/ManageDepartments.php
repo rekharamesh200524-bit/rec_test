@@ -17,7 +17,7 @@
                         </a>
                     </div>
               </div>
-              <div class="card-body">
+              <div class="card-body table-responsive">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead class="bg-success text-white">
                   <tr>
@@ -247,14 +247,14 @@ $(document).ready(function () {
 
     if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#example1')) {
         $('#example1').DataTable({
-            "responsive": true,
+            "responsive": false,
             "autoWidth": false
         });
     }
 
     $(window).on('resize orientationchange', function() {
         if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().columns.adjust().responsive.recalc();
+            $('#example1').DataTable().columns.adjust();
         }
     });
 

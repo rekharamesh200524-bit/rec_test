@@ -530,14 +530,14 @@
             jQuery(document).ready(function(){
                 
                 jQuery('#basicTable,#basicTable1,#basicTable2,#basicTable3').DataTable({
-                    responsive: true
+                    responsive: false
                 });
                 
                 var shTable = jQuery('#shTable').DataTable({
                     "fnDrawCallback": function(oSettings) {
                         jQuery('#shTable_paginate ul').addClass('pagination-active-dark');
                     },
-                    responsive: true
+                    responsive: false
                 });
                 
                 // Show/Hide Columns Dropdown
@@ -562,7 +562,7 @@
                 });
                 
                 var exRowTable = jQuery('#exRowTable').DataTable({
-                    responsive: true,
+                    responsive: false,
                     "fnDrawCallback": function(oSettings) {
                         jQuery('#exRowTable_paginate ul').addClass('pagination-active-success');
                     },

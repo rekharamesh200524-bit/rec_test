@@ -545,3 +545,13 @@ $config['site_footer'] = "Copyright Â© 2020 inet. All Rights Reserved.";
 $config['powered_url'] = "";
 
 $config['powered_raw_url'] = "";
+
+/*
+|--------------------------------------------------------------------------
+| Microsoft Graph API / Teams Meeting Credentials
+|--------------------------------------------------------------------------
+*/
+$config['ms_tenant_id']         = getenv('MS_TENANT_ID') ?: '';
+$config['ms_client_id']         = getenv('MS_CLIENT_ID') ?: '';
+$config['ms_client_secret']     = getenv('MS_CLIENT_SECRET') ?: '';
+$config['ms_organizer_user_id'] = getenv('MS_ORGANIZER_USER_ID') ?: '';

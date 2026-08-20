@@ -560,6 +560,10 @@ public function dashboard()
         $data["onhold_reminders"] = [];
     }
 
+    // Normalize legacy 'HR' status to 'Level 1'
+    $this->db->where('CurrentStatus', 'HR')->or_where('CurrentStatus', 'hr')->update('JobApplications', ['CurrentStatus' => 'Level 1']);
+    $this->db->where('ATS_Status', 'HR')->or_where('ATS_Status', 'hr')->update('IHrCandidates', ['ATS_Status' => 'Level 1']);
+
     // 4. RESOURCE REQUESTS
     $data["total_resource_requests"]   = $this->db->count_all_results("resource_requests");
     $data["pending_resource_requests"] = $this->db->where("Status", "PENDING APPROVAL")->count_all_results("resource_requests");
@@ -2830,9 +2834,15 @@ public function saveCandidateStage()
         $currentStatus = 'Rescheduled';
     }
     elseif($actLower == 'shortlisted' && !empty($level)){
-        $stageRow = $this->db->where('StageId', $level)->get('recruitmentstages')->row();
-        if($stageRow){
-            $currentStatus = $stageRow->StageName;   
+        if (is_numeric($level)) {
+            $stageRow = $this->db->where('StageId', $level)->get('recruitmentstages')->row();
+            if($stageRow && strtolower(trim($stageRow->StageName)) !== 'hr'){
+                $currentStatus = $stageRow->StageName;   
+            } else {
+                $currentStatus = 'Level ' . $level;
+            }
+        } else {
+            $currentStatus = $level;
         }
     }
     elseif(!empty($stageId)){
@@ -2960,18 +2970,29 @@ public function saveCandidateStage()
             $meetLink = '';
             if (!empty($interviewType) && strtolower($interviewType) === 'online') {
                 if (!$this->db->field_exists('MeetLink', 'CandidateInterviews')) {
-                    $this->db->query("ALTER TABLE CandidateInterviews ADD COLUMN MeetLink VARCHAR(300) NULL");
+                    $this->db->query("ALTER TABLE CandidateInterviews ADD COLUMN MeetLink TEXT NULL");
                 }
-                $jobMeta = $this->db
-                    ->select('j.JobCode, c.CandidateCode')
+                $candMeta = $this->db
+                    ->select('c.Fullname, c.CandidateCode, j.JobCode, j.JobTitle')
                     ->from('IHRCandidates c')
                     ->join('IHRJobsList j', 'j.Jid = c.Jid', 'left')
                     ->where('c.CandidateId', $candidateId)
                     ->get()->row();
-                $jCode    = $jobMeta ? preg_replace('/[^a-zA-Z0-9]/', '', $jobMeta->JobCode)        : 'INET';
-                $cCode    = $jobMeta ? preg_replace('/[^a-zA-Z0-9]/', '', $jobMeta->CandidateCode)  : 'CAND';
-                $token    = strtoupper(substr(md5(uniqid((string)rand(), true)), 0, 6));
-                $meetLink = 'https://meet.jit.si/INETCSC-' . $jCode . '-' . $cCode . '-' . $token;
+
+                $candName = $candMeta ? trim($candMeta->Fullname) : 'Candidate';
+                $jobTitle = $candMeta ? trim($candMeta->JobTitle) : 'Position';
+                $subject  = "Interview - {$candName} ({$jobTitle})";
+
+                $this->load->library('ms_graph_teams');
+                $teamsResult = $this->ms_graph_teams->createTeamsMeeting($subject, $interviewDate, 45);
+
+                if (!empty($teamsResult['status']) && !empty($teamsResult['joinWebUrl'])) {
+                    $meetLink = $teamsResult['joinWebUrl'];
+                } else {
+                    $errMessage = !empty($teamsResult['message']) ? $teamsResult['message'] : 'Unable to create Microsoft Teams meeting. Please try again.';
+                    echo json_encode(['status' => 'error', 'message' => $errMessage, 'msg' => $errMessage]);
+                    return;
+                }
             }
 
             $interviewDataToSave = [
@@ -3656,16 +3677,16 @@ public function filterAssignedInterviews()
 
             echo "<tr {$trClass}>";
             echo "<td class='text-center font-weight-bold'>".$i++."</td>";
-            echo "<td style='white-space: nowrap;'><a href='".base_url('admin/viewResume/'.$cl['CandidateId'])."' target='_blank' class='badge badge-pill badge-primary px-2 py-1 font-weight-bold' style='font-size: 11.5px;'>".htmlspecialchars($cl['CandidateCode'])."</a></td>";
-            echo "<td style='white-space: nowrap;'><a href='javascript:void(0);' class='viewCandidateDetails text-primary font-weight-bold' data-id='".$cl['CandidateId']."'>".htmlspecialchars($cl['Fullname'])."</a></td>";
+            echo "<td style='white-space: nowrap;'><a href='".base_url('admin/viewResume/'.$cl['CandidateId'])."' target='_blank' class='text-dark font-weight-bold'>".htmlspecialchars($cl['CandidateCode'])."</a></td>";
+            echo "<td style='white-space: nowrap;'><a href='javascript:void(0);' class='viewCandidateDetails text-dark font-weight-bold' data-id='".$cl['CandidateId']."'>".htmlspecialchars($cl['Fullname'])."</a></td>";
             echo "<td style='white-space: nowrap;'>";
-            echo "<div class='font-weight-bold text-dark mb-0'><i class='fas fa-briefcase text-primary mr-1'></i><strong>Job Title:</strong> {$jobTitleStr}</div>";
+            echo "<div class='font-weight-bold text-dark mb-0'>{$jobTitleStr}</div>";
             if (!empty($roleStr)) {
-                echo "<div class='small text-muted'><i class='fas fa-user-tag text-info mr-1'></i><strong>Role:</strong> {$roleStr}</div>";
+                echo "<div class='small text-muted'>{$roleStr}</div>";
             }
             echo "</td>";
-            echo "<td style='white-space: nowrap;'><span class='text-dark font-weight-bold'><i class='fas fa-phone text-muted mr-1'></i>".htmlspecialchars($cl['PhoneNo'])."</span></td>";
-            echo "<td style='white-space: nowrap;'><span class='text-muted small'><i class='fas fa-envelope text-primary mr-1'></i>".htmlspecialchars($cl['Email'])."</span></td>";
+            echo "<td style='white-space: nowrap;'><span class='text-dark font-weight-bold'>".htmlspecialchars($cl['PhoneNo'])."</span></td>";
+            echo "<td style='white-space: nowrap;'><span class='text-muted small'>".htmlspecialchars($cl['Email'])."</span></td>";
 
             $recVal = !empty($cl['ProfileMatchPer']) ? $cl['ProfileMatchPer'] : 'Potential Match';
             if ($recVal === 'Recommended') $recVal = 'Strong Match';
@@ -3676,14 +3697,14 @@ public function filterAssignedInterviews()
 
             echo "<td class='text-center' style='white-space: nowrap;'>";
             if (strtolower($mode) === 'online') {
-                echo "<span class='badge badge-primary'><i class='fas fa-video mr-1'></i>Online</span>";
+                echo "<span class='badge badge-success px-2 py-1'><i class='fas fa-video mr-1'></i>Online</span>";
                 if (!empty($meetLink) && !$isRescheduledRow) {
-                    echo " <a href='".htmlspecialchars($meetLink)."' target='_blank' class='btn btn-xs btn-outline-primary ml-1' title='Join Video Meeting'><i class='fas fa-video mr-1'></i>Join</a>";
+                    echo " <a href='".htmlspecialchars($meetLink)."' target='_blank' class='btn btn-xs btn-outline-success ml-1' title='Join Video Meeting'><i class='fas fa-video mr-1'></i>Join</a>";
                 }
             } elseif (strtolower($mode) === 'offline') {
-                echo "<span class='badge badge-secondary'><i class='fas fa-building mr-1'></i>Offline</span>";
+                echo "<span class='badge badge-primary px-2 py-1'><i class='fas fa-building mr-1'></i>Offline</span>";
             } else {
-                echo "<span class='badge badge-light'>".(!empty($mode) ? htmlspecialchars($mode) : 'N/A')."</span>";
+                echo "<span class='badge badge-light px-2 py-1'>".(!empty($mode) ? htmlspecialchars($mode) : 'N/A')."</span>";
             }
             echo "</td>";
 
@@ -4880,7 +4901,7 @@ public function mark_all_notifications_read() {
                     "ExpMax"               => isset($inps["ExpMax"]) ? (float)$inps["ExpMax"] : 0.0,
                     
                     "Salary"               => $salaryStr,
-                    "RecruitmentStartDate" => !empty($inps["RecruitmentStartDate"]) ? $inps["RecruitmentStartDate"] : null,
+                    "RecruitmentStartDate" => !empty($inps["RecruitmentStartDate"]) ? $inps["RecruitmentStartDate"] : date("Y-m-d"),
                     "TargetOnboardingDate" => !empty($inps["TargetOnboardingDate"]) ? $inps["TargetOnboardingDate"] : null,
                     "ReasonForRequirement" => isset($inps["ReasonForRequirement"]) ? trim($inps["ReasonForRequirement"]) : "",
                     "MustHaveSkills"       => isset($inps["MustHaveSkills"]) ? trim($inps["MustHaveSkills"]) : "",
@@ -5169,7 +5190,7 @@ public function mark_all_notifications_read() {
             "Did"                   => $req["Did"],
             "EmploymentType"        => "Full-Time",
             "WorkMode"              => "Onsite",
-            "EducationRequired"     => "Bachelor Degree",
+            "EducationRequired"     => !empty($req["EducationRequired"]) ? $req["EducationRequired"] : "Bachelor Degree",
             "ExpMin"                => $req["ExpMin"],
             "ExpMax"                => $req["ExpMax"],
             "SalMin"                => $req["SalMin"],
@@ -5202,8 +5223,11 @@ public function mark_all_notifications_read() {
     {
         if (empty($requestId)) return false;
 
+        // Fetch full request details including approver gender
         $req = $this->db
-            ->select('rr.*, d.Departmentname, req.EmpName AS RequesterName, req.EmpEmail AS RequesterEmail, app.EmpName AS ApproverName, app.EmpEmail AS ApproverEmail')
+            ->select('rr.*, d.Departmentname,
+                      req.EmpName AS RequesterName, req.EmpEmail AS RequesterEmail,
+                      app.EmpName AS ApproverName, app.EmpEmail AS ApproverEmail, app.EmpGender AS ApproverGender')
             ->from('resource_requests rr')
             ->join('Departments d', 'd.Did = rr.Did', 'left')
             ->join('IHUsers req', 'req.IUid = rr.RequestedBy', 'left')
@@ -5216,105 +5240,160 @@ public function mark_all_notifications_read() {
             return false;
         }
 
+        // Fetch CC recipients: Requester, Recruitment Managers (10), Hiring Managers (9), Recruiters
+        $ccMap = [];
+
+        // 1. Add Requester to CC if different from Approver
+        if (!empty($req['RequesterEmail']) && strtolower(trim($req['RequesterEmail'])) !== strtolower(trim($req['ApproverEmail']))) {
+            $ccMap[strtolower(trim($req['RequesterEmail']))] = !empty($req['RequesterName']) ? $req['RequesterName'] : 'Requester';
+        }
+
+        // 2. Fetch users by Role ID or Role Name
+        $roleUsers = $this->db
+            ->select('u.EmpName, u.EmpEmail, r.RoleName')
+            ->from('IHUsers u')
+            ->join('EmpRoles r', 'u.Erid = r.Erid', 'left')
+            ->group_start()
+                ->where_in('u.Erid', [9, 10])
+                ->or_where_in('LOWER(r.RoleName)', ['recruitment manager', 'hiring manager', 'recruiter', 'recruitment manager / recruiter', 'hr manager'])
+                ->or_like('LOWER(r.RoleName)', 'recruiter')
+                ->or_like('LOWER(r.RoleName)', 'hiring manager')
+                ->or_like('LOWER(r.RoleName)', 'recruitment')
+            ->group_end()
+            ->get()
+            ->result_array();
+
+        if (!empty($roleUsers)) {
+            foreach ($roleUsers as $cu) {
+                $e = strtolower(trim($cu['EmpEmail'] ?? ''));
+                if (!empty($e) && filter_var($e, FILTER_VALIDATE_EMAIL)) {
+                    if ($e !== strtolower(trim($req['ApproverEmail']))) {
+                        $ccMap[$e] = !empty($cu['EmpName']) ? $cu['EmpName'] : '';
+                    }
+                }
+            }
+        }
+
+        // Gender-aware salutation for approver
+        $approverGender = strtolower(trim($req['ApproverGender'] ?? ''));
+        if ($approverGender === 'female') {
+            $salutation = 'Dear Madam,';
+        } elseif ($approverGender === 'male') {
+            $salutation = 'Dear Sir,';
+        } else {
+            $salutation = 'Dear Sir / Madam,';
+        }
+
+        $approverName  = !empty($req['ApproverName'])  ? $req['ApproverName']  : 'Approver';
         $requesterName = !empty($req['RequesterName']) ? $req['RequesterName'] : 'A team member';
-        $jobTitle      = !empty($req['JobTitle']) ? $req['JobTitle'] : 'Resource';
-        $requestCode   = !empty($req['RequestCode']) ? $req['RequestCode'] : 'REQ';
+        $jobTitle      = !empty($req['JobTitle'])      ? $req['JobTitle']      : 'Resource';
+        $requestCode   = !empty($req['RequestCode'])   ? $req['RequestCode']   : 'REQ';
+        $department    = !empty($req['Departmentname']) ? $req['Departmentname'] : 'N/A';
+        $openings      = !empty($req['NoofOpenings'])  ? (int)$req['NoofOpenings'] : 1;
+        $positionType  = !empty($req['PositionType'])  ? $req['PositionType']  : 'New Position';
+        $targetDate    = !empty($req['TargetOnboardingDate']) ? date('d M Y', strtotime($req['TargetOnboardingDate'])) : 'N/A';
+        $expRange      = '';
+        if (!empty($req['ExpMin']) || !empty($req['ExpMax'])) {
+            $expRange = $req['ExpMin'] . ' - ' . $req['ExpMax'] . ' years';
+        } else {
+            $expRange = 'N/A';
+        }
 
-        $subject = $requesterName . ' requested a resource (' . $jobTitle . ') - ' . $requestCode;
+        $subject = '[Action Required] Resource Request ' . $requestCode . ' - ' . $jobTitle . ' | Approval Needed';
 
-        $baseUrl = $this->config->item('base_url');
-        $actionLink = $baseUrl . 'admin/RequestedResources';
+        $posTypeLower = strtolower(trim($positionType));
+        $posTypePhrase = ($posTypeLower === 'replacement') ? 'replacement' : 'new position';
 
-        $htmlBody = '
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <style>
-                body { font-family: "Segoe UI", Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-                .email-card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e9ecef; }
-                .email-header { background: linear-gradient(135deg, #007bff, #0056b3); padding: 24px; text-align: center; color: #ffffff; }
-                .email-header h2 { margin: 0; font-size: 22px; font-weight: 600; }
-                .email-body { padding: 30px; }
-                .info-box { background: #eef5ff; border-left: 4px solid #007bff; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 15px; }
-                .info-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                .info-table td { padding: 10px; border-bottom: 1px solid #e9ecef; font-size: 14px; }
-                .info-table td.label { font-weight: 600; color: #495057; width: 40%; }
-                .btn-approve { display: inline-block; background: #28a745; color: #ffffff !important; padding: 12px 28px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; text-align: center; }
-                .email-footer { background: #f1f3f5; padding: 15px; text-align: center; font-size: 12px; color: #6c757d; }
-            </style>
-        </head>
-        <body>
-            <div class="email-card">
-                <div class="email-header">
-                    <h2>Resource Request Pending Approval</h2>
-                </div>
-                <div class="email-body">
-                    <p>Dear <strong>' . htmlspecialchars($req['ApproverName'] ?? 'Approver') . '</strong>,</p>
-                    <div class="info-box">
-                        <strong>' . htmlspecialchars($requesterName) . '</strong> has requested a resource for <strong>' . htmlspecialchars($jobTitle) . '</strong>.
-                    </div>
-                    <table class="info-table">
-                        <tr>
-                            <td class="label">Request Code:</td>
-                            <td><strong style="color:#007bff;">' . htmlspecialchars($requestCode) . '</strong></td>
-                        </tr>
-                        <tr>
-                            <td class="label">Requested By:</td>
-                            <td>' . htmlspecialchars($requesterName) . ' (' . htmlspecialchars($req['RequesterEmail'] ?? '-') . ')</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Job Title:</td>
-                            <td>' . htmlspecialchars($jobTitle) . '</td>
-                        </tr>
-                        <tr>
-                            <td class="label">No. of Openings:</td>
-                            <td>' . (int)($req['NoofOpenings'] ?? 1) . '</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Department:</td>
-                            <td>' . htmlspecialchars($req['Departmentname'] ?? 'General') . '</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Position Type:</td>
-                            <td>' . htmlspecialchars($req['PositionType'] ?? 'New Position') . '</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Target Onboarding:</td>
-                            <td>' . htmlspecialchars($req['TargetOnboardingDate'] ?? 'N/A') . '</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Reason / Requirement:</td>
-                            <td>' . htmlspecialchars($req['ReasonForRequirement'] ?? 'N/A') . '</td>
-                        </tr>
-                    </table>
-                    <div style="text-align: center; margin-top: 25px;">
-                        <a href="' . $actionLink . '" class="btn-approve">Review & Approve Request</a>
-                    </div>
-                </div>
-                <div class="email-footer">
-                    <p>This is an automated notification from I-NET Recruitment Portal.</p>
-                </div>
-            </div>
-        </body>
-        </html>';
+        $htmlBody = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.6; color: #333333; background-color: #ffffff; margin: 0; padding: 10px; }
+        .req-table { width: 100%; max-width: 650px; border-collapse: collapse; margin: 20px 0; }
+        .req-table th, .req-table td { border: 1px solid #dddddd; padding: 8px 12px; text-align: left; font-size: 13px; }
+        .req-table th { background-color: #f8f9fa; width: 35%; color: #495057; font-weight: bold; }
+        .req-table td { color: #212529; }
+    </style>
+</head>
+<body>
+    <p>' . $salutation . '</p>
+    <p>A new Resource Request (<strong>' . htmlspecialchars($requestCode) . '</strong>) has been submitted by <strong>' . htmlspecialchars($requesterName) . '</strong> for the ' . $posTypePhrase . ' of <strong>' . htmlspecialchars($jobTitle) . '</strong> and is pending your approval.</p>
+
+    <table class="req-table">
+        <tr>
+            <th>Request Code</th>
+            <td><strong>' . htmlspecialchars($requestCode) . '</strong></td>
+        </tr>
+        <tr>
+            <th>Job Title</th>
+            <td>' . htmlspecialchars($jobTitle) . '</td>
+        </tr>
+        <tr>
+            <th>Department</th>
+            <td>' . htmlspecialchars($department) . '</td>
+        </tr>
+        <tr>
+            <th>No. of Positions</th>
+            <td>' . $openings . '</td>
+        </tr>
+        <tr>
+            <th>Position Type</th>
+            <td>' . htmlspecialchars($positionType) . '</td>
+        </tr>
+        <tr>
+            <th>Experience Required</th>
+            <td>' . htmlspecialchars($expRange) . '</td>
+        </tr>
+        <tr>
+            <th>Target Onboarding Date</th>
+            <td>' . htmlspecialchars($targetDate) . '</td>
+        </tr>
+        <tr>
+            <th>Requested By</th>
+            <td>' . htmlspecialchars($requesterName) . ' (' . htmlspecialchars($req['RequesterEmail'] ?? '-') . ')</td>
+        </tr>
+    </table>
+
+    <p>Thanks &amp; Regards,<br>
+    <strong>Recruiter Team</strong></p>
+    <br>
+    <p style="font-size: 12px; color: #666666; font-style: italic; margin-top: 20px; border-top: 1px dashed #cccccc; padding-top: 8px;">Note: This is an auto-generated email.</p>
+</body>
+</html>';
 
         try {
             require_once(APPPATH . 'libraries/InetMailer.php');
             $objs = new InetMailer();
             $mail = $objs->load();
             if ($mail) {
-                $mail->Timeout = 3;
+                $mail->CharSet = 'UTF-8';
+                $mail->Timeout = 10;
                 $mail->setFrom('info@inetcsc.com', 'I-NET Recruitment Portal');
-                $mail->addAddress(trim($req['ApproverEmail']));
                 $mail->isHTML(true);
                 $mail->Subject = $subject;
                 $mail->Body    = $htmlBody;
-                return @$mail->send();
+
+                // To: Approver
+                $mail->addAddress(trim($req['ApproverEmail']), $approverName);
+
+                // CC: Recruitment Managers, Hiring Managers, Recruiters, and Requester
+                foreach ($ccMap as $ccEmail => $ccName) {
+                    try {
+                        $mail->addCC($ccEmail, $ccName);
+                    } catch (\Throwable $ct) {
+                        log_message('error', 'addCC failed for email: ' . $ccEmail . ' - ' . $ct->getMessage());
+                    }
+                }
+
+                $sent = $mail->send();
+                @file_put_contents(APPPATH . 'logs/ats_debug.log', date('Y-m-d H:i:s') . " - Resource Request Email Sent: " . ($sent ? "SUCCESS" : "FAILED") . " | To: " . $req['ApproverEmail'] . " | CC: " . implode(', ', array_keys($ccMap)) . "\n", FILE_APPEND);
+                return $sent;
             }
             return false;
         } catch (\Throwable $e) {
             log_message('error', 'Resource Request Approver Email Error: ' . $e->getMessage());
+            @file_put_contents(APPPATH . 'logs/ats_debug.log', date('Y-m-d H:i:s') . " - Resource Request Email ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
             return false;
         }
     }
@@ -5676,9 +5755,11 @@ public function mark_all_notifications_read() {
         $data["currentUrlArray"] = $this->admin_model->getBreadcrumb($currentUrl);
 
         $data["approved_resources"]   = $this->admin_model->getApprovedResourceRequests();
+        $data["pending_resources"]    = $this->admin_model->getResourceRequests(['Status' => 'PENDING APPROVAL']);
         $data["recruitment_managers"] = $this->admin_model->getRecruitmentManagers();
         $data["department"]           = $this->admin_model->getUserDepartments();
         $data["ctc_approvers"]        = $this->admin_model->getAllUsers();
+        $data["employee_det"]         = $check_session;
 
         $this->template->write_view("content", "admin/ApprovedResources", $data);
         $this->template->render();
@@ -5747,7 +5828,7 @@ public function mark_all_notifications_read() {
                 "Did"                        => $req["Did"],
                 "EmploymentType"             => "Full-Time",
                 "WorkMode"                   => "Onsite",
-                "EducationRequired"          => "Bachelor Degree",
+                "EducationRequired"          => !empty($req["EducationRequired"]) ? $req["EducationRequired"] : "Bachelor Degree",
                 "ExpMin"                     => $req["ExpMin"],
                 "ExpMax"                     => $req["ExpMax"],
                 "SalMin"                     => $req["SalMin"],

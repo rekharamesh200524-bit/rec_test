@@ -24,7 +24,7 @@ $theme_path = $this->config->item('theme_locations').$this->config->item('active
         </div>
       </div>
 
-      <div class="card-body">
+      <div class="card-body table-responsive">
         <table id="recruitmentStagesTable" class="table table-bordered table-striped">
           <thead class="bg-success text-white">
             <tr>
@@ -296,12 +296,12 @@ $(document).ready(function() {
             $('#recruitmentStagesTable').DataTable().destroy();
         }
         $('#recruitmentStagesTable').DataTable({
-            "responsive": true,
+            "responsive": false,
             "autoWidth": false
         });
         $(window).on('resize orientationchange', function() {
             if ($.fn.DataTable && $.fn.DataTable.isDataTable('#recruitmentStagesTable')) {
-                $('#recruitmentStagesTable').DataTable().columns.adjust().responsive.recalc();
+                $('#recruitmentStagesTable').DataTable().columns.adjust();
             }
         });
     }, 100);
