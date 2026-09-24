@@ -1,8 +1,11 @@
 <?php
-    $employee_det = $this->session->userdata('logged_in');
-         
-     if(empty($employee_det)) { redirect($this->config->item('base_url').'admin/index'); }
-    $theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
+$employee_det = $this->session->userdata('logged_in');
+
+if (empty($employee_det)) {
+    redirect($this->config->item('base_url').'admin/index');
+}
+
+$theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
     
     $fv         = $this->session->flashdata('form_values');
     $fv         = is_array($fv) ? $fv : [];
@@ -35,7 +38,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Gender</th>
+                    <!-- <th>Gender</th> -->
                     <th>Designation</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -55,7 +58,7 @@
                                     <td><?= $usr['EmpName']; ?></td>
                                     <td><?= $usr['EmpEmail']; ?></td>
                                     <td><?= $usr['EmpPhone']; ?></td>
-                                    <td><?= $usr['EmpGender']; ?></td>
+                                    <!-- <td><?= $usr['EmpGender']; ?></td> -->
                                     <td><?= $usr['EmpDesignation']; ?></td>
                                     <td>
                                         <?= ($usr['UStatus'] == 1) ? 'Active' : 'Inactive'; ?>
@@ -228,7 +231,7 @@
   </div>
 </div>
 
-<div id="rightForm" class="right-form">
+<div id="rightForm" class="right-form <?= !empty($hasError) ? 'open' : '' ?>">
     <div class="right-form-header">
         <h5>Add User</h5>
         <button type="button" class="close-btn" id="closeAddForm">&times;</button>
@@ -307,14 +310,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-4 col-form-label">DOB</label>
+                        <label class="col-lg-4 col-form-label">DOJ(Date of Joining:)</label>
                         <div class="col-lg-8">
                             <input type="date" class="form-control" name="val-dob"
                                    value="<?= htmlspecialchars(isset($fv['val-dob']) ? $fv['val-dob'] : '', ENT_QUOTES) ?>">
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label class="col-lg-4 col-form-label">Gender</label>
                         <div class="col-lg-8">
                             <select class="form-control" name="val-gender">
@@ -323,7 +326,7 @@
                                 <option value="Female" <?= (isset($fv['val-gender']) && $fv['val-gender'] === 'Female') ? 'selected' : '' ?>>Female</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="form-group row">
                         <label class="col-lg-4 col-form-label">Designation</label>
@@ -346,78 +349,4 @@
     </div>
 </div>
 
-<div id="rightFormOverlay"></div>
-
-<script src="<?= $theme_path ?>/assets/plugins/jquery/jquery.min.js"></script>
-
-<script>
-document.querySelectorAll('.editUserBtn').forEach(function(btn) {
-
-    btn.addEventListener('click', function () {
-
-        document.getElementById('edit_IUid').value = this.dataset.id;
-        document.getElementById('edit_name').value = this.dataset.name;
-        document.getElementById('edit_email').value = this.dataset.email;
-        document.getElementById('edit_phone').value = this.dataset.phone;
-        document.getElementById('edit_dob').value = this.dataset.dob;
-        document.getElementById('edit_gender').value = this.dataset.gender;
-        document.getElementById('edit_designation').value = this.dataset.designation;
-            document.getElementById('edit_department').value = this.dataset.department;
-        document.getElementById('edit_role').value = this.dataset.role;
-
-        $('#editUserModal').modal('show');
-    });
-
-});
- 
-$(document).on('click', '.userStatusBtn', function () {
-
-    let userId = $(this).data('id');
-    let action = $(this).data('action');
-    let url = '';
-    let title = '';
-    let message = '';
-    let btnClass = '';
-
-    if (action === 'deactivate') {
-        url = "<?= base_url('admin/DeactivateUser/'); ?>" + userId;
-        title = "Deactivate User";
-        message = "Are you sure you want to deactivate this user?";
-        btnClass = "btn-danger";
-    } else {
-        url = "<?= base_url('admin/ActivateUser/'); ?>" + userId;
-        title = "Activate User";
-        message = "Are you sure you want to activate this user?";
-        btnClass = "btn-success";
-    }
-
-    $('#userStatusTitle').text(title);
-    $('#userStatusMessage').text(message);
-    $('#confirmUserStatusBtn')
-        .attr('href', url)
-        .removeClass('btn-danger btn-success')
-        .addClass(btnClass);
-
-    $('#userStatusModal').modal('show');
-});
-
-$(document).ready(function () {
-
-    $('#openAddForm').on('click', function () {
-        $('#rightForm').addClass('open');
-        $('#rightFormOverlay').addClass('show');
-    });
-
-    $('#closeAddForm, #rightFormOverlay').on('click', function () {
-        $('#rightForm').removeClass('open');
-        $('#rightFormOverlay').removeClass('show');
-    });
-
-    
-    <?php if ($hasError): ?>
-    $('#rightForm').addClass('open');
-    $('#rightFormOverlay').addClass('show');
-    <?php endif; ?>
-
-});
-</script>
+<div id="rightFormOverlay" class="<?= !empty($hasError) ? 'show' : '' ?>"></div>

@@ -226,7 +226,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 3;
 
 /*
 |--------------------------------------------------------------------------
@@ -551,7 +551,7 @@ $config['powered_raw_url'] = "";
 | Microsoft Graph API / Teams Meeting Credentials
 |--------------------------------------------------------------------------
 */
-$config['ms_tenant_id']         = getenv('MS_TENANT_ID') ?: '';
-$config['ms_client_id']         = getenv('MS_CLIENT_ID') ?: '';
-$config['ms_client_secret']     = getenv('MS_CLIENT_SECRET') ?: '';
-$config['ms_organizer_user_id'] = getenv('MS_ORGANIZER_USER_ID') ?: '';
+// $config['ms_tenant_id']         = getenv('MS_TENANT_ID') ?: '';
+// $config['ms_client_id']         = getenv('MS_CLIENT_ID') ?: '';
+// $config['ms_client_secret']     = getenv('MS_CLIENT_SECRET') ?: '';
+// $config['ms_organizer_user_id'] = getenv('MS_ORGANIZER_USER_ID') ?: '';

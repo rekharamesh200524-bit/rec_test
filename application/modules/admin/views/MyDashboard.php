@@ -1,3 +1,13 @@
+<?php
+$employee_det = $this->session->userdata('logged_in');
+
+if (empty($employee_det)) {
+    redirect($this->config->item('base_url').'admin/index');
+}
+
+$theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
+?>
+
 <section class="content">
   <div class="container-fluid">
 
@@ -59,7 +69,7 @@
       <div class="card-body">
 
         <div class="text-center">
-          <canvas id="vacancyDonutChart" height="220"></canvas>
+          <canvas id="vacancyDonutChart" height="220" data-labels="<?= htmlspecialchars($donut_labels, ENT_QUOTES, 'UTF-8'); ?>" data-values="<?= htmlspecialchars($donut_values, ENT_QUOTES, 'UTF-8'); ?>"></canvas>
         </div>
 
         <hr>
@@ -75,66 +85,3 @@
 
   </div>
 </section>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  var donutLabels = <?= $donut_labels ?>;
-  var donutValues = <?= $donut_values ?>;
-
-  var colors = [
-    '#28a745',  
-    '#007bff', 
-    '#ffc107',  
-    '#dc3545'  
-  ];
-
-  var total = donutValues.reduce((a, b) => a + b, 0);
-
-  var ctx = document.getElementById('vacancyDonutChart').getContext('2d');
-
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: donutLabels,
-      datasets: [{
-        data: donutValues,
-        backgroundColor: colors
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '70%',
-      plugins: {
-        legend: { display: false }
-      }
-    }
-  });
-
- 
-  var detailsContainer = document.getElementById('vacancyDetails');
-  detailsContainer.innerHTML = '';
-
-  donutLabels.forEach(function(label, index) {
-
-    var value = donutValues[index];
-    var percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-    var color = colors[index];
-
-    detailsContainer.innerHTML += `
-      <div class="progress-group mb-3">
-        ${label}
-        <span class="float-right">
-          <b>${value}</b> / ${total}
-        </span>
-        <div class="progress progress-sm">
-          <div class="progress-bar" style="width:${percentage}%; background-color:${color}">
-          </div>
-        </div>
-      </div>
-    `;
-  });
-
-});
-</script>

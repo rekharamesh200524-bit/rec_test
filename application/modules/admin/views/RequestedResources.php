@@ -79,7 +79,7 @@
 
                       <?php if ($req['Status'] === 'PENDING APPROVAL'): ?>
 
-                        <?php if ($isApproverRole): ?>
+                        <!-- <?php if ($isApproverRole): ?>
                         
                           <button type="button" class="btn btn-sm btn-success" title="Accept Request"
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'ACCEPTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
@@ -89,7 +89,7 @@
                             onclick="openApprovalModal('<?= !empty($req['RequestId']) ? $req['RequestId'] : htmlspecialchars($req['RequestCode']); ?>', 'REJECTED', '<?= htmlspecialchars($req['RequestCode']); ?>')">
                             <i class="fas fa-times"></i>
                           </button>
-                        <?php endif; ?>
+                        <?php endif; ?> -->
 
                       <?php endif; ?>
                     </div>
@@ -114,7 +114,7 @@
 
 
 <div id="requestResourcePanel" class="right-form">
-  <form action="<?= base_url('admin/saveResourceRequest'); ?>" method="post" id="resourceRequestForm" style="display:flex; flex-direction:column; height:100%;">
+  <form action="<?= base_url('admin/saveResourceRequest'); ?>" method="post" id="resourceRequestForm" novalidate style="display:flex; flex-direction:column; height:100%;">
     <input type="hidden" name="RequestId" id="res_RequestId" value="0">
     
     <div class="right-form-header">
@@ -215,7 +215,95 @@
                       </select>
                     </div>
 
+                    <div class="form-group mb-3">
+                      <label class="text-label font-weight-bold d-flex justify-content-between align-items-center mb-1">
+                        <span><i class="fas fa-paper-plane text-primary mr-1"></i> CC Notification Recipients</span>
+                        <span class="badge badge-light border text-muted px-2 py-1 font-weight-normal selected-cc-count-badge" id="selectedCcCountBadge">0 Recipients</span>
+                      </label>
+                      
+                      <!-- Selected Active CC Chips -->
+                      <div id="activeCcChipsContainer" class="p-2 border rounded bg-white d-flex flex-wrap align-items-center mb-2 active-cc-chips-container">
+                        <!-- Dynamically rendered -->
+                      </div>
 
+                      <!-- Search & Interactive User Picker -->
+                      <div class="card border mb-0 shadow-sm cc-search-card">
+                        <div class="card-header bg-light p-2 border-bottom d-flex align-items-center">
+                          <div class="input-group input-group-sm mb-0">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text bg-white border-right-0 cc-search-icon-text"><i class="fas fa-search text-muted"></i></span>
+                            </div>
+                            <input type="text" id="ccUserSearchInput" class="form-control form-control-sm border-left-0 cc-search-input-field" placeholder="Search team member by name, email or role...">
+                          </div>
+                        </div>
+                        <div class="card-body p-0 cc-user-list-container" id="ccUserListContainer">
+                          <?php if (!empty($ctc_approvers)): ?>
+                            <?php foreach ($ctc_approvers as $u): ?>
+                              <?php 
+                                $rName = strtolower(trim($u['RoleName'] ?? ''));
+                                $isDefaultCc = (
+                                  in_array($rName, ['recruitment manager', 'hiring manager', 'recruiter', 'recruitment manager / recruiter', 'hr manager']) ||
+                                  strpos($rName, 'recruiter') !== false ||
+                                  strpos($rName, 'hiring manager') !== false ||
+                                  strpos($rName, 'recruitment') !== false
+                                );
+                                $initial = strtoupper(substr(trim($u['EmpName'] ?? 'U'), 0, 1));
+                                $avatarClass = $isDefaultCc ? 'cc-user-avatar-default' : 'cc-user-avatar-standard';
+                              ?>
+                              <div class="cc-user-row d-flex align-items-center justify-content-between p-2 border-bottom" 
+                                   data-uid="<?= $u['IUid']; ?>" 
+                                   data-name="<?= htmlspecialchars($u['EmpName']); ?>" 
+                                   data-email="<?= htmlspecialchars($u['EmpEmail']); ?>" 
+                                   data-role="<?= htmlspecialchars($u['RoleName'] ? $u['RoleName'] : 'Team Member'); ?>"
+                                   data-default="<?= $isDefaultCc ? '1' : '0'; ?>">
+                                <div class="d-flex align-items-center cc-user-row-content">
+                                  <div class="rounded-circle text-white font-weight-bold d-flex align-items-center justify-content-center flex-shrink-0 cc-user-avatar-circle <?= $avatarClass; ?>">
+                                    <?= $initial; ?>
+                                  </div>
+                                  <div class="overflow-hidden" style="line-height: 1.2;">
+                                    <div class="font-weight-bold text-dark text-truncate cc-user-name-text">
+                                      <?= htmlspecialchars($u['EmpName']); ?>
+                                      <?php if ($isDefaultCc): ?>
+                                        <span class="badge badge-primary ml-1 cc-user-default-badge"><i class="fas fa-star mr-1 cc-user-star-icon"></i>Default CC</span>
+                                      <?php endif; ?>
+                                    </div>
+                                    <div class="text-muted text-truncate cc-user-email-text">
+                                      <?= htmlspecialchars($u['EmpEmail']); ?> &bull; <span class="text-secondary"><?= htmlspecialchars($u['RoleName'] ? $u['RoleName'] : 'User'); ?></span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="custom-control custom-checkbox mr-2">
+                                  <input type="checkbox" class="custom-control-input cc-user-chk" id="cc_chk_<?= $u['IUid']; ?>" value="<?= $u['IUid']; ?>" <?= $isDefaultCc ? 'checked' : ''; ?>>
+                                  <label class="custom-control-label" for="cc_chk_<?= $u['IUid']; ?>"></label>
+                                </div>
+                              </div>
+                            <?php endforeach; ?>
+                          <?php endif; ?>
+                        </div>
+                      </div>
+
+                      <!-- Hidden Multi-Select for backend form submission -->
+                      <select name="ExtraCcUsers[]" id="resExtraCcUsers" class="d-none" multiple>
+                        <?php if (!empty($ctc_approvers)): ?>
+                          <?php foreach ($ctc_approvers as $u): ?>
+                            <?php 
+                              $rName = strtolower(trim($u['RoleName'] ?? ''));
+                              $isDefaultCc = (
+                                in_array($rName, ['recruitment manager', 'hiring manager', 'recruiter', 'recruitment manager / recruiter', 'hr manager']) ||
+                                strpos($rName, 'recruiter') !== false ||
+                                strpos($rName, 'hiring manager') !== false ||
+                                strpos($rName, 'recruitment') !== false
+                              );
+                            ?>
+                            <option value="<?= $u['IUid']; ?>" <?= $isDefaultCc ? 'selected' : ''; ?> data-default="<?= $isDefaultCc ? '1' : '0'; ?>"><?= $u['IUid']; ?></option>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </select>
+
+                      <small class="form-text text-muted mt-1 cc-info-help-text">
+                        <i class="fas fa-info-circle text-info mr-1"></i>Click team members to select or remove them from email notifications.
+                      </small>
+                    </div>
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Reason for Requirement</label>
@@ -241,7 +329,35 @@
                       </div>
                     </div>
 
-                    
+                    <div class="form-group">
+                      <label class="text-label font-weight-bold">Expected Salary Range</label>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label class="text-muted small">Minimum Expected Salary (LPA)</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text font-weight-bold">₹</span>
+                            </div>
+                            <input type="number" step="any" min="0" name="ExpectedSalaryMin" id="res_ExpectedSalaryMin" class="form-control" placeholder="e.g. 3">
+                            <div class="input-group-append">
+                              <span class="input-group-text">LPA</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="text-muted small">Maximum Expected Salary (LPA)</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text font-weight-bold">₹</span>
+                            </div>
+                            <input type="number" step="any" min="0" name="ExpectedSalaryMax" id="res_ExpectedSalaryMax" class="form-control" placeholder="e.g. 5">
+                            <div class="input-group-append">
+                              <span class="input-group-text">LPA</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                     <div class="form-group">
                       <label class="text-label font-weight-bold">Target Onboarding Date</label>
@@ -398,7 +514,6 @@ $(document).ready(function() {
     $('#requestResourcePanel').removeClass('open');
   });
 
- 
   var stepperEl = document.querySelector('#requestResourcePanel .bs-stepper');
   if (stepperEl && typeof Stepper !== 'undefined') {
     try {
@@ -406,7 +521,6 @@ $(document).ready(function() {
     } catch (e) {}
   }
 
-  
   $(document).on('click', '#requestResourcePanel .bs-stepper-header .step', function(e) {
     e.preventDefault();
     var target = $(this).data('target');
@@ -533,14 +647,11 @@ function goToResStep(stepNum) {
   };
   var targetId = targets[stepNum];
 
- 
   $('#requestResourcePanel .bs-stepper-header .step').removeClass('active');
   $('#requestResourcePanel .bs-stepper-header .step[data-target="' + targetId + '"]').addClass('active');
 
-  
   $('#requestResourcePanel .bs-stepper-content .content').removeClass('active').hide();
   $(targetId).addClass('active').fadeIn(150);
-
 
   if (window.resStepperObj) {
     try { window.resStepperObj.to(stepNum); } catch (e) {}
@@ -626,7 +737,7 @@ function viewRequestDetails(req) {
         <div class="col-6 col-md-3 mb-2">
           <div class="p-2 border rounded bg-white shadow-sm">
             <small class="text-muted font-weight-bold d-block text-uppercase" style="font-size:10px;">Experience</small>
-            <span class="font-weight-bold text-dark h6 mb-0">${req.ExpMin || 0} - ${req.ExpMax || 0} Yrs</span>
+            <span class="font-weight-bold text-dark h6 mb-0">${parseInt(req.ExpMin) || 0} - ${parseInt(req.ExpMax) || 0} Yrs</span>
           </div>
         </div>
         <div class="col-6 col-md-3 mb-2">
@@ -777,6 +888,85 @@ function submitApproval(e) {
   });
 }
 
+function syncCcUI() {
+    var chipsHtml = '';
+    var selectedCount = 0;
+    
+    $('#resExtraCcUsers option').prop('selected', false);
+
+    $('.cc-user-row').each(function() {
+        var $row = $(this);
+        var uid = $row.data('uid');
+        var name = $row.data('name');
+        var role = $row.data('role');
+        var isDefault = $row.data('default') == '1';
+        var isChecked = $row.find('.cc-user-chk').is(':checked');
+
+        if (isChecked) {
+            selectedCount++;
+            $('#resExtraCcUsers option[value="' + uid + '"]').prop('selected', true);
+            $row.css('background-color', '#f1f5f9');
+
+            var badgeClass = isDefault ? 'badge-primary' : 'badge-success';
+            var iconClass = isDefault ? 'fa-star' : 'fa-user-check';
+            var defaultTag = isDefault ? ' (Default)' : '';
+
+            chipsHtml += '<span class="badge ' + badgeClass + ' px-2 py-1 font-weight-normal shadow-sm d-inline-flex align-items-center mr-1 mb-1" style="font-size: 11.5px; border-radius: 6px;">' +
+                '<i class="fas ' + iconClass + ' mr-1" style="font-size: 9px;"></i>' +
+                '<strong>' + name + '</strong>&nbsp;<span style="opacity: 0.85;">(' + role + defaultTag + ')</span>' +
+                '<span class="remove-cc-chip ml-2 font-weight-bold" data-uid="' + uid + '" style="cursor: pointer; font-size: 13px; opacity: 0.8;" title="Remove">&times;</span>' +
+            '</span>';
+        } else {
+            $row.css('background-color', 'transparent');
+        }
+    });
+
+    if (chipsHtml === '') {
+        chipsHtml = '<span class="text-muted small italic p-1"><i class="fas fa-user-slash mr-1"></i>No CC recipients selected</span>';
+    }
+
+    $('#activeCcChipsContainer').html(chipsHtml);
+    $('#selectedCcCountBadge').text(selectedCount + ' Recipient' + (selectedCount === 1 ? '' : 's'));
+}
+
+$(document).ready(function() {
+    syncCcUI();
+});
+
+$(document).off('click', '.cc-user-row').on('click', '.cc-user-row', function(e) {
+    if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('label')) {
+        return;
+    }
+    var $chk = $(this).find('.cc-user-chk');
+    $chk.prop('checked', !$chk.is(':checked'));
+    syncCcUI();
+});
+
+$(document).off('change', '.cc-user-chk').on('change', '.cc-user-chk', function() {
+    syncCcUI();
+});
+
+$(document).off('click', '.remove-cc-chip').on('click', '.remove-cc-chip', function(e) {
+    e.stopPropagation();
+    var uid = $(this).data('uid');
+    $('#cc_chk_' + uid).prop('checked', false);
+    syncCcUI();
+});
+
+$(document).off('keyup', '#ccUserSearchInput').on('keyup', '#ccUserSearchInput', function() {
+    var q = $(this).val().toLowerCase().trim();
+    $('.cc-user-row').each(function() {
+        var name = ($(this).data('name') || '').toLowerCase();
+        var email = ($(this).data('email') || '').toLowerCase();
+        var role = ($(this).data('role') || '').toLowerCase();
+        if (name.indexOf(q) !== -1 || email.indexOf(q) !== -1 || role.indexOf(q) !== -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+
 function openCreateRequestModal() {
   $("#res_RequestId").val("0");
   $("#panelHeaderTitle").html('<i class="fas fa-user-plus mr-2"></i>Request Resource');
@@ -784,6 +974,13 @@ function openCreateRequestModal() {
   if ($("#resourceRequestForm").length) {
     $("#resourceRequestForm")[0].reset();
   }
+  $('#res_ExpectedSalaryMin').val('');
+  $('#res_ExpectedSalaryMax').val('');
+  $('.cc-user-row').each(function() {
+    var isDefault = $(this).data('default') == '1';
+    $(this).find('.cc-user-chk').prop('checked', isDefault);
+  });
+  syncCcUI();
   preloadResChips('', 'resLocationChips', 'resJobLocation');
   preloadResChips('', 'resEducationChips', 'resEducationRequired');
   preloadResChips('', 'resMustHaveSkillsChips', 'resMustHaveSkills');
@@ -798,7 +995,6 @@ function openEditRequestModal(req) {
   $("#panelHeaderTitle").html('<i class="fas fa-edit mr-2"></i>Edit Resource Request [' + (req.RequestCode || "") + ']');
   $("#resSubmitBtn").html('<i class="fas fa-save mr-1"></i> Update Request');
 
-
   $('input[name="JobTitle"]').val(req.JobTitle || "");
   $('input[name="FunctionalRole"]').val(req.FunctionalRole || "");
   $('select[name="Did"]').val(req.Did || "");
@@ -806,8 +1002,39 @@ function openEditRequestModal(req) {
   $('select[name="ApproverId"]').val(req.ApproverId || "");
   $('textarea[name="ReasonForRequirement"]').val(req.ReasonForRequirement || "");
 
+  var extraArr = [];
+  if (req.ExtraCcUsers) {
+    try {
+      if (typeof req.ExtraCcUsers === 'string') {
+        extraArr = JSON.parse(req.ExtraCcUsers);
+      } else if (Array.isArray(req.ExtraCcUsers)) {
+        extraArr = req.ExtraCcUsers;
+      }
+    } catch(e) {
+      if (typeof req.ExtraCcUsers === 'string') {
+        extraArr = req.ExtraCcUsers.split(',').map(function(x) { return x.trim(); });
+      }
+    }
+  }
+
+  if (extraArr && extraArr.length > 0) {
+    var strArr = extraArr.map(String);
+    $('.cc-user-row').each(function() {
+      var uid = String($(this).data('uid'));
+      $(this).find('.cc-user-chk').prop('checked', strArr.indexOf(uid) !== -1);
+    });
+  } else {
+    $('.cc-user-row').each(function() {
+      var isDefault = $(this).data('default') == '1';
+      $(this).find('.cc-user-chk').prop('checked', isDefault);
+    });
+  }
+  syncCcUI();
+
   $('input[name="ExpMin"]').val(req.ExpMin || 0);
   $('input[name="ExpMax"]').val(req.ExpMax || 0);
+  $('#res_ExpectedSalaryMin').val(req.ExpectedSalaryMin || '');
+  $('#res_ExpectedSalaryMax').val(req.ExpectedSalaryMax || '');
   $('input[name="RecruitmentStartDate"]').val((req.RecruitmentStartDate || "").split(" ")[0]);
   $('input[name="TargetOnboardingDate"]').val((req.TargetOnboardingDate || "").split(" ")[0]);
 
@@ -864,7 +1091,6 @@ function addResChipDirect(value, inputId, chipsId, hiddenId) {
     if (dropdown) dropdown.style.display = 'none';
     syncHidden();
 }
-
 
 $(document).on('keydown', '#resLocationInput, #resEducationInput, #resMustHaveSkillsInput, #resNiceToHaveSkillsInput, #resLanguageInput', function(e) {
     if (e.which === 13 || e.keyCode === 13 || e.key === 'Enter' || e.which === 188 || e.keyCode === 188 || e.key === ',') {
@@ -1007,89 +1233,92 @@ function initResChipAutocomplete(config) {
     });
 }
 
-$(document).ready(function() {
-    $('#btnGenerateJobContent').on('click', function(e) {
-        e.preventDefault();
+// Generate Job Description & Responsibilities — delegated so it works regardless of panel show/hide state
+$(document).on('click', '#btnGenerateJobContent', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      
-        $('#resLocationInput, #resEducationInput, #resMustHaveSkillsInput, #resNiceToHaveSkillsInput, #resLanguageInput').trigger('blur');
+    setTimeout(function() {
+        var jobTitle       = ($('input[name="JobTitle"]').val() || '').trim();
+        var functionalRole = ($('input[name="FunctionalRole"]').val() || '').trim();
+        var deptSelect     = $('select[name="Did"] option:selected');
+        var deptText       = deptSelect.length ? deptSelect.text().trim() : '';
+        var department     = (deptText && !deptText.toLowerCase().includes('select')) ? deptText : '';
+        var expMin         = $('#res_ExpMin').val() || 0;
+        var expMax         = $('#res_ExpMax').val() || 0;
+        var mustSkills     = $('#resMustHaveSkills').val() || '';
+        var niceSkills     = $('#resNiceToHaveSkills').val() || '';
+        var location       = $('#resJobLocation').val() || '';
+        var commLang       = $('#resCommunicationLang').val() || '';
 
-        setTimeout(function() {
-            const jobTitle       = $('input[name="JobTitle"]').val().trim();
-            const functionalRole = $('input[name="FunctionalRole"]').val().trim();
-            const deptSelect     = $('select[name="Did"] option:selected');
-            const deptText       = deptSelect.length ? deptSelect.text().trim() : '';
-            const department     = (deptText && !deptText.toLowerCase().includes('select')) ? deptText : '';
-            const expMin         = $('#res_ExpMin').val() || 0;
-            const expMax         = $('#res_ExpMax').val() || 0;
-
-            const mustSkills     = $('#resMustHaveSkills').val() || $('#resMustHaveSkillsInput').val() || '';
-            const niceSkills     = $('#resNiceToHaveSkills').val() || $('#resNiceToHaveSkillsInput').val() || '';
-            const location       = $('#resJobLocation').val() || $('#resLocationInput').val() || '';
-            const commLang       = $('#resCommunicationLang').val() || $('#resLanguageInput').val() || '';
-
-            if (!jobTitle && !functionalRole) {
-                if (typeof toastr !== 'undefined') {
-                    toastr.error('Please enter a Job Title or Functional Role before generating.');
-                } else {
-                    alert('Please enter a Job Title or Functional Role before generating.');
-                }
-                return;
+        if (!jobTitle && !functionalRole && !mustSkills && !niceSkills && !department) {
+            if (typeof toastr !== 'undefined') {
+                toastr.warning('Please enter a Job Title, Functional Role, Department, or Skills before generating.');
+            } else {
+                alert('Please enter a Job Title, Functional Role, Department, or Skills before generating.');
             }
+            return;
+        }
 
-            const btn = $('#btnGenerateJobContent');
-            const origHtml = btn.html();
+        var $btn     = $('#btnGenerateJobContent');
+        var origHtml = $btn.html();
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Generating...');
 
-            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Generating...');
-
-            $.ajax({
-                url: base_url + 'admin/generateJobContent',
-                type: 'POST',
-                data: {
-                    JobTitle: jobTitle,
-                    FunctionalRole: functionalRole,
-                    Department: department,
-                    ExpMin: expMin,
-                    ExpMax: expMax,
-                    MustHaveSkills: mustSkills,
-                    NiceToHaveSkills: niceSkills,
-                    JobLocation: location,
-                    CommunicationLang: commLang
-                },
-                dataType: 'json',
-                success: function(res) {
-                    btn.prop('disabled', false).html(origHtml);
-                    if (res && res.status === 'success') {
-                        if (res.job_description) {
-                            $('textarea[name="JobDescription"]').val(res.job_description);
+        $.ajax({
+            url:      '<?= base_url("admin/generateJobContent"); ?>',
+            type:     'POST',
+            dataType: 'json',
+            data: {
+                JobTitle:          jobTitle,
+                FunctionalRole:    functionalRole,
+                Department:        department,
+                ExpMin:            expMin,
+                ExpMax:            expMax,
+                MustHaveSkills:    mustSkills,
+                NiceToHaveSkills:  niceSkills,
+                JobLocation:       location,
+                CommunicationLang: commLang
+            },
+            success: function(res) {
+                $btn.prop('disabled', false).html(origHtml);
+                if (res && res.status === 'success') {
+                    if (res.job_description) {
+                        $('textarea[name="JobDescription"]').val(res.job_description);
+                    }
+                    if (res.responsibilities) {
+                        $('textarea[name="Responsibilities"]').val(res.responsibilities);
+                    }
+                    if (res.suggested_title) {
+                        if (!$('input[name="JobTitle"]').val().trim()) {
+                            $('input[name="JobTitle"]').val(res.suggested_title);
                         }
-                        if (res.responsibilities) {
-                            $('textarea[name="Responsibilities"]').val(res.responsibilities);
-                        }
-                        if (typeof toastr !== 'undefined') {
-                            toastr.success('Job Description & Responsibilities auto-generated successfully!');
-                        }
-                    } else {
-                        const errorMsg = (res && res.message) ? res.message : 'Unable to generate job content. Please enter the details manually.';
-                        if (typeof toastr !== 'undefined') {
-                            toastr.error(errorMsg);
-                        } else {
-                            alert(errorMsg);
+                        if (!$('input[name="FunctionalRole"]').val().trim()) {
+                            $('input[name="FunctionalRole"]').val(res.suggested_title);
                         }
                     }
-                },
-                error: function(xhr, status, error) {
-                    btn.prop('disabled', false).html(origHtml);
-                    console.error('Job content generation error:', xhr.responseText);
                     if (typeof toastr !== 'undefined') {
-                        toastr.error('Unable to generate job content. Please enter the details manually.');
+                        toastr.success('Job Description & Responsibilities generated successfully!');
+                    }
+                } else {
+                    var errorMsg = (res && res.message) ? res.message : 'Unable to generate. Please fill in the details manually.';
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(errorMsg);
                     } else {
-                        alert('Unable to generate job content. Please enter the details manually.');
+                        alert(errorMsg);
                     }
                 }
-            });
-        }, 250);
-    });
+            },
+            error: function(xhr) {
+                $btn.prop('disabled', false).html(origHtml);
+                console.error('generateJobContent error:', xhr.status, xhr.responseText);
+                if (typeof toastr !== 'undefined') {
+                    toastr.error('Server error generating job content. Please try again.');
+                } else {
+                    alert('Server error generating job content. Please try again.');
+                }
+            }
+        });
+    }, 350);
 });
-
 </script>
+

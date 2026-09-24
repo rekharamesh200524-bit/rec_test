@@ -4,95 +4,140 @@ $actLower = strtolower(isset($action) ? $action : '');
 $isReschedule = ($actLower === 'reschedule');
 $interviewDateFormatted = !empty($interviewDate) ? date('d-m-Y', strtotime($interviewDate)) : 'TBD';
 $interviewTimeFormatted = !empty($interviewDate) ? date('h:i A', strtotime($interviewDate)) : '';
+$candidateName = !empty($candidatelist->Fullname) ? $candidatelist->Fullname : 'Candidate';
+$jobTitleText = !empty($jobTitle) ? $jobTitle : 'Position';
+$interviewerNameText = !empty($interviewerName) ? $interviewerName : 'Interviewer';
+$mode = strtolower(isset($interviewMode) ? $interviewMode : '');
+$pageTitle = $isReschedule ? 'Interview Rescheduled' : 'Interview Assignment';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $isReschedule ? 'Interview Rescheduled' : 'Interview Assignment'; ?></title>
-    <style>
-        body{margin:0;padding:0;background-color:#f0f4f8;font-family:system-ui,sans-serif;}
-        .wrap{max-width:620px;margin:30px auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
-        .header{background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);padding:32px 30px;text-align:center;}
-        .header h1{margin:0;color:#fff;font-size:22px;font-weight:700;}
-        .header p{margin:6px 0 0;color:#bbdefb;font-size:13px;}
-        .badge{display:inline-block;background:rgba(255,255,255,0.2);color:#fff;padding:4px 14px;border-radius:20px;font-size:12px;margin-top:10px;}
-        .body{padding:32px 30px;color:#444;font-size:14px;line-height:24px;}
-        .body p{margin:0 0 14px;}
-        .info-box{background:#f8faff;border-left:4px solid #1a73e8;border-radius:6px;padding:18px 20px;margin:20px 0;}
-        .info-box table{width:100%;border-collapse:collapse;}
-        .info-box td{padding:6px 0;font-size:14px;}
-        .info-box td:first-child{color:#666;width:140px;}
-        .info-box td:last-child{font-weight:600;color:#222;}
-        .meet-btn{display:block;text-align:center;margin:24px 0;}
-        .meet-btn a{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:14px 36px;text-decoration:none;border-radius:6px;font-size:15px;font-weight:700;display:inline-block;}
-        .meet-link-text{text-align:center;margin:10px 0 0;font-size:12px;color:#888;word-break:break-all;}
-        .footer{padding:20px 30px;background:#f8faff;color:#999;font-size:12px;border-top:1px solid #eee;}
-        .footer strong{color:#555;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($pageTitle); ?></title>
 </head>
-<body>
-<table width="100%" cellpadding="0" cellspacing="0" style="padding:20px 10px;">
-<tr><td align="center">
-<div class="wrap">
-    <div class="header">
-        <?php if ($isReschedule): ?>
-        <h1>&#127897; Interview Rescheduled</h1>
-        <p>The interview assigned to you has been rescheduled</p>
-        <?php else: ?>
-        <h1>&#127897; Interview Assignment</h1>
-        <p>You have been assigned to conduct an interview</p>
-        <?php endif; ?>
-        <span class="badge"><?php echo htmlspecialchars($jobTitle); ?></span>
-    </div>
-    <div class="body">
-        <p>Dear <strong><?php echo htmlspecialchars($interviewerName); ?></strong>,</p>
+<body style="margin: 0; padding: 20px; background-color: #f8fafc; font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.6; color: #333333;">
+    <div style="max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         
-        <?php if ($isReschedule): ?>
-        <p>Please note that the interview assigned to you for candidate <strong><?php echo htmlspecialchars($candidatelist->Fullname); ?></strong> has been <strong>RESCHEDULED</strong>.</p>
-        <p>Below are the updated interview details. 
-        <?php if (strtolower($interviewMode ?? '') === 'online'): ?>
-        Please review the details and join the meeting at the updated time.
-        <?php else: ?>
-        Please review the candidate details below for this in-person interview.
-        <?php endif; ?>
-        </p>
-        <?php else: ?>
-        <p>You have been scheduled to conduct an interview for the following candidate. 
-        <?php if (strtolower($interviewMode ?? '') === 'online'): ?>
-        Please review the details and join the meeting at the scheduled time.
-        <?php else: ?>
-        Please review the candidate details below for this in-person interview.
-        <?php endif; ?>
-        </p>
-        <?php endif; ?>
+        <!-- Header -->
+        <div style="background-color: #0f766e; padding: 18px 24px;">
+            <h2 style="margin: 0; color: #ffffff; font-size: 18px; font-weight: 600; letter-spacing: 0.3px;">I-NET Recruitment Portal</h2>
+        </div>
 
-        <div class="info-box">
-            <table>
-                <tr><td>Candidate</td><td><?php echo htmlspecialchars($candidatelist->Fullname); ?></td></tr>
-                <tr><td>Job Position</td><td><?php echo htmlspecialchars($jobTitle); ?></td></tr>
-                <tr><td>Interview Level</td><td><?php echo htmlspecialchars(isset($interviewLevelName) ? $interviewLevelName : 'Interview'); ?></td></tr>
-                <tr><td><?php echo $isReschedule ? 'Updated Date' : 'Date'; ?></td><td><?php echo $interviewDateFormatted; ?></td></tr>
-                <?php if (!empty($interviewTimeFormatted)): ?><tr><td><?php echo $isReschedule ? 'Updated Time' : 'Time'; ?></td><td><?php echo $interviewTimeFormatted; ?></td></tr><?php endif; ?>
-                <tr><td>Mode</td><td><?php echo htmlspecialchars($interviewMode); ?></td></tr>
-            </table>
+        <!-- Content Area -->
+        <div style="padding: 24px 28px;">
+            <!-- Greeting -->
+            <p style="margin: 0 0 16px 0; font-size: 14px; color: #333333; line-height: 1.6;">Dear <strong><?php echo htmlspecialchars($interviewerNameText); ?></strong>,</p>
+
+            <?php if ($isReschedule): ?>
+                <!-- RESCHEDULED INTERVIEW (Offline / Online) -->
+                <p style="margin: 0 0 14px 0; font-size: 14px; color: #333333; line-height: 1.6;">
+                    Please note that the interview assigned to you for candidate <strong><?php echo htmlspecialchars($candidateName); ?></strong> for the <strong><?php echo htmlspecialchars($jobTitleText); ?></strong> position has been <strong style="color: #d97706;">RESCHEDULED</strong>.
+                </p>
+                <p style="margin: 0 0 20px 0; font-size: 14px; color: #333333; line-height: 1.6;">
+                    <?php echo ($mode === 'online') ? 'Below are the updated online interview details:' : 'Below are the updated in-person interview details:'; ?>
+                </p>
+            <?php else: ?>
+                <!-- SCHEDULED INTERVIEW ASSIGNMENT (Offline / Online) -->
+                <p style="margin: 0 0 14px 0; font-size: 14px; color: #333333; line-height: 1.6;">
+                    You have been scheduled to conduct an interview for the <strong><?php echo htmlspecialchars($jobTitleText); ?></strong> position.
+                </p>
+                <p style="margin: 0 0 20px 0; font-size: 14px; color: #333333; line-height: 1.6;">
+                    <?php echo ($mode === 'online') ? 'Please review the candidate details below and join the meeting at the scheduled time:' : 'Please review the candidate details below for this in-person interview:'; ?>
+                </p>
+            <?php endif; ?>
+
+            <!-- Interview Details Table -->
+            <div style="margin: 20px 0; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;">
+                <div style="background-color: #f1f5f9; padding: 10px 16px; border-bottom: 1px solid #e2e8f0;">
+                    <strong style="font-size: 14px; color: #1e293b;"><?php echo $isReschedule ? 'Updated Interview Assignment Details' : 'Interview Assignment Details'; ?></strong>
+                </div>
+                <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                            <th style="padding: 9px 16px; text-align: left; font-size: 13px; font-weight: bold; color: #475569; width: 38%;">Field</th>
+                            <th style="padding: 9px 16px; text-align: left; font-size: 13px; font-weight: bold; color: #475569;">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #475569; font-size: 13px;">Candidate:</td>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 13px;"><?php echo htmlspecialchars($candidateName); ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #475569; font-size: 13px;">Position:</td>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 13px;"><?php echo htmlspecialchars($jobTitleText); ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #475569; font-size: 13px;">Interview Level:</td>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 13px;"><?php echo htmlspecialchars(isset($interviewLevelName) ? $interviewLevelName : 'Interview'); ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #475569; font-size: 13px;"><?php echo $isReschedule ? 'Updated Date:' : 'Date:'; ?></td>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 13px;"><?php echo htmlspecialchars($interviewDateFormatted); ?></td>
+                        </tr>
+                        <?php if (!empty($interviewTimeFormatted)): ?>
+                        <tr>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #475569; font-size: 13px;"><?php echo $isReschedule ? 'Updated Time:' : 'Time:'; ?></td>
+                            <td style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 13px;"><?php echo htmlspecialchars($interviewTimeFormatted); ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <tr>
+                            <td style="padding: 10px 16px; <?php echo ($mode !== 'online') ? 'border-bottom: 1px solid #f1f5f9;' : ''; ?> font-weight: bold; color: #475569; font-size: 13px;">Mode:</td>
+                            <td style="padding: 10px 16px; <?php echo ($mode !== 'online') ? 'border-bottom: 1px solid #f1f5f9;' : ''; ?> color: #1e293b; font-size: 13px;">
+                                <?php echo ($mode === 'online') ? 'Online (Video Call)' : 'In-Person (Offline)'; ?>
+                            </td>
+                        </tr>
+                        <?php if ($mode !== 'online'): ?>
+                        <tr>
+                            <td style="padding: 10px 16px; font-weight: bold; color: #475569; font-size: 13px;">Venue:</td>
+                            <td style="padding: 10px 16px; color: #1e293b; font-size: 13px;">I-NET Secure Labs Pvt. Ltd., Chennai, Tamil Nadu</td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php if ($mode === 'online'): ?>
+                <!-- Online Teams Meeting & Instructions -->
+                <?php if (!empty($meetLink)): ?>
+                <p style="margin: 20px 0 10px 0; font-size: 14px; color: #333333;">Click the button below to join the interview meeting:</p>
+                <table cellpadding="0" cellspacing="0" border="0" style="margin: 14px 0 16px 0;">
+                    <tr>
+                        <td>
+                            <a href="<?php echo htmlspecialchars($meetLink); ?>" target="_blank" style="display: inline-block; background-color: #007bff; color: #ffffff !important; padding: 11px 26px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 14px; font-family: Arial, Helvetica, sans-serif; text-align: center;">Join Teams Meeting</a>
+                        </td>
+                    </tr>
+                </table>
+                <p style="font-size: 12px; color: #64748b; margin: 0 0 16px 0; word-break: break-all;">Direct meeting link: <a href="<?php echo htmlspecialchars($meetLink); ?>" style="color: #007bff; text-decoration: underline;"><?php echo htmlspecialchars($meetLink); ?></a></p>
+                <?php endif; ?>
+
+                <div style="margin: 20px 0; padding: 14px 18px; background-color: #f8fafc; border-left: 4px solid #007bff; border-radius: 4px;">
+                    <strong style="color: #1e293b; font-size: 13px;">Interviewer Instructions:</strong>
+                    <p style="margin: 6px 0 0 0; font-size: 13px; color: #475569; line-height: 1.5;">Please join the meeting on time and record your feedback in the recruitment portal after the interview concludes.</p>
+                </div>
+            <?php else: ?>
+                <!-- Offline Instructions -->
+                <div style="margin: 20px 0; padding: 14px 18px; background-color: #f8fafc; border-left: 4px solid #0f766e; border-radius: 4px;">
+                    <strong style="color: #1e293b; font-size: 13px;">Interviewer Instructions:</strong>
+                    <p style="margin: 6px 0 0 0; font-size: 13px; color: #475569; line-height: 1.5;">Please be present at the interview venue on time. The candidate's resume and application details can be accessed via the recruitment portal.</p>
+                </div>
+            <?php endif; ?>
+
+            <!-- Consistent Sign-off / Footer -->
+            <p style="margin: 24px 0 0 0; font-size: 14px; color: #333333; line-height: 1.6;">
+                Thanks &amp; Regards,<br>
+                <strong>Recruitment Team</strong>
+            </p>
         </div>
-        <?php if (!empty($meetLink)): ?>
-        <p>Click the button below to join the online interview:</p>
-        <div class="meet-btn">
-            <a href="<?php echo htmlspecialchars($meetLink); ?>" target="_blank">&#127909; Join <?php echo $isReschedule ? 'Rescheduled ' : ''; ?>Meeting</a>
+
+        <!-- Card Footer -->
+        <div style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 12px 24px; text-align: center;">
+            <p style="margin: 0; font-size: 12px; color: #64748b; font-style: italic;">Note: This is an auto-generated notification from I-NET Recruitment Portal.</p>
         </div>
-        <p class="meet-link-text">Or copy this link: <a href="<?php echo htmlspecialchars($meetLink); ?>" style="color:#1a73e8;"><?php echo htmlspecialchars($meetLink); ?></a></p>
-        <?php endif; ?>
-        <p style="margin-top:24px;">If you have any questions, please contact the HR team.</p>
+
     </div>
-    <div class="footer">
-        <p>For assistance, contact <strong>info@inetcsc.com</strong> or call <strong>+91 44 4400 6666</strong>.</p>
-        <p>Best regards,<br><strong>HR Recruitment Team &ndash; I-NET CSC</strong></p>
-    </div>
-</div>
-</td></tr>
-</table>
 </body>
 </html>
+

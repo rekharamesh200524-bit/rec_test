@@ -1,8 +1,11 @@
-  <?php
-    $employee_det = $this->session->userdata('logged_in'); 
-     if(empty($employee_det)) { redirect($this->config->item('base_url').'admin/index'); }
-         $theme_path = $this->config->item('theme_locations').$this->config->item('active_template'); 
+<?php
+$employee_det = $this->session->userdata('logged_in');
 
+if (empty($employee_det)) {
+    redirect($this->config->item('base_url').'admin/index');
+}
+
+$theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
 ?>
     <section class="content">
       <div class="container-fluid">
@@ -186,77 +189,4 @@
     </div>
 </div>
 
-<div id="rightFormOverlay"></div>
-
-<script src="<?= $theme_path ?>/assets/plugins/jquery/jquery.min.js"></script>
-
-<script>
-document.querySelectorAll('.editUserBtn').forEach(function(btn) {
-
-    btn.addEventListener('click', function () {
-
-        document.getElementById('edit_Did').value = this.dataset.id;
-        document.getElementById('edit_Departmentname').value = this.dataset.name;  
-        $('#editUserModal').modal('show');
-    });
-
-});
- 
-$(document).on('click', '.userStatusBtn', function () {
-
-    let userId = $(this).data('id');
-    let action = $(this).data('action');
-    let url = '';
-    let title = '';
-    let message = '';
-    let btnClass = '';
-
-    if (action === 'deactivate') {
-        url = "<?= base_url('admin/DeactivateDepartment/'); ?>" + userId;
-        title = "Deactivate Department";
-        message = "Are you sure you want to deactivate this Department?";
-        btnClass = "btn-danger";
-    } else {
-        url = "<?= base_url('admin/ActivateDepartment/'); ?>" + userId;
-        title = "Activate Department";
-        message = "Are you sure you want to activate this Department?";
-        btnClass = "btn-success";
-    }
-
-    $('#userStatusTitle').text(title);
-    $('#userStatusMessage').text(message);
-    $('#confirmUserStatusBtn')
-        .attr('href', url)
-        .removeClass('btn-danger btn-success')
-        .addClass(btnClass);
-
-    $('#userStatusModal').modal('show');
-});
-
-$(document).ready(function () {
-
-    $('#openAddForm').on('click', function () {
-        $('#rightForm').addClass('open');
-        $('#rightFormOverlay').addClass('show');
-    });
-
-    $('#closeAddForm, #rightFormOverlay').on('click', function () {
-        $('#rightForm').removeClass('open');
-        $('#rightFormOverlay').removeClass('show');
-    });
-
-    if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#example1')) {
-        $('#example1').DataTable({
-            "responsive": false,
-            "autoWidth": false
-        });
-    }
-
-    $(window).on('resize orientationchange', function() {
-        if ($.fn.DataTable && $.fn.DataTable.isDataTable('#example1')) {
-            $('#example1').DataTable().columns.adjust();
-        }
-    });
-
-});
-</script>
+<div id="rightFormOverlay"></div>

@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-    $employee_det = $this->session->userdata('logged_in');
-         $currentUrl = strtolower(uri_string());
-         if (!isset($currentUrlArray)) {
-             $currentUrlArray = ['parent' => null, 'child' => null];
-         }
-         $isActive   = !empty($currentUrlArray['child'])
-              && strtolower($currentUrlArray['child']['Menuurl']) === $currentUrl;
-       // echo "<pre>cur_view isActive"; print_r($employee_det); exit;       
-     if(empty($employee_det)) { redirect($this->config->item('base_url').'admin/index'); }
+$employee_det = $this->session->userdata('logged_in');
+
+if (empty($employee_det)) {
+    redirect($this->config->item('base_url').'admin/index');
+}
+
+$theme_path = $this->config->item('theme_locations').$this->config->item('active_template');
+
+$currentUrl = strtolower(uri_string());
+if (!isset($currentUrlArray)) {
+    $currentUrlArray = ['parent' => null, 'child' => null];
+}
+$isActive   = !empty($currentUrlArray['child'])
+     && strtolower($currentUrlArray['child']['Menuurl']) === $currentUrl;
 ?>
- 
-<?php $theme_path = $this->config->item('theme_locations').$this->config->item('active_template'); ?>
 
 <head>
 <meta charset="utf-8">

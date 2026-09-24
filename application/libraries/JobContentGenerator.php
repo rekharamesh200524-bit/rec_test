@@ -35,10 +35,10 @@ class JobContentGenerator {
         $location        = $normalized['JobLocation'];
         $communication   = $normalized['CommunicationLang'];
 
-        if (empty($rawTitle) && empty($rawRole)) {
+        if (empty($rawTitle) && empty($rawRole) && empty($rawDept) && empty($mustSkills) && empty($niceSkills)) {
             return [
                 'status'  => 'error',
-                'message' => 'Please enter a Job Title or Functional Role before generating.'
+                'message' => 'Please enter a Job Title, Role, Department, or Skills before generating.'
             ];
         }
 
@@ -77,6 +77,7 @@ class JobContentGenerator {
 
         return [
             'status'           => 'success',
+            'suggested_title'  => $profile['name'],
             'job_description'  => $jobDescription,
             'responsibilities' => $responsibilities
         ];

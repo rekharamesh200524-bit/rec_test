@@ -53,3 +53,6 @@ $route['default_controller'] = 'admin/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['sitemap\.xml'] = "admin/site_map";
+
+
+

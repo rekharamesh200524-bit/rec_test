@@ -567,3 +567,830 @@
   CandidateSend = OK
   InterviewerSend = OK
 ---
+2026-08-21 11:22:29 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-08-21 11:22:29 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 47, Rescheduled)
+  ApplicationId    = 71
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-08-21 11:22:29 Interview Email:
+  Mode          = 
+  CandidateMail = marimuthu.vlk@gmail.com
+  InterviewerMail = 
+---
+2026-08-21 11:23:11 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-08-21
+  interviewDate_normalized = 2026-08-21 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-08-21 11:23:11 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 48, Rescheduled)
+  ApplicationId    = 71
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-08-21 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-08-21 11:23:11 Interview Email:
+  Mode          = offline
+  CandidateMail = marimuthu.vlk@gmail.com
+  InterviewerMail = reka@inetcsc.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-08-22 14:04:24 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-08-21
+  interviewDate_normalized = 2026-08-21 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-08-22 14:04:24 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 49, Rescheduled)
+  ApplicationId    = 71
+  InterviewRound   = 3
+  InterviewType    = Online
+  ScheduledAt      = 2026-08-21 00:00:00
+  InterviewerId    = 17
+  MeetLink         = https://teams.microsoft.com/meet/476290945879213?p=DCWJ3qDYVhb4da4bFR
+---
+2026-08-22 14:04:24 Interview Email:
+  Mode          = online
+  CandidateMail = marimuthu.vlk@gmail.com
+  InterviewerMail = reka@inetcsc.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-15 12:24:38 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-15 12:24:38 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 50, Rescheduled)
+  ApplicationId    = 88
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-15 12:24:38 Interview Email:
+  Mode          = 
+  CandidateMail = sanjayajayanthi2001@gmail.com
+  InterviewerMail = 
+---
+2026-09-15 12:32:06 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 16
+  interviewLevel= 1
+---
+2026-09-15 12:32:06 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 51, Rescheduled)
+  ApplicationId    = 86
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 16
+  MeetLink         = N/A
+---
+2026-09-15 12:32:06 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = prasanna@inetcsc.com
+---
+2026-09-15 12:32:38 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-23
+  interviewDate_normalized = 2026-09-23 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-15 12:32:38 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 52, Rescheduled)
+  ApplicationId    = 86
+  InterviewRound   = 2
+  InterviewType    = Online
+  ScheduledAt      = 2026-09-23 00:00:00
+  InterviewerId    = 17
+  MeetLink         = https://teams.microsoft.com/meet/476799660273862?p=asfhhT6XEfWiUTy4MN
+---
+2026-09-15 12:32:38 Interview Email:
+  Mode          = online
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = reka@inetcsc.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 18:28:44 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-19 18:28:44 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 53, Rescheduled)
+  ApplicationId    = 92
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 18:28:44 Interview Email:
+  Mode          = 
+  CandidateMail = vijaykumaresan92@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 18:29:16 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-26
+  interviewDate_normalized = 2026-09-26 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-19 18:29:16 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 54, Rescheduled)
+  ApplicationId    = 92
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-26 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 18:29:16 Interview Email:
+  Mode          = offline
+  CandidateMail = vijaykumaresan92@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 19:01:59 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-19 19:02:00 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 55, Rescheduled)
+  ApplicationId    = 94
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 19:02:00 Interview Email:
+  Mode          = 
+  CandidateMail = agilanagi071@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 19:02:27 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-26
+  interviewDate_normalized = 2026-09-26 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-19 19:02:27 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 56, Rescheduled)
+  ApplicationId    = 94
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-26 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 19:02:27 Interview Email:
+  Mode          = offline
+  CandidateMail = agilanagi071@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 19:13:33 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-19 19:13:33 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 57, Rescheduled)
+  ApplicationId    = 95
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 19:13:33 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 19:14:15 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-10-03
+  interviewDate_normalized = 2026-10-03 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-19 19:14:15 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 58, Rescheduled)
+  ApplicationId    = 95
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-10-03 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 19:14:15 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 20:21:40 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-19 20:21:40 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 59, Rescheduled)
+  ApplicationId    = 85
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 20:21:40 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 20:22:11 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-30
+  interviewDate_normalized = 2026-09-30 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+---
+[2026-09-19 20:22:11] [Ms_graph_teams ERROR] Missing Microsoft Graph credentials in configuration.
+2026-09-19 20:22:24 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-30
+  interviewDate_normalized = 2026-09-30 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+---
+[2026-09-19 20:22:24] [Ms_graph_teams ERROR] Missing Microsoft Graph credentials in configuration.
+2026-09-19 20:27:55 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+---
+2026-09-19 20:27:55 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 60, Rescheduled)
+  ApplicationId    = 85
+  InterviewRound   = 2
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 20:27:55 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 20:28:50 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-26
+  interviewDate_normalized = 2026-09-26 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+---
+[2026-09-19 20:28:50] [Ms_graph_teams ERROR] Missing Microsoft Graph credentials in configuration.
+2026-09-19 20:29:40 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-26
+  interviewDate_normalized = 2026-09-26 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-19 20:29:41 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 61, Rescheduled)
+  ApplicationId    = 85
+  InterviewRound   = 3
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-26 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 20:29:41 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 20:31:22 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-19
+  interviewDate_normalized = 2026-09-19 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+---
+2026-09-19 20:31:22 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 62, Rescheduled)
+  ApplicationId    = 86
+  InterviewRound   = 3
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-19 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 20:31:22 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 20:38:41 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-19 20:38:41 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 63, Rescheduled)
+  ApplicationId    = 86
+  InterviewRound   = 4
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 20:38:41 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 20:39:12 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-19
+  interviewDate_normalized = 2026-09-19 00:00:00
+  interviewType = Online
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = https://teams.microsoft.com/meet/412867054036759?p=wlOUsPXeraezMDsBh5
+---
+2026-09-19 20:39:12 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 64, Rescheduled)
+  ApplicationId    = 86
+  InterviewRound   = 5
+  InterviewType    = Online
+  ScheduledAt      = 2026-09-19 00:00:00
+  InterviewerId    = 17
+  MeetLink         = https://teams.microsoft.com/meet/412867054036759?p=wlOUsPXeraezMDsBh5
+---
+2026-09-19 20:39:12 Interview Email:
+  Mode          = online
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 21:57:15 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-19 21:57:15 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 65, Rescheduled)
+  ApplicationId    = 96
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 21:57:15 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 21:57:43 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-30
+  interviewDate_normalized = 2026-09-30 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-19 21:57:44 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 66, Rescheduled)
+  ApplicationId    = 96
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-30 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 21:57:44 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 23:00:00 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-10-01
+  interviewDate_normalized = 2026-10-01 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-19 23:00:00 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 67, Rescheduled)
+  ApplicationId    = 96
+  InterviewRound   = 3
+  InterviewType    = Offline
+  ScheduledAt      = 2026-10-01 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 23:00:00 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-19 23:07:38 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-19 23:07:39 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 68, Rescheduled)
+  ApplicationId    = 97
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-19 23:07:39 Interview Email:
+  Mode          = 
+  CandidateMail = mkshiji0809@gmail.com
+  InterviewerMail = 
+---
+2026-09-19 23:08:05 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-10-03
+  interviewDate_normalized = 2026-10-03 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-19 23:08:05 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 69, Rescheduled)
+  ApplicationId    = 97
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-10-03 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-19 23:08:05 Interview Email:
+  Mode          = offline
+  CandidateMail = mkshiji0809@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-21 11:21:23 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-21 11:21:23 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 70, Rescheduled)
+  ApplicationId    = 98
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-21 11:21:23 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-21 11:21:47 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-10-01
+  interviewDate_normalized = 2026-10-01 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-21 11:21:47 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 71, Rescheduled)
+  ApplicationId    = 98
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-10-01 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-21 11:21:47 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-21 17:15:18 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-21 17:15:18 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 72, Rescheduled)
+  ApplicationId    = 99
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-21 17:15:18 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-21 17:15:48 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-30
+  interviewDate_normalized = 2026-09-30 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-21 17:15:48 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 73, Rescheduled)
+  ApplicationId    = 99
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-30 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-21 17:15:48 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-22 12:52:16 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-22 12:52:16 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 74, Rescheduled)
+  ApplicationId    = 100
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-22 12:52:16 Interview Email:
+  Mode          = 
+  CandidateMail = keerthanaanburaj4@gmail.com
+  InterviewerMail = 
+---
+2026-09-22 12:53:30 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-24
+  interviewDate_normalized = 2026-09-24 00:00:00
+  interviewType = Online
+  interviewerId = 19
+  interviewLevel= 1
+  teamsMeetingLink = https://teams.microsoft.com/l/meetup-join/
+---
+2026-09-22 12:53:30 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 75, Rescheduled)
+  ApplicationId    = 100
+  InterviewRound   = 2
+  InterviewType    = Online
+  ScheduledAt      = 2026-09-24 00:00:00
+  InterviewerId    = 19
+  MeetLink         = https://teams.microsoft.com/l/meetup-join/
+---
+2026-09-22 12:53:30 Interview Email:
+  Mode          = online
+  CandidateMail = keerthanaanburaj4@gmail.com
+  InterviewerMail = rekharamesh@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---
+2026-09-23 18:25:37 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-23 18:25:37 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 76, Rescheduled)
+  ApplicationId    = 101
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-23 18:25:37 Interview Email:
+  Mode          = 
+  CandidateMail = 
+  InterviewerMail = 
+---
+2026-09-23 18:26:07 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-10-01
+  interviewDate_normalized = 2026-10-01 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-23 18:26:07 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 77, Rescheduled)
+  ApplicationId    = 101
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-10-01 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-23 18:26:07 Interview Email:
+  Mode          = offline
+  CandidateMail = 
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = EXCEPTION: Invalid address:  (to): 
+  InterviewerSend = OK
+---
+2026-09-24 19:40:21 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-24 19:40:21 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 78, Rescheduled)
+  ApplicationId    = 103
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-24 19:40:21 Interview Email:
+  Mode          = 
+  CandidateMail = 
+  InterviewerMail = 
+---
+2026-09-24 23:18:48 saveCandidateStage POST:
+  action        = 
+  interviewDate = 
+  interviewDate_normalized = 
+  interviewType = 
+  interviewerId = 
+  interviewLevel= 
+  teamsMeetingLink = 
+---
+2026-09-24 23:18:48 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 79, Rescheduled)
+  ApplicationId    = 104
+  InterviewRound   = 1
+  InterviewType    = 
+  ScheduledAt      = OMITTED/NULL
+  InterviewerId    = 
+  MeetLink         = N/A
+---
+2026-09-24 23:18:48 Interview Email:
+  Mode          = 
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = 
+---
+2026-09-24 23:19:11 saveCandidateStage POST:
+  action        = Shortlisted
+  interviewDate = 2026-09-25
+  interviewDate_normalized = 2026-09-25 00:00:00
+  interviewType = Offline
+  interviewerId = 17
+  interviewLevel= 1
+  teamsMeetingLink = 
+---
+2026-09-24 23:19:11 saveCandidateStage DB Save Details:
+  Operation        = INSERT CandidateInterviews (ID: 80, Rescheduled)
+  ApplicationId    = 104
+  InterviewRound   = 2
+  InterviewType    = Offline
+  ScheduledAt      = 2026-09-25 00:00:00
+  InterviewerId    = 17
+  MeetLink         = N/A
+---
+2026-09-24 23:19:11 Interview Email:
+  Mode          = offline
+  CandidateMail = rekharamesh200524@gmail.com
+  InterviewerMail = rekharamesh200524@gmail.com
+  CandidateSend = OK
+  InterviewerSend = OK
+---

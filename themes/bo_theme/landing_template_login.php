@@ -18,12 +18,19 @@
         <!-- Toastr -->
         <link rel="stylesheet" href="<?=$theme_path?>/assets/plugins/toastr/toastr.min.css">
         <script src="<?=$theme_path?>/assets/plugins/toastr/toastr.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="<?=$theme_path?>/assets/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="<?=$theme_path?>/css/custom-style.css">
     </head>
 
    <body class="h-100">
        <div class="authincation h-100">
              	<?php echo $content; ?>
        </div>
+       <script src="<?=$theme_path?>/js/custom-script.js"></script>
+
        <script>
        $(function () {
          <?php if ($this->session->flashdata('success')): ?>
